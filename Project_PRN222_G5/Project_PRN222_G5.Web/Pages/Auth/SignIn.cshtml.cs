@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.Interfaces;
 
-namespace Project_PRN222_G5.Web.Pages.Account
+namespace Project_PRN222_G5.Web.Pages.Auth
 {
     [IgnoreAntiforgeryToken]
     public class SignInModel : PageModel

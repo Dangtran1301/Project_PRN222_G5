@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
-    [IgnoreAntiforgeryToken]
     [Authorize(Roles = nameof(Role.Admin))]
     public class CreateModel(IUserService userService) : PageModel
     {
@@ -16,6 +16,11 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public IActionResult OnGet()
         {
+            ViewData["Roles"] = new List<SelectListItem>
+            {
+                new() { Value = nameof(Role.Author), Text = nameof(Role.Author) },
+                new() { Value = nameof(Role.Reader), Text = nameof(Role.Reader) }
+            };
             return Page();
         }
 
