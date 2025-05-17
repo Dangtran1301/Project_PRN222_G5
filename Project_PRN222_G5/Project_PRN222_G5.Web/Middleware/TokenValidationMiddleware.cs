@@ -7,8 +7,8 @@ namespace Project_PRN222_G5.Web.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
             if (
-                context.Request.Path.StartsWithSegments("/Account/SignIn") ||
-                context.Request.Path.StartsWithSegments("/Account/SignUp")||
+                context.Request.Path.StartsWithSegments("/Auth/SignIn") ||
+                context.Request.Path.StartsWithSegments("/Auth/SignUp")||
                 context.Request.Path.StartsWithSegments("/")
                 )
             {

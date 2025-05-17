@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using static System.DateTime;
+﻿using static System.DateTime;
 
 namespace Project_PRN222_G5.Web.Middleware
 {
@@ -19,20 +18,18 @@ namespace Project_PRN222_G5.Web.Middleware
                 var coloredStatus = ColorStatus(context.Response.StatusCode);
                 var coloredMethod = ColorMethod(context.Request.Method);
 
-                var log = $"{startTime:MM/dd/yyyy HH:mm:ss} - " +
-                          $"Request: {coloredMethod} {context.Request.Path} " +
-                          $"by User: {context.User.Identity?.Name ?? "Anonymous"} " +
-                          $"took {coloredTime} Status: {coloredStatus}";
-
-                logger.LogInformation(log);
+                logger.LogInformation($"{startTime:MM/dd/yyyy HH:mm:ss} - " +
+                                      $"Request: {coloredMethod} {context.Request.Path} " +
+                                      $"by User: {context.User.Identity?.Name ?? "Anonymous"} " +
+                                      $"took {coloredTime} Status: {coloredStatus}");
             }
         }
 
         private static string ColorStatus(int statusCode)
         {
-            if (statusCode >= 200 && statusCode < 300) return $"\x1b[32m{statusCode}\x1b[0m"; // Green
-            if (statusCode >= 300 && statusCode < 400) return $"\x1b[36m{statusCode}\x1b[0m"; // Cyan
-            if (statusCode >= 400 && statusCode < 500) return $"\x1b[33m{statusCode}\x1b[0m"; // Yellow
+            if (statusCode is >= 200 and < 300) return $"\x1b[32m{statusCode}\x1b[0m"; // Green
+            if (statusCode is >= 300 and < 400) return $"\x1b[36m{statusCode}\x1b[0m"; // Cyan
+            if (statusCode is >= 400 and < 500) return $"\x1b[33m{statusCode}\x1b[0m"; // Yellow
             return $"\x1b[31m{statusCode}\x1b[0m"; // Red
         }
 

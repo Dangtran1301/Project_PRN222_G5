@@ -41,7 +41,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             {
                 await _userService.RegisterUserAsync(Input);
                 _logger.LogInformation("User {Username} signed up successfully.", Input.Username);
-                return RedirectToPage("/Account/SignIn");
+                return RedirectToPage("/Auth/SignIn");
             }
             catch (ValidationException ex)
             {

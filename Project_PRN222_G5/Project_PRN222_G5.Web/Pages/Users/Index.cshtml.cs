@@ -19,9 +19,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             if (page < 1) page = 1;
             CurrentPage = page;
-
-            var items = await userService.GetPagedAsync(page, PageSize);
-            Users = items;
+            Users = await userService.GetPagedAsync(page, PageSize);
             TotalPages = (int)Math.Ceiling((double)TotalCount / PageSize);
         }
     }

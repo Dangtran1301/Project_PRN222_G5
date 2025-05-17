@@ -47,7 +47,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                     Expires = DateTimeOffset.UtcNow.AddMinutes(30)
                 });
                 _logger.LogInformation("User {Username} signed in successfully.", Input.Username);
-                return RedirectToPage("/Users/Index");
+                return RedirectToPage(PageRoutes.UsersIndex);
             }
             catch (UnauthorizedAccessException ex)
             {
