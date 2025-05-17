@@ -27,17 +27,23 @@ namespace Project_PRN222_G5.Web.Middleware
 
         private static string ColorStatus(int statusCode)
         {
-            if (statusCode is >= 200 and < 300) return $"\x1b[32m{statusCode}\x1b[0m"; // Green
-            if (statusCode is >= 300 and < 400) return $"\x1b[36m{statusCode}\x1b[0m"; // Cyan
-            if (statusCode is >= 400 and < 500) return $"\x1b[33m{statusCode}\x1b[0m"; // Yellow
-            return $"\x1b[31m{statusCode}\x1b[0m"; // Red
+            return statusCode switch
+            {
+                >= 200 and < 300 => $"\x1b[32m{statusCode}\x1b[0m",
+                >= 300 and < 400 => $"\x1b[36m{statusCode}\x1b[0m",
+                >= 400 and < 500 => $"\x1b[33m{statusCode}\x1b[0m",
+                _ => $"\x1b[31m{statusCode}\x1b[0m"
+            };
         }
 
         private static string ColorMilliseconds(double milliSeconds)
         {
-            if (milliSeconds < 100) return $"\x1b[32m{milliSeconds}\x1b[0m ms";
-            if (milliSeconds < 500) return $"\x1b[33m{milliSeconds}\x1b[0m ms";
-            return $"\x1b[31m{milliSeconds}\x1b[0m ms";
+            return milliSeconds switch
+            {
+                < 100 => $"\x1b[32m{milliSeconds}\x1b[0m ms",
+                < 500 => $"\x1b[33m{milliSeconds}\x1b[0m ms",
+                _ => $"\x1b[31m{milliSeconds}\x1b[0m ms"
+            };
         }
 
         private static string ColorMethod(string method)
