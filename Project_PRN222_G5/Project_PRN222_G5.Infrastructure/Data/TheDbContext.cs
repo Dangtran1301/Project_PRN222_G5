@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Common;
 using Project_PRN222_G5.Domain.Entities.Users;
-using System;
 
 namespace Project_PRN222_G5.Infrastructure.Data;
 

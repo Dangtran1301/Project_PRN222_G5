@@ -1,13 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.DTOs.Responses;
 using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Entities.Users;
 using Project_PRN222_G5.Domain.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Project_PRN222_G5.Application.Services;
 

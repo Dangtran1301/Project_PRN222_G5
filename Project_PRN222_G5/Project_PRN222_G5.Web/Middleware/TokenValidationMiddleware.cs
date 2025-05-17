@@ -8,7 +8,7 @@ namespace Project_PRN222_G5.Web.Middleware
         {
             if (
                 context.Request.Path.StartsWithSegments("/Auth/SignIn") ||
-                context.Request.Path.StartsWithSegments("/Auth/SignUp")||
+                context.Request.Path.StartsWithSegments("/Auth/SignUp") ||
                 context.Request.Path.StartsWithSegments("/")
                 )
             {

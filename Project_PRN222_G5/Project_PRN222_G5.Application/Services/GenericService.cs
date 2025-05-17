@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Project_PRN222_G5.Application.Interfaces;
+﻿using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Common;
 using Project_PRN222_G5.Domain.Interfaces;
 using System.Linq.Expressions;
@@ -12,7 +11,6 @@ public abstract class GenericService<TEntity, TRequest, TResponse>
     where TRequest : class
     where TResponse : class
 {
-
     public async Task<TResponse> GetByIdAsync(Guid id)
     {
         var entity = await unitOfWork.Repository<TEntity>().GetByIdAsync(id);
