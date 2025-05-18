@@ -499,3 +499,5 @@ src/Application/appsettings.json
 /Project_PRN222_G5/Project_PRN222_G5.Web/appsettings.Development.json
 /.gitignore
 /Project_PRN222_G5/Project_PRN222_G5.Web/appsettings.Development.json
+*.json
+/Project_PRN222_G5/Project_PRN222_G5.Web/appsettings.example.json
