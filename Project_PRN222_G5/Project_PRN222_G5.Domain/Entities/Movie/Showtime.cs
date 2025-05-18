@@ -3,7 +3,7 @@ using Project_PRN222_G5.Domain.Entities.Cinema;
 
 namespace Project_PRN222_G5.Domain.Entities.Movie;
 
-public class Showtime : BaseEntity
+public class Showtime : BaseEntity<int>
 {
     public Guid MovieId { get; set; }
     public Movie Movie { get; set; } = null!;

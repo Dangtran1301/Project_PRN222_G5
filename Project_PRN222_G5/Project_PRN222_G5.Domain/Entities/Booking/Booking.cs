@@ -10,7 +10,7 @@ public class Booking : BaseEntity
     public decimal TotalPrice { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
-    public Guid ShowtimeId { get; set; }
+    public int ShowtimeId { get; set; }
     public Showtime Showtime { get; set; } = null!;
     public ICollection<BookingDetail> BookingDetails { get; set; } = [];
 }
