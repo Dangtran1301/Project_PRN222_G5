@@ -2,10 +2,10 @@
 
 public abstract class DefaultEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 }
 
 public abstract class DefaultEntity<T>
 {
-    public T Id { get; set; } = default!;
+    public T Id { get; init; } = default!;
 }

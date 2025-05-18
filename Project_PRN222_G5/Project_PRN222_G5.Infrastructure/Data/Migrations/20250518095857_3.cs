@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -173,7 +174,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                 name: "Showtimes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -206,7 +208,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     BookingTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     TotalPrice = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShowtimeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShowtimeId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),

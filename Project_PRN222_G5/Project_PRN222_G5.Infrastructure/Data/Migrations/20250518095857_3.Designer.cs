@@ -12,7 +12,7 @@ using Project_PRN222_G5.Infrastructure.Data;
 namespace Project_PRN222_G5.Infrastructure.Migrations
 {
     [DbContext(typeof(TheDbContext))]
-    [Migration("20250518094723_3")]
+    [Migration("20250518095857_3")]
     partial class _3
     {
         /// <inheritdoc />
@@ -44,8 +44,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid>("ShowtimeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ShowtimeId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasPrecision(10, 2)
@@ -243,9 +243,11 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
             modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Showtime", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
