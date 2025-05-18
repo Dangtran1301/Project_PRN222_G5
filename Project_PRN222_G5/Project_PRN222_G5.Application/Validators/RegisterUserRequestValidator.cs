@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Project_PRN222_G5.Application.DTOs.Requests;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.Application.Validators
 {

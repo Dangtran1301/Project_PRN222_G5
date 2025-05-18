@@ -9,7 +9,6 @@ namespace Project_PRN222_G5.Infrastructure.Data;
 public class TheDbContext(DbContextOptions<TheDbContext> options)
     : DbContext(options), IDbContext
 {
-
     public DatabaseFacade DatabaseFacade => Database;
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }

@@ -53,6 +53,7 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
 
             return await _dbSet.AnyAsync(criteria, cancellationToken);
         }
+
         public async Task<int> CountAsync(
             Expression<Func<TEntity, bool>>? criteria = null,
             CancellationToken cancellationToken = default)

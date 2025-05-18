@@ -7,6 +7,7 @@ namespace Project_PRN222_G5.Application.Interfaces;
 public interface IDbContext : IDisposable
 {
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
+
     EntityEntry Entry(object entity);
 
     public DatabaseFacade DatabaseFacade { get; }

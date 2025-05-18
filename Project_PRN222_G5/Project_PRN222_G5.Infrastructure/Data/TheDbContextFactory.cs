@@ -12,7 +12,7 @@ public class TheDbContextFactory : IDesignTimeDbContextFactory<TheDbContext>
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(
-                    @Directory.GetCurrentDirectory()+$"/../Project_PRN222_G5.Web/appsettings.json")
+                    @Directory.GetCurrentDirectory() + $"/../Project_PRN222_G5.Web/appsettings.json")
                 .Build();
 
             var connectionString = configuration.GetValue<string>(
