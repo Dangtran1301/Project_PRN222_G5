@@ -21,7 +21,7 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
         {
             // 👉 Infrastructure - DbContext
             services.AddDbContext<TheDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
 
             services.AddScoped<IDbContext, TheDbContext>();
 
