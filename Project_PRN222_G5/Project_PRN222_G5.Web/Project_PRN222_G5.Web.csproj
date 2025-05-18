@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+	  <TargetFramework>net8.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <PreserveCompilationContext>true</PreserveCompilationContext>
+	  <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Project_PRN222_G5.Application\Project_PRN222_G5.Application.csproj" />
+    <ProjectReference Include="..\Project_PRN222_G5.Domain\Project_PRN222_G5.Domain.csproj" />
+    <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.Infrastructure.csproj" />
+    <ProjectReference Include="..\Project_PRN222_G5.Persistence\Project_PRN222_G5.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

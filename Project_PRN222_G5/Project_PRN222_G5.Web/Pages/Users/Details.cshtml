@@ -1,0 +1,26 @@
+﻿@page
+@model Project_PRN222_G5.Web.Pages.Users.DetailsModel
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>User Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Username</dt>
+        <dd class="col-sm-10">@Model.User.Username</dd>
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.User.Email</dd>
+        <dt class="col-sm-2">Full Name</dt>
+        <dd class="col-sm-10">@Model.User.FullName</dd>
+        <dt class="col-sm-2">Roles</dt>
+        <dd class="col-sm-10">@string.Join(", ", Model.User.Role)</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-page="Edit" asp-route-id="@Model.User.Id" class="btn btn-warning">Edit</a>
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>
