@@ -23,8 +23,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 User = await userService.GetByIdAsync(id);
                 Input = new RegisterUserRequest
                 {
-                    FirstName = User.FirstName,
-                    LastName = User.LastName,
+                    FullName = User.FullName,
                     Username = User.Username,
                     Email = User.Email,
                     Password = string.Empty,

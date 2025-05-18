@@ -11,10 +11,13 @@ public class TheDbContextFactory : IDesignTimeDbContextFactory<TheDbContext>
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(
+                    @Directory.GetCurrentDirectory()+$"/../Project_PRN222_G5.Web/appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetValue<string>(
+                "ConnectionStrings:DefaultConnection"
+                    );
 
             var optionsBuilder = new DbContextOptionsBuilder<TheDbContext>();
             optionsBuilder.UseSqlServer(connectionString);

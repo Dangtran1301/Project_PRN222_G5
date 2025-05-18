@@ -1,4 +1,3 @@
-using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Data.Seeder;
 using Project_PRN222_G5.Infrastructure.DependencyInjection;
 using Project_PRN222_G5.Web.Middleware;
@@ -18,10 +17,11 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
 var app = builder.Build();
+
+//Seeder
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<TheDbContext>();
-    await DatabaseSeeder.SeedAsync(context);
+    await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
 }
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

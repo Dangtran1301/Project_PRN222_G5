@@ -10,14 +10,9 @@
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group mb-3">
-        <label asp-for="Input.FirstName" class="form-label">First Name</label>
-        <input name="Input.FirstName" asp-for="Input.FirstName" class="form-control" />
-        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.LastName" class="form-label">Last Name</label>
-        <input name="Input.LastName" asp-for="Input.LastName" class="form-control" />
-        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+        <label asp-for="Input.FullName" class="form-label">First Name</label>
+        <input name="Input.FirstName" asp-for="Input.FullName" class="form-control" />
+        <span asp-validation-for="Input.FullName" class="text-danger"></span>
     </div>
     <div class="form-group mb-3">
         <label asp-for="Input.Username" class="form-label">Username</label>

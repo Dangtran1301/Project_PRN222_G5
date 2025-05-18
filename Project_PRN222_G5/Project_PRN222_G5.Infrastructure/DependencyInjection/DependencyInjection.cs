@@ -10,6 +10,7 @@ using Project_PRN222_G5.Application.Services;
 using Project_PRN222_G5.Application.Validators;
 using Project_PRN222_G5.Domain.Interfaces;
 using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.Infrastructure.Repositories;
 using System.Text;
 
 namespace Project_PRN222_G5.Infrastructure.DependencyInjection
@@ -18,22 +19,33 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // 👉 Infrastructure - DbContext
             services.AddDbContext<TheDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IDbContext, TheDbContext>();
+
+            // 👉 Infrastructure - UnitOfWork & Repository
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+
+            // 👉 Application - Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            // Thêm các service khác tại đây nếu có
 
+            // 👉 Application - Validators
             services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
 
+            // 👉 Logging
             services.AddLogging(logging => logging.AddConsole());
 
+            // 👉 Authentication (JWT)
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters

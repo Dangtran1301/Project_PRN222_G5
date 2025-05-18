@@ -4,7 +4,8 @@ namespace Project_PRN222_G5.Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
-    IGenericRepositoryAsync<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
+    IGenericRepositoryAsync<TEntity> Repository<TEntity>()
+        where TEntity : BaseEntity;
 
     Task<int> CompleteAsync();
 }

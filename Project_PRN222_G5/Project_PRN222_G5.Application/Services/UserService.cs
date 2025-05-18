@@ -59,8 +59,7 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
         new()
         {
             Id = entity.Id,
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
+            FullName = entity.FullName,
             Username = entity.Username,
             Email = entity.Email,
             Roles = entity.Roles.Select(r => r.ToString()).ToList()
@@ -70,8 +69,7 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
         new()
         {
             Id = Guid.NewGuid(),
-            FirstName = request.FirstName,
-            LastName = request.LastName,
+            FullName = request.FullName,
             Username = request.Username,
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
@@ -84,8 +82,7 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
 
     protected override void UpdateEntity(User entity, RegisterUserRequest request)
     {
-        entity.FirstName = request.FirstName;
-        entity.LastName = request.LastName;
+        entity.FullName = request.FullName;
         entity.Username = request.Username;
         entity.Email = request.Email;
         entity.Roles = request.Roles.Any()

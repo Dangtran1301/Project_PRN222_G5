@@ -5,7 +5,7 @@ using Project_PRN222_G5.Domain.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
 
-public class UserConfigration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

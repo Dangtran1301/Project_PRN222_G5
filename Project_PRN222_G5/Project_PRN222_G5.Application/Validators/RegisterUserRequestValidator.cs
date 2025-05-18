@@ -8,13 +8,9 @@ namespace Project_PRN222_G5.Application.Validators
     {
         public RegisterUserRequestValidator()
         {
-            RuleFor(x => x.FirstName)
+            RuleFor(x => x.FullName)
                 .NotEmpty().WithMessage("First name is required.")
                 .MaximumLength(50).WithMessage("First name cannot exceed 50 characters.");
-
-            RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage("Last name is required.")
-                .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.");
 
             RuleFor(x => x.Username)
                 .NotEmpty().WithMessage("Username is required.")
