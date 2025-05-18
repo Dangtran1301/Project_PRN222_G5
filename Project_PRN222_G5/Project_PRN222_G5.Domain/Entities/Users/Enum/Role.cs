@@ -3,6 +3,6 @@
 public enum Role
 {
     Admin = 1,
-    Author = 2,
-    Reader = 3
+    Customer = 2,
+    Staff = 3
 }

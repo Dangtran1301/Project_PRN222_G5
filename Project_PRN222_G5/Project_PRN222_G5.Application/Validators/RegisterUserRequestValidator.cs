@@ -25,9 +25,8 @@ namespace Project_PRN222_G5.Application.Validators
                 .NotEmpty().WithMessage("Password is required.")
                 .MinimumLength(6).WithMessage("Password must be at least 6 characters.");
 
-            RuleFor(x => x.Roles)
+            RuleFor(x => x.Role)
                 .NotNull().WithMessage("Roles cannot be null.")
-                .Must(roles => roles.All(r => Enum.TryParse<Role>(r, true, out _)))
                 .WithMessage("Invalid role specified.");
         }
     }

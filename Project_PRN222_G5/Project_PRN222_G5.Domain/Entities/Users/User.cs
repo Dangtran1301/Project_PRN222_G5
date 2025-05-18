@@ -23,7 +23,9 @@ public class User : BaseEntity
 
     public UserStatus UserStatus { get; set; } = UserStatus.Active;
 
-    public ICollection<Role> Roles { get; set; } = [];
+    public Role Role { get; set; } = Role.Customer;
+
+    public ICollection<Booking.Booking> Bookings { get; set; } = [];
 
     public ICollection<UserToken> UserTokens { get; set; } = [];
 

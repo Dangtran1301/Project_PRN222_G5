@@ -44,7 +44,7 @@ public class AuthService(IUnitOfWork unitOfWork, IConfiguration configuration) :
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.Username),
-            new Claim(ClaimTypes.Role, string.Join(",", user.Roles))
+            new Claim(ClaimTypes.Role, string.Join(",", user.Role))
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

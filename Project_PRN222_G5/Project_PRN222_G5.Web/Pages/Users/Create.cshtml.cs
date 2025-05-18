@@ -18,8 +18,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             ViewData["Roles"] = new List<SelectListItem>
             {
-                new() { Value = nameof(Role.Author), Text = nameof(Role.Author) },
-                new() { Value = nameof(Role.Reader), Text = nameof(Role.Reader) }
+                new() { Value = nameof(Role.Customer), Text = nameof(Role.Customer) },
+                new() { Value = nameof(Role.Staff), Text = nameof(Role.Staff) }
             };
             return Page();
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Project_PRN222_G5.Domain.Entities.Users;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
 
@@ -36,13 +35,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.UserStatus)
             .HasColumnType("tinyint");
 
-        builder.Property(x => x.Roles)
-            .HasMaxLength(10)
-            .HasConversion(
-                v => string.Join(",", v.Select(r => r.ToString())),
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(Enum.Parse<Role>)
-                    .ToList())
+        builder.Property(x => x.Role)
+            .HasConversion<string>()
+            .HasMaxLength(20)
             .IsRequired();
     }
 }

@@ -27,7 +27,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
                     Username = User.Username,
                     Email = User.Email,
                     Password = string.Empty,
-                    Roles = User.Roles
+                    Role = User.Role
                 };
                 return Page();
             }

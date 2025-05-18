@@ -62,7 +62,7 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
             FullName = entity.FullName,
             Username = entity.Username,
             Email = entity.Email,
-            Roles = entity.Roles.Select(r => r.ToString()).ToList()
+            Role = entity.Role.ToString(),
         };
 
     protected override User MapToEntity(RegisterUserRequest request) =>
@@ -73,9 +73,9 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
             Username = request.Username,
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Roles = request.Roles.Any()
-                ? request.Roles.Select(r => Enum.Parse<Role>(r, true)).ToList()
-                : [Role.Reader],
+            Role = request.Role.Any()
+                ? Enum.Parse<Role>(request.Role, true)
+                : Role.Customer,
             CreatedAt = DateTimeOffset.UtcNow,
             CreatedBy = "System"
         };
@@ -85,9 +85,9 @@ public class UserService(IUnitOfWork unitOfWork, IValidator<RegisterUserRequest>
         entity.FullName = request.FullName;
         entity.Username = request.Username;
         entity.Email = request.Email;
-        entity.Roles = request.Roles.Any()
-            ? request.Roles.Select(r => Enum.Parse<Role>(r, true)).ToList()
-            : [Role.Reader];
+        entity.Role = request.Role.Any()
+            ? Enum.Parse<Role>(request.Role, true)
+            : Role.Customer;
         entity.UpdatedAt = DateTimeOffset.UtcNow;
         entity.UpdatedBy = string.Empty;
     }
