@@ -20,11 +20,23 @@ public class ShowtimeConfiguration : IEntityTypeConfiguration<Showtime>
         builder.HasOne(x => x.Movie)
             .WithMany(x => x.Showtimes)
             .HasForeignKey(x => x.MovieId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.Room)
             .WithMany(x => x.Showtimes)
             .HasForeignKey(x => x.RoomId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Property(x => x.CreatedAt)
             .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedBy)
+            .HasMaxLength(100);
     }
 }

@@ -8,16 +8,18 @@ public class BookingDetailConfiguration : IEntityTypeConfiguration<BookingDetail
 {
     public void Configure(EntityTypeBuilder<BookingDetail> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(x => new { x.BookingId, x.SeatId });
 
         builder.HasOne(x => x.Booking)
             .WithMany(x => x.BookingDetails)
             .HasForeignKey(x => x.BookingId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Seat)
             .WithMany(x => x.BookingDetails)
             .HasForeignKey(x => x.SeatId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

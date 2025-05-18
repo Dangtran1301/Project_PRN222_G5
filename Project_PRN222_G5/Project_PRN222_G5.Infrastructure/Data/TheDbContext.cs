@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Domain.Entities.Booking;
+using Project_PRN222_G5.Domain.Entities.Cinema;
+using Project_PRN222_G5.Domain.Entities.Movie;
 using Project_PRN222_G5.Domain.Entities.Users;
 using System.Reflection;
 
@@ -13,6 +16,13 @@ public class TheDbContext(DbContextOptions<TheDbContext> options)
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
     public DbSet<UserResetPassword> UserResetPasswords { get; set; }
+    public DbSet<Cinema> Cinemas { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Seat> Seats { get; set; }
+    public DbSet<Movie> Movies { get; set; }
+    public DbSet<Showtime> Showtimes { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<BookingDetail> BookingDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

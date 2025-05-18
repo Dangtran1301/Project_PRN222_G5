@@ -1,12 +1,11 @@
-﻿using Project_PRN222_G5.Domain.Common;
-using Project_PRN222_G5.Domain.Entities.Cinema;
+﻿using Project_PRN222_G5.Domain.Entities.Cinema;
 
 namespace Project_PRN222_G5.Domain.Entities.Booking;
 
-public class BookingDetail : BaseEntity
+public class BookingDetail
 {
-    public int BookingId { get; set; }
-    public int SeatId { get; set; }
+    public Guid BookingId { get; set; }
     public Booking Booking { get; set; } = null!;
+    public Guid SeatId { get; set; }
     public Seat Seat { get; set; } = null!;
 }

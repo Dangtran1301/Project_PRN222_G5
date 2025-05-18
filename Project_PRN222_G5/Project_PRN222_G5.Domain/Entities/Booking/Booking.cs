@@ -8,9 +8,9 @@ public class Booking : BaseEntity
 {
     public DateTime BookingTime { get; set; } = DateTime.Now;
     public decimal TotalPrice { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public User User { get; set; } = null!;
-    public int ShowtimeId { get; set; }
+    public Guid ShowtimeId { get; set; }
     public Showtime Showtime { get; set; } = null!;
     public ICollection<BookingDetail> BookingDetails { get; set; } = [];
 }

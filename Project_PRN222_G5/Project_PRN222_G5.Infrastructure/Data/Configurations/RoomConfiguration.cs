@@ -19,6 +19,16 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
                 .WithMany(x => x.Rooms)
                 .HasForeignKey(x => x.CinemaId)
                 .IsRequired();
+
+            builder.Property(x => x.CreatedAt)
+                .IsRequired();
+
+            builder.Property(x => x.CreatedBy)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            builder.Property(x => x.UpdatedBy)
+                .HasMaxLength(100);
         }
     }
 }

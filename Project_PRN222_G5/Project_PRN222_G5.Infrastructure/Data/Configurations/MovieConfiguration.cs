@@ -26,8 +26,18 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
 
         builder.Property(x => x.Status)
             .HasConversion<byte>()
-            .HasColumnType("bit")
+            .HasColumnType("tinyint")
             .HasDefaultValue(MovieStatus.Active)
             .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedBy)
+            .HasMaxLength(100);
     }
 }

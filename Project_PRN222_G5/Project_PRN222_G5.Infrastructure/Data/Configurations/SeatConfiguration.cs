@@ -18,5 +18,15 @@ public class SeatConfiguration : IEntityTypeConfiguration<Seat>
             .WithMany(x => x.Seats)
             .HasForeignKey(x => x.RoomId)
             .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedBy)
+            .HasMaxLength(100);
     }
 }

@@ -20,11 +20,23 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
         builder.HasOne(x => x.User)
             .WithMany(x => x.Bookings)
             .HasForeignKey(x => x.UserId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.Showtime)
             .WithMany(x => x.Bookings)
             .HasForeignKey(x => x.ShowtimeId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Property(x => x.CreatedAt)
             .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedBy)
+            .HasMaxLength(100);
     }
 }
