@@ -18,6 +18,7 @@ namespace Project_PRN222_G5.Infrastructure.Data.Seeder
                     FullName = "Admin",
                     Username = "admin",
                     Email = "admin@example.com",
+                    Phone = "666",
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
                     Roles = new List<Role> { Role.Admin },
                     UserStatus = UserStatus.Active,

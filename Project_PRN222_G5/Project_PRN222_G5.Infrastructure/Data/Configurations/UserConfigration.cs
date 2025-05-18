@@ -11,22 +11,33 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.FullName)
+            .HasMaxLength(100);
+
         builder.Property(x => x.Username)
-            .HasColumnType("citext")
+            .HasMaxLength(100)
             .IsRequired();
         builder.HasIndex(x => x.Username)
             .IsUnique();
 
         builder.Property(x => x.Email)
-            .HasColumnType("citext")
+            .HasMaxLength(100)
             .IsRequired();
         builder.HasIndex(x => x.Email)
             .IsUnique();
 
+        builder.Property(x => x.Phone)
+            .HasMaxLength(10)
+            .IsRequired(false);
+
         builder.Property(x => x.DayOfBirth)
             .HasColumnType("date");
 
+        builder.Property(x => x.UserStatus)
+            .HasColumnType("tinyint");
+
         builder.Property(x => x.Roles)
+            .HasMaxLength(10)
             .HasConversion(
                 v => string.Join(",", v.Select(r => r.ToString())),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
