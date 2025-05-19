@@ -23,16 +23,16 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
             services.AddDbContext<TheDbContext>(options =>
                 options.UseSqlServer(configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
 
-            services.AddScoped<IDbContext, TheDbContext>();
+            services.AddScoped(typeof(IDbContext), typeof(TheDbContext));
 
             // 👉 Infrastructure - UnitOfWork & Repository
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork.UnitOfWork));
             services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
 
             // 👉 Application - Services
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserService, UserService>();
-            // Thêm các service khác tại đây nếu có
+            services.AddScoped(typeof(IAuthService), typeof(AuthService));
+            services.AddScoped(typeof(IUserService), typeof(UserService));
+            services.AddScoped(typeof(ICinemaService), typeof(CinemaService));
 
             // 👉 Application - Validators
             services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();

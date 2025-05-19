@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.DTOs.Requests;
-using Project_PRN222_G5.Application.DTOs.Responses;
+using Project_PRN222_G5.Application.DTOs.Users.Responses;
 using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Entities.Users;
 using Project_PRN222_G5.Domain.Interfaces;

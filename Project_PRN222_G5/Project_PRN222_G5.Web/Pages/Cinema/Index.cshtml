@@ -1,0 +1,36 @@
+﻿@page
+@model Project_PRN222_G5.Web.Pages.Cinema.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Cinemas</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
+</p>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var cinema in Model.List)
+    {
+        <tr>
+            <td>@cinema.Name</td>
+            <td>@cinema.Address</td>
+            <td>
+                <a asp-page="Details" asp-route-id="@cinema.Id" class="btn btn-info btn-sm">Details</a>
+                <a asp-page="Edit" asp-route-id="@cinema.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-page="Delete" asp-route-id="@cinema.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

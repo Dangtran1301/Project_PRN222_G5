@@ -12,8 +12,8 @@ using Project_PRN222_G5.Infrastructure.Data;
 namespace Project_PRN222_G5.Infrastructure.Migrations
 {
     [DbContext(typeof(TheDbContext))]
-    [Migration("20250518095857_3")]
-    partial class _3
+    [Migration("20250519114910_4")]
+    partial class _4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,7 +101,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -112,7 +113,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -219,10 +221,10 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<byte>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
-                        .HasDefaultValue((byte)1);
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -293,6 +295,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Avatar")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -316,21 +319,25 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasDefaultValue("Unknown");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneNumber")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -339,8 +346,10 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<byte>("UserStatus")
-                        .HasColumnType("tinyint");
+                    b.Property<string>("UserStatus")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Username")
                         .IsRequired()

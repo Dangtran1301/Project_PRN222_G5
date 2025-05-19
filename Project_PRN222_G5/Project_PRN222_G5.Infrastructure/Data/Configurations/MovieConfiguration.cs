@@ -25,9 +25,8 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .HasMaxLength(300);
 
         builder.Property(x => x.Status)
-            .HasConversion<byte>()
-            .HasColumnType("tinyint")
-            .HasDefaultValue(MovieStatus.Active)
+            .HasConversion<string>()
+            .HasMaxLength(10)
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)

@@ -1,27 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.Interfaces;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Utils;
 
-namespace Project_PRN222_G5.Web.Pages.Users
+namespace Project_PRN222_G5.Web.Pages.Auth
 {
-    [Authorize(Roles = nameof(Role.Admin))]
-    public class CreateModel(IUserService userService) : PageModel
+    [IgnoreAntiforgeryToken]
+    public class RegisterModel(IUserService userService, ILogger<RegisterModel> logger) : PageModel
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
 
+        public string? ErrorMessage { get; set; }
+
         public IActionResult OnGet()
         {
-            ViewData["Roles"] = new List<SelectListItem>
-            {
-                new() { Value = nameof(Role.Customer), Text = nameof(Role.Customer) },
-                new() { Value = nameof(Role.Staff), Text = nameof(Role.Staff) }
-            };
             return Page();
         }
 
@@ -35,11 +30,12 @@ namespace Project_PRN222_G5.Web.Pages.Users
             try
             {
                 await userService.RegisterUserAsync(Input);
-                return RedirectToPage(PageRoutes.Users.Index);
+                return RedirectToPage(PageRoutes.Auth.Login);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                logger.LogError(ex, "Unexpected error during Register for {Username}.", Input.Username);
+                ErrorMessage = "An unexpected error occurred. Please try again.";
                 return Page();
             }
         }

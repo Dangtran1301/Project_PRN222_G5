@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.DTOs.Responses;
+using Project_PRN222_G5.Application.DTOs.Users.Responses;
 using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -30,7 +31,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             try
             {
                 await userService.DeleteAsync(id);
-                return RedirectToPage(PageRoutes.UsersIndex);
+                return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception)
             {

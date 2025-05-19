@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Project_PRN222_G5.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _3 : Migration
+    public partial class _4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,8 +19,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
@@ -38,7 +38,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     Genre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: true),
                     PosterPath = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    Status = table.Column<byte>(type: "tinyint", nullable: false, defaultValue: (byte)1),
+                    Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -58,12 +58,12 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    Gender = table.Column<int>(type: "int", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, defaultValue: "Unknown"),
                     DayOfBirth = table.Column<DateTime>(type: "date", nullable: true),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserStatus = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
