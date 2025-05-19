@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Responses;
 using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -18,7 +19,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             }
             catch (Exception)
             {
-                return NotFound();
+                return RedirectToPage(PageRoutes.Static.NotFound);
             }
         }
     }

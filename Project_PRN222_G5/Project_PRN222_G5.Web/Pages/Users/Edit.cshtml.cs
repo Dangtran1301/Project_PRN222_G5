@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.DTOs.Responses;
 using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Mapper.Users;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -12,7 +14,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
     public class EditModel(IUserService userService) : PageModel
     {
         [BindProperty]
-        public RegisterUserRequest Input { get; set; } = new();
+        public UpdateInfoUser Input { get; set; } = new();
 
         public new UserResponse User { get; set; } = null!;
 
@@ -20,15 +22,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             try
             {
-                User = await userService.GetByIdAsync(id);
-                Input = new RegisterUserRequest
-                {
-                    FullName = User.FullName,
-                    Username = User.Username,
-                    Email = User.Email,
-                    Password = string.Empty,
-                    Role = User.Role
-                };
+                Input.ToUpdateInfoUser(await userService.GetByIdAsync(id));
                 return Page();
             }
             catch (Exception)
@@ -47,7 +41,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             try
             {
                 await userService.UpdateAsync(id, Input);
-                return RedirectToPage(PageRoutes.UsersIndex);
+                return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception ex)
             {

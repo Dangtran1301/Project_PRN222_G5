@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.Interfaces;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -34,7 +35,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             try
             {
                 await userService.CreateAsync(Input);
-                return RedirectToPage(PageRoutes.UsersIndex);
+                return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception ex)
             {
