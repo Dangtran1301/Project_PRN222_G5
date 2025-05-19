@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Movie;
+using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+using Project_PRN222_G5.Application.Interfaces;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class IndexModel : PageModel
+    public class IndexModel(ICinemaService cinemaService) : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
-
-        public IndexModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public IEnumerable<CinemaResponse> List { get; set; } = [];
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; } = 10;
+        public int TotalCount { get; set; }
+        public async Task OnGetAsync(int page = 1)
         {
-            _context = context;
-        }
-
-        public IList<Movie> Movie { get; set; } = null!;
-
-        public async Task OnGetAsync()
-        {
-            Movie = await _context.Movies.ToListAsync();
+            if (page < 1) page = 1;
+            CurrentPage = page;
+            List = await cinemaService.GetAllAsync();
+            TotalPages = (int)Math.Ceiling((double)TotalCount / PageSize);
         }
     }
 }

@@ -13,13 +13,13 @@ public class User : BaseEntity
 
     public string Email { get; set; }
 
-    public string Phone { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public Gender? Gender { get; set; }
+    public Gender Gender { get; set; } = Gender.Unknown;
 
     public DateTime? DayOfBirth { get; set; }
 
-    public string? Avatar { get; set; }
+    public string Avatar { get; set; } = string.Empty;
 
     public UserStatus UserStatus { get; set; } = UserStatus.Active;
 

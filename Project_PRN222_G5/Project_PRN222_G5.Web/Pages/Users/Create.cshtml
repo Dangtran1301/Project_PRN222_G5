@@ -10,8 +10,8 @@
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group mb-3">
-        <label asp-for="Input.FullName" class="form-label">First Name</label>
-        <input name="Input.FirstName" asp-for="Input.FullName" class="form-control" />
+        <label asp-for="Input.FullName" class="form-label"></label>
+        <input name="Input.FullName" asp-for="Input.FullName" class="form-control" />
         <span asp-validation-for="Input.FullName" class="text-danger"></span>
     </div>
     <div class="form-group mb-3">
@@ -31,8 +31,8 @@
     </div>
     <div class="form-group mb-3">
         <label asp-for="Input.Role" class="form-label">Roles</label>
-        <select name="Input.Roles" asp-for="Input.Role" class="form-control" multiple>
-            @foreach (var role in ((List<SelectListItem>)ViewData["Roles"]!))
+        <select name="Input.Role" asp-for="Input.Role" class="form-control">
+            @foreach (var role in ((List<SelectListItem>)ViewData["Roles"]))
             {
                 <option value="@role.Value">@role.Text</option>
             }

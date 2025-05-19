@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Infrastructure", "Project_PRN222_G5.Infrastructure\Project_PRN222_G5.Infrastructure.csproj", "{B668014A-6E51-4C38-A409-A992CDD9670C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Persistence", "Project_PRN222_G5.Persistence\Project_PRN222_G5.Persistence.csproj", "{84D1B649-E35F-4871-B32F-4B091A302490}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{B668014A-6E51-4C38-A409-A992CDD9670C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B668014A-6E51-4C38-A409-A992CDD9670C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B668014A-6E51-4C38-A409-A992CDD9670C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84D1B649-E35F-4871-B32F-4B091A302490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84D1B649-E35F-4871-B32F-4B091A302490}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84D1B649-E35F-4871-B32F-4B091A302490}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84D1B649-E35F-4871-B32F-4B091A302490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,7 +34,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
             try
             {
-                await userService.CreateAsync(Input);
+                await userService.RegisterUserAsync(Input);
                 return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception ex)

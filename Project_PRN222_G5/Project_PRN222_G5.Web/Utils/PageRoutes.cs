@@ -6,7 +6,7 @@
 
         public static class Static
         {
-            public const string Home = "/Index";
+            public const string Home = "/";
             public const string NotFound = "/404";
         }
 

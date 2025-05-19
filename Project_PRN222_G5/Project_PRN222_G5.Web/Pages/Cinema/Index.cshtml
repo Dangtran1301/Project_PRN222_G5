@@ -3,88 +3,34 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Cinemas</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].PosterPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].UpdatedAt)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Actions</th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Movie) {
+    @foreach (var cinema in Model.List)
+    {
         <tr>
+            <td>@cinema.Name</td>
+            <td>@cinema.Address</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PosterPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="Details" asp-route-id="@cinema.Id" class="btn btn-info btn-sm">Details</a>
+                <a asp-page="Edit" asp-route-id="@cinema.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-page="Delete" asp-route-id="@cinema.Id" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

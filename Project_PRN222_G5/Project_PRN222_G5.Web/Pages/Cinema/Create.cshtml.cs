@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_PRN222_G5.Domain.Entities.Movie;
-using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.Application.DTOs.Cinema.Request;
+using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class CreateModel : PageModel
+    public class CreateModel(ICinemaService cinemaService) : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
-
-        public CreateModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
-        {
-            _context = context;
-        }
-
         public IActionResult OnGet()
         {
             return Page();
         }
 
         [BindProperty]
-        public Movie Movie { get; set; } = default!;
+        public CreateCinemaDto Input { get; set; } = null!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -35,10 +23,8 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 return Page();
             }
 
-            _context.Movies.Add(Movie);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            await cinemaService.CreateAsync(Input);
+            return RedirectToPage(PageRoutes.Cinema.Index);
         }
     }
 }
