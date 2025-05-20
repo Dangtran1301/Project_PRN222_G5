@@ -16,6 +16,7 @@
     <thead>
         <tr>
             <th>Full Name</th>
+            <th>Username</th>
             <th>Email</th>
             <th>Roles</th>
             <th>Actions</th>
@@ -24,10 +25,11 @@
     <tbody>
         @if (Model.Response.Items != null)
         {
-            @foreach (UserResponse user in Model.Response.Items.Cast<UserResponse>())
+            @foreach (var user in Model.Response.Items.Cast<UserResponse>())
             {
                 <tr>
                     <td>@user.FullName</td>
+                    <td>@user.Username</td>
                     <td>@user.Email</td>
                     <td>@string.Join(", ", user.Role)</td>
                     <td>
