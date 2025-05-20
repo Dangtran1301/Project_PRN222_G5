@@ -2,7 +2,6 @@
 using Project_PRN222_G5.Domain.Entities.Users;
 using Project_PRN222_G5.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using ValidationException = Project_PRN222_G5.Application.Exceptions.ValidationException;
 
 namespace Project_PRN222_G5.Application.Services;
 

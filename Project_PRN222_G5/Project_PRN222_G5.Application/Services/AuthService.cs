@@ -11,6 +11,7 @@ using Project_PRN222_G5.Domain.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Project_PRN222_G5.Application.DTOs.Users.Requests;
 
 namespace Project_PRN222_G5.Application.Services;
 
