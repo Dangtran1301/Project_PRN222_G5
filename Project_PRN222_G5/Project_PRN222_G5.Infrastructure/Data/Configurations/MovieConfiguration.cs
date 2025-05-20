@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Project_PRN222_G5.Domain.Entities.Movie;
-using Project_PRN222_G5.Domain.Entities.Movie.Enum;
 
 namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
 

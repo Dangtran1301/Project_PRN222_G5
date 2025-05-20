@@ -17,6 +17,7 @@
 	<ItemGroup>
 	  <Folder Include="DTOs\Cinema\Response\" />
 	  <Folder Include="Exceptions\" />
+	  <Folder Include="Interfaces\Validation\" />
 	  <Folder Include="Mapper\Cinema\" />
 	</ItemGroup>
 

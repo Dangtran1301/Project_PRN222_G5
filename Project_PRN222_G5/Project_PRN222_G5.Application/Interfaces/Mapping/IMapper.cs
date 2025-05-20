@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Application.Interfaces;
+﻿namespace Project_PRN222_G5.Application.Interfaces.Mapping;
 
 public interface IMapper<TEntity, in TRequest, TResponse>
     where TEntity : class
@@ -6,6 +6,8 @@ public interface IMapper<TEntity, in TRequest, TResponse>
     where TResponse : class
 {
     TEntity MapToEntity(TRequest request);
+
     TResponse MapToResponse(TEntity entity);
+
     void UpdateEntity(TEntity entity, TRequest request);
 }
