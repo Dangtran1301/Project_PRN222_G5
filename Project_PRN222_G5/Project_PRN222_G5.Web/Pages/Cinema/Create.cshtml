@@ -7,21 +7,21 @@
 
 <h1>Create</h1>
 
-<h4>Movie</h4>
+<h4>Cinema</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Input.Name" class="control-label"></label>
-                <input asp-for="Input.Name" class="form-control" />
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
+                <label asp-for="Cinema.Name" class="control-label"></label>
+                <input asp-for="Cinema.Name" class="form-control" />
+                <span asp-validation-for="Cinema.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Address" class="control-label"></label>
-                <input asp-for="Input.Address" class="form-control" />
-                <span asp-validation-for="Input.Address" class="text-danger"></span>
+                <label asp-for="Cinema.Address" class="control-label"></label>
+                <input asp-for="Cinema.Address" class="form-control" />
+                <span asp-validation-for="Cinema.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

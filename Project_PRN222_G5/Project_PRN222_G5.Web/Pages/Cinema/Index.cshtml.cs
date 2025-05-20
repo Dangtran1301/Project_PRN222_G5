@@ -1,22 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.DTOs.Cinema.Response;
-using Project_PRN222_G5.Application.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using CinemaEntity = Project_PRN222_G5.Domain.Entities.Cinema.Cinema;
+using Project_PRN222_G5.Infrastructure.Data;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class IndexModel(ICinemaService cinemaService) : PageModel
+    public class IndexModel : PageModel
     {
-        public IEnumerable<CinemaResponse> List { get; set; } = [];
-        public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }
-        public int PageSize { get; set; } = 10;
-        public int TotalCount { get; set; }
-        public async Task OnGetAsync(int page = 1)
+        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+
+        public IndexModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
         {
-            if (page < 1) page = 1;
-            CurrentPage = page;
-            List = await cinemaService.GetAllAsync();
-            TotalPages = (int)Math.Ceiling((double)TotalCount / PageSize);
+            _context = context;
+        }
+        public IList<CinemaEntity> Cinema { get; set; } = default!;
+
+        public async Task OnGetAsync()
+        {
+            Cinema = await _context.Cinemas.ToListAsync();
         }
     }
 }

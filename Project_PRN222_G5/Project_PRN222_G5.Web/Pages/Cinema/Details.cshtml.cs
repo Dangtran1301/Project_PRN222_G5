@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Movie;
+using Project_PRN222_G5.Domain.Entities.Cinema;
 using Project_PRN222_G5.Infrastructure.Data;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
@@ -19,7 +19,8 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             _context = context;
         }
 
-        public Movie Movie { get; set; } = default!;
+        [BindProperty]
+        public Project_PRN222_G5.Domain.Entities.Cinema.Cinema Cinema { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -28,14 +29,14 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            var cinema = await _context.Cinemas.FirstOrDefaultAsync(m => m.Id == id);
+            if (cinema == null)
             {
                 return NotFound();
             }
             else
             {
-                Movie = movie;
+                Cinema = cinema;
             }
             return Page();
         }

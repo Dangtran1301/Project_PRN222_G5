@@ -3,34 +3,40 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Cinemas</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
+    <a asp-page="Create">Create New</a>
 </p>
-<table class="table table-striped">
+<table class="table">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Actions</th>
-    </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cinema[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cinema[0].Address)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var cinema in Model.List)
-    {
+@foreach (var item in Model.Cinema) {
         <tr>
-            <td>@cinema.Name</td>
-            <td>@cinema.Address</td>
             <td>
-                <a asp-page="Details" asp-route-id="@cinema.Id" class="btn btn-info btn-sm">Details</a>
-                <a asp-page="Edit" asp-route-id="@cinema.Id" class="btn btn-warning btn-sm">Edit</a>
-                <a asp-page="Delete" asp-route-id="@cinema.Id" class="btn btn-danger btn-sm">Delete</a>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-    }
+}
     </tbody>
 </table>
