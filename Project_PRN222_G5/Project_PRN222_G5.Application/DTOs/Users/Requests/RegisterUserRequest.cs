@@ -8,7 +8,7 @@ namespace Project_PRN222_G5.Application.DTOs.Users.Requests;
 public class RegisterUserRequest : IMapTo<User>
 {
     [Required(ErrorMessage = "Full name is required.")]
-    [StringLength(50,MinimumLength = 10,ErrorMessage = "Full name must not exceed 50 characters.")]
+    [StringLength(50, MinimumLength = 10, ErrorMessage = "Full name must not exceed 50 characters.")]
     public string FullName { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Username is required.")]
