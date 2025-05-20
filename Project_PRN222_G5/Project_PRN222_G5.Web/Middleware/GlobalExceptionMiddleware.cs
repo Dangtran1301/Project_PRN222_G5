@@ -23,7 +23,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next)
         {
             UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Unauthorized access."),
             InvalidOperationException => (HttpStatusCode.BadRequest, ex.Message),
-            _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
+            _ => (HttpStatusCode.InternalServerError, ex.Message)
         };
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;

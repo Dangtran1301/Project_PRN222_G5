@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.DTOs.Requests;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Project_PRN222_G5.Application.DTOs.Users.Requests;
 using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Domain.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
@@ -11,6 +13,13 @@ namespace Project_PRN222_G5.Web.Pages.Auth
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
+
+        [ViewData]
+        public List<SelectListItem> Roles { get; set; } = Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(r => r != Role.Admin)
+            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })
+            .ToList();
 
         public string? ErrorMessage { get; set; }
 
