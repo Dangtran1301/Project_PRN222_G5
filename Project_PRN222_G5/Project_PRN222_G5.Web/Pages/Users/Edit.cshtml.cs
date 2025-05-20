@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Requests;
 using Project_PRN222_G5.Application.DTOs.Users.Responses;
-using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Mapper.Users;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Utils;
@@ -11,7 +11,7 @@ using Project_PRN222_G5.Web.Utils;
 namespace Project_PRN222_G5.Web.Pages.Users
 {
     [Authorize(Roles = nameof(Role.Admin))]
-    public class EditModel(IUserService userService) : PageModel
+    public class EditModel(IAuthService authService) : PageModel
     {
         [BindProperty]
         public UpdateInfoUser Input { get; set; } = new();
@@ -22,7 +22,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             try
             {
-                Input.ToUpdateInfoUser(await userService.GetByIdAsync(id));
+                Input.ToUpdateInfoUser(await authService.GetByIdAsync(id));
                 return Page();
             }
             catch (Exception)
@@ -40,7 +40,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
             try
             {
-                await userService.UpdateAsync(id, Input);
+                await authService.UpdateAsync(id, Input);
                 return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception ex)

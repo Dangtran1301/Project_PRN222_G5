@@ -1,4 +1,4 @@
-﻿using Project_PRN222_G5.Application.Interfaces;
+﻿using Project_PRN222_G5.Application.Interfaces.Data;
 using Project_PRN222_G5.Domain.Common;
 using Project_PRN222_G5.Domain.Interfaces;
 using Project_PRN222_G5.Infrastructure.Repositories;

@@ -42,6 +42,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<TokenValidationMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();

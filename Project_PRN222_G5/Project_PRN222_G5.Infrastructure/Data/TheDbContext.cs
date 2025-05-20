@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Interfaces.Data;
 using Project_PRN222_G5.Domain.Entities.Booking;
 using Project_PRN222_G5.Domain.Entities.Cinema;
 using Project_PRN222_G5.Domain.Entities.Movie;

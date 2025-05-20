@@ -1,7 +1,8 @@
-﻿using Project_PRN222_G5.Domain.Common;
+﻿using Project_PRN222_G5.Application.DTOs;
+using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Application.Interfaces;
+namespace Project_PRN222_G5.Application.Interfaces.Service;
 
 public interface IGenericService<TE, in TC, in TU, TR>
     where TE : BaseEntity
@@ -13,7 +14,7 @@ public interface IGenericService<TE, in TC, in TU, TR>
 
     Task<IEnumerable<TR>> GetAllAsync();
 
-    Task<IEnumerable<TR>> GetPagedAsync(int page, int pageSize, Expression<Func<TE, bool>>? predicate = null);
+    Task<PagedResponse> GetPagedAsync(int page, int pageSize, Expression<Func<TE, bool>>? predicate = null);
 
     Task<TR> CreateAsync(TC request);
 
