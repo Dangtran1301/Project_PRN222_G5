@@ -1,44 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+using Project_PRN222_G5.Application.Interfaces.Service;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class DetailsModel : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public DetailsModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public DetailsModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
-        [BindProperty]
-        public Project_PRN222_G5.Domain.Entities.Cinema.Cinema Cinema { get; set; } = default!;
+        public CinemaResponse Cinema { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var cinema = await _context.Cinemas.FirstOrDefaultAsync(m => m.Id == id);
-            if (cinema == null)
+            try
+            {
+                Cinema = await _cinemaService.GetByIdAsync(id.Value);
+                return Page();
+            }
+            catch
             {
                 return NotFound();
             }
-            else
-            {
-                Cinema = cinema;
-            }
-            return Page();
         }
     }
 }

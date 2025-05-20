@@ -7,8 +7,11 @@ public static class CinemaMapper
 {
     public static CinemaResponse ToCinemaResponse(this Domain.Entities.Cinema.Cinema entity) => new()
     {
+        Id = entity.Id,
+        Name = entity.Name,
         Address = entity.Address,
-        Name = entity.Name
+        CreatedAt = entity.CreatedAt,
+        UpdatedAt = entity.UpdatedAt,
     };
 
     public static void UpdateEntity(this Domain.Entities.Cinema.Cinema entity, UpdateCinemaDto request)

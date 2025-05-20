@@ -1,78 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.Application.DTOs.Cinema.Request;
+using Project_PRN222_G5.Application.Interfaces.Service;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class EditModel : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public EditModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public EditModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
         [BindProperty]
-        public Project_PRN222_G5.Domain.Entities.Cinema.Cinema Cinema { get; set; } = default!;
+        public UpdateCinemaDto CinemaDto { get; set; } = default!;
 
+        public Guid CinemaId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cinema =  await _context.Cinemas.FirstOrDefaultAsync(m => m.Id == id);
-            if (cinema == null)
-            {
-                return NotFound();
-            }
-            Cinema = cinema;
-            return Page();
-        }
-
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Cinema).State = EntityState.Modified;
+            if (id == null) return NotFound();
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CinemaExists(Cinema.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                var cinema = await _cinemaService.GetByIdAsync(id.Value);
+                if (cinema == null) return NotFound();
 
-            return RedirectToPage("./Index");
+                CinemaId = id.Value;
+                CinemaDto = new UpdateCinemaDto
+                {
+                    Id = id.Value,
+                    Name = cinema.Name,
+                    Address = cinema.Address
+                };
+
+                return Page();
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
-        private bool CinemaExists(Guid id)
+
+        public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            return _context.Cinemas.Any(e => e.Id == id);
+            if (!ModelState.IsValid)
+            {
+                CinemaId = id;
+                return Page();
+            }
+
+            try
+            {
+                await _cinemaService.UpdateAsync(id, CinemaDto);
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Error!");
+                CinemaId = id;
+                return Page();
+            }
         }
     }
 }

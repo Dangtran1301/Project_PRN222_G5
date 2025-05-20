@@ -1,64 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+using Project_PRN222_G5.Application.Interfaces.Service;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class DeleteModel : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public DeleteModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public DeleteModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
         [BindProperty]
-        public Project_PRN222_G5.Domain.Entities.Cinema.Cinema Cinema { get; set; } = default!;
-
+        public CinemaResponse Cinema { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var cinema = await _context.Cinemas.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (cinema == null)
+            try
             {
-                return NotFound();
-            }
-            else
-            {
+                var cinema = await _cinemaService.GetByIdAsync(id.Value);
                 Cinema = cinema;
+                return Page();
             }
-            return Page();
+            catch
+            {
+                return NotFound();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-            if (id == null)
+            if (id == null) return NotFound();
+
+            try
+            {
+                await _cinemaService.DeleteAsync(id.Value);
+                return RedirectToPage("./Index");
+            }
+            catch
             {
                 return NotFound();
             }
-
-            var cinema = await _context.Cinemas.FindAsync(id);
-            if (cinema != null)
-            {
-                Cinema = cinema;
-                _context.Cinemas.Remove(Cinema);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
         }
     }
 }

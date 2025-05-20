@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CinemaEntity = Project_PRN222_G5.Domain.Entities.Cinema.Cinema;
-using Project_PRN222_G5.Infrastructure.Data;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+using Project_PRN222_G5.Application.Interfaces.Service;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class IndexModel : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public IndexModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public IndexModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
-        public IList<CinemaEntity> Cinema { get; set; } = default!;
+
+        public IList<CinemaResponse> Cinemas { get; set; } = new List<CinemaResponse>();
 
         public async Task OnGetAsync()
         {
-            Cinema = await _context.Cinemas.ToListAsync();
+            var cinemas = await _cinemaService.GetAllAsync();
+            Cinemas = cinemas.ToList();
         }
     }
 }
