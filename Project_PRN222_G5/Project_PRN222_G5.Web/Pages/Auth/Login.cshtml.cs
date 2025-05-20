@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Requests;
-using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
 {
     [IgnoreAntiforgeryToken]
-    public class LoginModel(IAuthService authService, ILogger<LoginModel> logger) : PageModel
+    public class LoginModel(IAuthService authService) : PageModel
     {
-
         [BindProperty]
         public LoginRequest Input { get; set; } = null!;
 
@@ -38,10 +37,6 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                     Expires = DateTimeOffset.UtcNow.AddMinutes(30)
                 });
                 return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Page();
             }
             catch (Exception)
             {

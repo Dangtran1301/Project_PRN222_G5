@@ -1,22 +1,24 @@
-﻿using FluentValidation.Results;
-
-namespace Project_PRN222_G5.Application.Exceptions;
+﻿namespace Project_PRN222_G5.Application.Exceptions;
 
 public class ValidationException : Exception
 {
-    public ValidationException() : base("One or more validation failures have occurred.")
+    public IDictionary<string, string[]> Errors { get; }
+
+    public ValidationException()
+        : base("One or more validation failures have occurred.")
     {
-        Errors = [];
+        Errors = new Dictionary<string, string[]>();
     }
 
-    private List<string> Errors { get; }
-
-    public ValidationException(IEnumerable<ValidationFailure> failures)
-        : this()
+    public ValidationException(string error)
+        : base(error)
     {
-        foreach (var failure in failures)
-        {
-            Errors.Add(failure.ErrorMessage);
-        }
+        Errors = new Dictionary<string, string[]> { { string.Empty, new[] { error } } };
+    }
+
+    public ValidationException(IDictionary<string, string[]> errors)
+        : base("One or more validation failures have occurred.")
+    {
+        Errors = errors;
     }
 }

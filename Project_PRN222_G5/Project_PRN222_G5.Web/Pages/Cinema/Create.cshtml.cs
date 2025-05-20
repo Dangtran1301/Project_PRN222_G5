@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Cinema.Request;
-using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Web.Utils;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema

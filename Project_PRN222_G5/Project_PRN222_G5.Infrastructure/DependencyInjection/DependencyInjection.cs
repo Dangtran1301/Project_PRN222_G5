@@ -1,13 +1,13 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Project_PRN222_G5.Application.Interfaces;
+using Project_PRN222_G5.Application.Interfaces.Data;
+using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Services;
-using Project_PRN222_G5.Application.Validators;
 using Project_PRN222_G5.Domain.Interfaces;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
@@ -31,11 +31,8 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
 
             // 👉 Application - Services
             services.AddScoped(typeof(IAuthService), typeof(AuthService));
-            services.AddScoped(typeof(IUserService), typeof(UserService));
             services.AddScoped(typeof(ICinemaService), typeof(CinemaService));
-
-            // 👉 Application - Validators
-            services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
+            services.AddScoped(typeof(IValidationService), typeof(ValidationService));
 
             // 👉 Logging
             services.AddLogging(logging => logging.AddConsole());
