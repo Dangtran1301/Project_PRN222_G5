@@ -10,14 +10,12 @@ public static class CinemaMapper
         Id = entity.Id,
         Name = entity.Name,
         Address = entity.Address,
-        CreatedAt = entity.CreatedAt,
-        UpdatedAt = entity.UpdatedAt,
     };
 
     public static void UpdateEntity(this Domain.Entities.Cinema.Cinema entity, UpdateCinemaDto request)
     {
-        entity.Name = request.Name;
-        entity.Address = request.Address;
-        entity.UpdatedAt = DateTimeOffset.UtcNow;
+        var updateEntity = request.ToEntity();
+        entity.Name = updateEntity.Name;
+        entity.Address = updateEntity.Address;
     }
 }
