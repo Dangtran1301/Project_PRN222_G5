@@ -25,7 +25,9 @@
                                 <a class="nav-link" asp-page="@PageRoutes.Users.Index">Manage Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="@PageRoutes.Auth.Logout">Logout</a>
+                                <form method="post" asp-page="@PageRoutes.Auth.Logout" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link">Logout</button>
+                                </form>
                             </li>
                         }
                         else

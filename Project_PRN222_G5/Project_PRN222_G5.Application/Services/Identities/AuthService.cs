@@ -42,11 +42,13 @@ public class AuthService(
 
         var token = GenerateJwtToken(user);
         var refreshToken = Guid.NewGuid().ToString();
+        var userId = user.Id;
         await unitOfWork.Repository<UserToken>().AddAsync(new UserToken
         {
-            UserId = user.Id,
+            UserId = userId,
             RefreshToken = refreshToken,
-            ExpiredTime = DateTimeOffset.UtcNow.AddDays(7)
+            ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
+            CreatedBy = userId.ToString().ToUpper(),
         });
         await unitOfWork.CompleteAsync();
 
@@ -70,23 +72,16 @@ public class AuthService(
         return MapToResponse(user);
     }
 
-    public async Task<User> GetByUsernameAsync(string username)
+    public async Task LogoutAsync(Guid userId, string refreshToken)
     {
-        var user = (await unitOfWork.Repository<User>().FindAsync(u => u.Username == username)).FirstOrDefault();
-        return user ??
-    throw new ValidationException(new Dictionary<string, string[]>
-    {
-        ["Username"] = [$"User with username {username} not found."]
-    });
-    }
-
-    public async Task<User> GetByEmailAsync(string email)
-    {
-        var user = (await unitOfWork.Repository<User>().FindAsync(u => u.Email == email)).FirstOrDefault();
-        return user ?? throw new ValidationException(new Dictionary<string, string[]>
+        var tokens = await unitOfWork.Repository<UserToken>()
+            .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
+        var token = tokens.FirstOrDefault();
+        if (token != null)
         {
-            ["Email"] = [$"User with email {email} not found."]
-        });
+            unitOfWork.Repository<UserToken>().Delete(token);
+            await unitOfWork.CompleteAsync();
+        }
     }
 
     private string GenerateJwtToken(User user)
