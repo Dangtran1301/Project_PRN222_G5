@@ -1,18 +1,11 @@
 ﻿@page
 @model Project_PRN222_G5.Web.Pages.Auth.LoginModel
 @{
-    ViewData["Title"] = "Sign In";
+    ViewData["Title"] = "Login";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Sign In</h1>
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @Model.ErrorMessage
-    </div>
-}
+<h1>Login</h1>
 
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>

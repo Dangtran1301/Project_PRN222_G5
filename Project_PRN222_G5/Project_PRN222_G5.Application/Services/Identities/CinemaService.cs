@@ -1,15 +1,17 @@
 ﻿using Project_PRN222_G5.Application.DTOs.Cinema.Request;
 using Project_PRN222_G5.Application.DTOs.Cinema.Response;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
+using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Mapper.Cinema;
 using Project_PRN222_G5.Domain.Entities.Cinema;
 
-using System.ComponentModel.DataAnnotations;
+namespace Project_PRN222_G5.Application.Services.Identities;
 
-namespace Project_PRN222_G5.Application.Services;
-
-public class CinemaService(IUnitOfWork unitOfWork)
-    : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork), ICinemaService
+public class CinemaService(
+    IUnitOfWork unitOfWork,
+    IValidationService validationService
+    ) : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
 {
     protected override CinemaResponse MapToResponse(Cinema entity) => entity.ToCinemaResponse();
 

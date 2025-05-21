@@ -22,7 +22,7 @@ public class Startup(IConfiguration configuration)
         // Add Session
         services.AddSession(options =>
         {
-            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.IdleTimeout = TimeSpan.FromMinutes(60);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
             options.Cookie.SameSite = SameSiteMode.Strict;

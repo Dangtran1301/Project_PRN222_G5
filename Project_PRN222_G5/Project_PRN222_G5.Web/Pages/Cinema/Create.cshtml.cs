@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Cinema.Request;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
 
-namespace Project_PRN222_G5.Web.Pages.Cinema;
-
-public class CreateModel : PageModel
+namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    private readonly ICinemaService _cinemaService;
-
-    public CreateModel(ICinemaService cinemaService)
+    public class CreateModel(ICinemaService cinemaService) : BasePageModel
     {
         _cinemaService = cinemaService;
     }
@@ -22,12 +18,15 @@ public class CreateModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid)
+        [BindProperty]
+        public CreateCinemaDto Input { get; set; } = null!;
+
+        public async Task<IActionResult> OnPostAsync()
         {
-            return Page();
-        }
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
         try
         {

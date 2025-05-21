@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.Application.Exceptions;
 using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Repository;
 using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
 
@@ -11,10 +12,12 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
     {
         private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
+        #region CRUD
+
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)
-                   ?? throw new KeyNotFoundException($"Entity with id {id} not found.");
+                   ?? throw new ValidationException($"{nameof(TEntity)} with id {id} not found.");
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -42,6 +45,10 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
             _dbSet.Remove(entity);
         }
 
+        #endregion CRUD
+
+        #region bool
+
         public async Task<bool> AnyAsync(
             Expression<Func<TEntity, bool>>? criteria = null,
             CancellationToken cancellationToken = default)
@@ -54,6 +61,10 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
             return await _dbSet.AnyAsync(criteria, cancellationToken);
         }
 
+        #endregion bool
+
+        #region count
+
         public async Task<int> CountAsync(
             Expression<Func<TEntity, bool>>? criteria = null,
             CancellationToken cancellationToken = default)
@@ -65,5 +76,7 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
 
             return await _dbSet.CountAsync(criteria, cancellationToken);
         }
+
+        #endregion count
     }
 }

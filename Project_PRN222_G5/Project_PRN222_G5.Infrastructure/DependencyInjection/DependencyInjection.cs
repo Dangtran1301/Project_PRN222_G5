@@ -5,9 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.Interfaces.Data;
+using Project_PRN222_G5.Application.Interfaces.Repository;
 using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Services;
+using Project_PRN222_G5.Application.Services.Identities;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
 using Project_PRN222_G5.Infrastructure.Service;
@@ -40,8 +44,9 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
             // Infrastructure - Repository & Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-            services.AddScoped<IDateTimeService, DateTimeService>();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+            services.AddSingleton<IDateTimeService, DateTimeService>();
+
             return services;
         }
 

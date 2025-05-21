@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Web.Utils
+﻿namespace Project_PRN222_G5.Web.Pages.Shared
 {
     public static class PageRoutes
     {
@@ -6,7 +6,7 @@
 
         public static class Static
         {
-            public const string Home = "/";
+            public const string Home = "/Index";
             public const string NotFound = "/404";
         }
 

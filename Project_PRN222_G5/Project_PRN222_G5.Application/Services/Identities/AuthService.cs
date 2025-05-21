@@ -3,7 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.DTOs.Users.Requests;
 using Project_PRN222_G5.Application.DTOs.Users.Responses;
 using Project_PRN222_G5.Application.Exceptions;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Mapper.Users;
 using Project_PRN222_G5.Domain.Entities.Users;
@@ -11,10 +12,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Project_PRN222_G5.Application.Services;
+namespace Project_PRN222_G5.Application.Services.Identities;
 
-public class AuthService(IUnitOfWork unitOfWork, IValidationService validationService, IConfiguration configuration)
-        : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork: unitOfWork), IAuthService
+public class AuthService(
+    IUnitOfWork unitOfWork,
+    IValidationService validationService,
+    IConfiguration configuration
+    ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
@@ -30,16 +34,21 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
-            throw new UnauthorizedAccessException("Invalid credentials.");
+            throw new ValidationException(new Dictionary<string, string[]>
+            {
+                ["Credentials"] = ["Invalid credentials."]
+            });
         }
 
         var token = GenerateJwtToken(user);
         var refreshToken = Guid.NewGuid().ToString();
+        var userId = user.Id;
         await unitOfWork.Repository<UserToken>().AddAsync(new UserToken
         {
-            UserId = user.Id,
+            UserId = userId,
             RefreshToken = refreshToken,
-            ExpiredTime = DateTimeOffset.UtcNow.AddDays(7)
+            ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
+            CreatedBy = userId.ToString().ToUpper(),
         });
         await unitOfWork.CompleteAsync();
 
@@ -63,16 +72,16 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
         return MapToResponse(user);
     }
 
-    public async Task<User> GetByUsernameAsync(string username)
+    public async Task LogoutAsync(Guid userId, string refreshToken)
     {
-        var user = (await unitOfWork.Repository<User>().FindAsync(u => u.Username == username)).FirstOrDefault();
-        return user ?? throw new KeyNotFoundException($"User with username {username} not found.");
-    }
-
-    public async Task<User> GetByEmailAsync(string email)
-    {
-        var user = (await unitOfWork.Repository<User>().FindAsync(u => u.Email == email)).FirstOrDefault();
-        return user ?? throw new KeyNotFoundException($"User with email {email} not found.");
+        var tokens = await unitOfWork.Repository<UserToken>()
+            .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
+        var token = tokens.FirstOrDefault();
+        if (token != null)
+        {
+            unitOfWork.Repository<UserToken>().Delete(token);
+            await unitOfWork.CompleteAsync();
+        }
     }
 
     private string GenerateJwtToken(User user)
@@ -91,7 +100,7 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
             issuer: configuration["Jwt:Issuer"],
             audience: configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

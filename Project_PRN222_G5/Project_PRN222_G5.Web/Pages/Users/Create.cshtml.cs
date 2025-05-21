@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
-using Project_PRN222_G5.Web.Utils;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
     [Authorize(Roles = nameof(Role.Admin))]
-    public class CreateModel(IAuthService authService) : PageModel
+    public class CreateModel(IAuthService authService) : BasePageModel
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
@@ -31,6 +30,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 return Page();
             }
 
@@ -41,7 +41,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                HandleException(ex);
                 return Page();
             }
         }

@@ -2,7 +2,7 @@
 using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Application.Interfaces.Service;
+namespace Project_PRN222_G5.Application.Interfaces.Service.Identities;
 
 public interface IGenericService<TE, in TC, in TU, TR>
     where TE : BaseEntity
