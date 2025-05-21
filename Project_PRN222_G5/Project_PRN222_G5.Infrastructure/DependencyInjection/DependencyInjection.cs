@@ -19,52 +19,69 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // 👉 Infrastructure - DbContext
+            // Application - Services
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICinemaService, CinemaService>();
+
+            // Application - Validation
+            services.AddScoped<IValidationService, ValidationService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Infrastructure - DbContext
             services.AddDbContext<TheDbContext>(options =>
-                options.UseSqlServer(configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IDbContext, TheDbContext>();
 
-            services.AddScoped(typeof(IDbContext), typeof(TheDbContext));
-
-            // 👉 Infrastructure - UnitOfWork & Repository
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork.UnitOfWork));
+            // Infrastructure - Repository & Unit of Work
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
 
-            // 👉 Application - Services
-            services.AddScoped(typeof(IAuthService), typeof(AuthService));
-            services.AddScoped(typeof(ICinemaService), typeof(CinemaService));
-            services.AddScoped(typeof(IValidationService), typeof(ValidationService));
+            return services;
+        }
 
-            // 👉 Logging
-            services.AddLogging(logging => logging.AddConsole());
-
-            // 👉 Authentication (JWT)
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["Jwt:Issuer"],
-                        ValidAudience = configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
-                    };
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                };
 
-                    options.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
-                        {
-                            context.Token = context.Request.Cookies["AccessToken"];
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
+                        context.Token = context.Request.Cookies["AccessToken"];
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            return services;
+        }
+        public static IServiceCollection AddCustomLogging(this IServiceCollection services)
+        {
+            services.AddLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+            });
 
             return services;
         }

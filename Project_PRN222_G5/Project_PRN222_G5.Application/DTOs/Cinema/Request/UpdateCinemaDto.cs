@@ -8,7 +8,7 @@ public class UpdateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
     public string Address { get; set; } = string.Empty;
     public Guid Id { get; set; }  
 
-    public Domain.Entities.Cinema.Cinema ToEntity() => new Domain.Entities.Cinema.Cinema()
+    public Domain.Entities.Cinema.Cinema ToEntity() => new()
     {
         Id = Id,
         Name = Name,
