@@ -3,7 +3,7 @@ using Project_PRN222_G5.Application.DTOs.Cinema.Response;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Mapper.Cinema;
 using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Domain.Interfaces;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.Application.Services;
