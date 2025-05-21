@@ -4,5 +4,5 @@ namespace Project_PRN222_G5.Infrastructure.Service;
 
 public class DateTimeService : IDateTimeService
 {
-    public DateTime NowUtc { get; } = DateTime.Now;
+    public DateTime NowUtc => DateTime.UtcNow;
 }
