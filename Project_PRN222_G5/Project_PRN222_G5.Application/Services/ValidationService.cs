@@ -1,4 +1,4 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Service;
+﻿using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Domain.Entities.Users;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +9,14 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
 {
     public async Task<Dictionary<string, string[]>> ValidateAsync<T>(T model)
     {
+        if (model == null)
+        {
+            return await Task.FromResult(new Dictionary<string, string[]>
+            {
+                ["Model"] = ["Model cannot be null."]
+            });
+        }
+
         var validationResults = new List<ValidationResult>();
         var validationContext = new ValidationContext(model);
         Validator.TryValidateObject(model, validationContext, validationResults, true);

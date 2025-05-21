@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Application.Interfaces.Service;
+namespace Project_PRN222_G5.Application.Interfaces.Repository;
 
 public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 {
