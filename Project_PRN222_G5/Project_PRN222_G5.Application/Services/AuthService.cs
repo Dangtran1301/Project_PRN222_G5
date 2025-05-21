@@ -83,7 +83,7 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
             new Claim(JwtRegisteredClaimNames.Name, user.FullName),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("uid",user.Id.ToString())
+            new Claim("uid",user.Id.ToString().ToUpper())
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
