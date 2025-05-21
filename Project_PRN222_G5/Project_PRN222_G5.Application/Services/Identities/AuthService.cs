@@ -14,8 +14,11 @@ using System.Text;
 
 namespace Project_PRN222_G5.Application.Services.Identities;
 
-public class AuthService(IUnitOfWork unitOfWork, IValidationService validationService, IConfiguration configuration)
-        : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork: unitOfWork), IAuthService
+public class AuthService(
+    IUnitOfWork unitOfWork,
+    IValidationService validationService,
+    IConfiguration configuration
+    ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {

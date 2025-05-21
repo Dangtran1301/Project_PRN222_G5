@@ -1,13 +1,16 @@
 ﻿using Project_PRN222_G5.Application.DTOs;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
+using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.Application.Services.Identities;
 
-public abstract class GenericService<TE, TC, TU, TR>
-    (IUnitOfWork unitOfWork) : IGenericService<TE, TC, TU, TR>
+public abstract class GenericService<TE, TC, TU, TR>(
+    IUnitOfWork unitOfWork,
+    IValidationService validationService
+    ) : IGenericService<TE, TC, TU, TR>
     where TE : BaseEntity
     where TC : class
     where TU : class
@@ -51,6 +54,7 @@ public abstract class GenericService<TE, TC, TU, TR>
 
     public async Task<TR> CreateAsync(TC request)
     {
+        await validationService.ValidateAsync(request);
         var entity = MapToEntity(request);
         await unitOfWork.Repository<TE>().AddAsync(entity);
         await unitOfWork.CompleteAsync();
@@ -59,6 +63,7 @@ public abstract class GenericService<TE, TC, TU, TR>
 
     public async Task<TR> UpdateAsync(Guid id, TU request)
     {
+        await validationService.ValidateAsync(request);
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
         UpdateEntity(entity, request);
         unitOfWork.Repository<TE>().Update(entity);
@@ -73,7 +78,7 @@ public abstract class GenericService<TE, TC, TU, TR>
         await unitOfWork.CompleteAsync();
     }
 
-    #endregion
+    #endregion CRUD
 
     #region Mapping
 
@@ -83,6 +88,5 @@ public abstract class GenericService<TE, TC, TU, TR>
 
     protected abstract void UpdateEntity(TE entity, TU request);
 
-    #endregion
-
+    #endregion Mapping
 }

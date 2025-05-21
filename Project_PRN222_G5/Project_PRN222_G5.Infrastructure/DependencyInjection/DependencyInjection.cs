@@ -44,8 +44,9 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
             // Infrastructure - Repository & Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-            services.AddScoped<IDateTimeService, DateTimeService>();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+            services.AddSingleton<IDateTimeService, DateTimeService>();
+
             return services;
         }
 

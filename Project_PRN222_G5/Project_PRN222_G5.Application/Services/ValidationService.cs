@@ -11,24 +11,40 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
     {
         if (model == null)
         {
-            return await Task.FromResult(new Dictionary<string, string[]>
+            return new Dictionary<string, string[]>
             {
                 ["Model"] = ["Model cannot be null."]
-            });
+            };
         }
 
         var validationResults = new List<ValidationResult>();
         var validationContext = new ValidationContext(model);
-        Validator.TryValidateObject(model, validationContext, validationResults, true);
+
+        try
+        {
+            Validator.TryValidateObject(model, validationContext, validationResults, validateAllProperties: true);
+        }
+        catch (Exception ex)
+        {
+            return new Dictionary<string, string[]>
+            {
+                ["ValidationError"] = [$"Validation failed: {ex.Message}"]
+            };
+        }
 
         var errors = validationResults
-            .GroupBy(v => v.MemberNames.FirstOrDefault() ?? string.Empty)
+            .GroupBy(v => v.MemberNames.FirstOrDefault() ?? "General")
             .ToDictionary(
                 g => g.Key,
-                g => g.Select(v => v.ErrorMessage).ToArray()
+                g => g.Select(v => v.ErrorMessage ?? "Invalid value").ToArray()
             );
 
-        return (await Task.FromResult(errors))!;
+        if (errors.Any())
+        {
+            throw new Exceptions.ValidationException(errors);
+        }
+
+        return errors;
     }
 
     public async Task ValidateUniqueUserAsync(string username, string email)
