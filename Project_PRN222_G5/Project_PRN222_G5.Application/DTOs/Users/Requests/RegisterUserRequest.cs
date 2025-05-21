@@ -41,7 +41,5 @@ public class RegisterUserRequest : IMapTo<User>
         PasswordHash = BCrypt.Net.BCrypt.HashPassword(Password),
         Email = Email,
         Role = Enum.Parse<Role>(Role, true),
-        CreatedAt = DateTimeOffset.UtcNow,
-        CreatedBy = "System"
     };
 }

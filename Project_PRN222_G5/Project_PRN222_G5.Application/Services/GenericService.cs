@@ -1,7 +1,6 @@
 ﻿using Project_PRN222_G5.Application.DTOs;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Domain.Common;
-using Project_PRN222_G5.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.Application.Services;

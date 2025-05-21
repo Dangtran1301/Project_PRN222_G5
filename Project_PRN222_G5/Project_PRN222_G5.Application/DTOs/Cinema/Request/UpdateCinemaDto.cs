@@ -11,7 +11,5 @@ public class UpdateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
     {
         Name = Name,
         Address = Address,
-        UpdatedBy = string.Empty,
-        UpdatedAt = DateTimeOffset.Now
     };
 }
