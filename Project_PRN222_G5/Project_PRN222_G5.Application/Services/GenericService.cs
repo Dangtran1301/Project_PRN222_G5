@@ -47,7 +47,7 @@ public abstract class GenericService<TE, TC, TU, TR>
         };
     }
 
-    public async Task<TR> CreateAsync(TC request)
+    public virtual async Task<TR> CreateAsync(TC request)
     {
         var entity = MapToEntity(request);
         await unitOfWork.Repository<TE>().AddAsync(entity);
@@ -55,7 +55,7 @@ public abstract class GenericService<TE, TC, TU, TR>
         return MapToResponse(entity);
     }
 
-    public async Task<TR> UpdateAsync(Guid id, TU request)
+    public virtual async Task<TR> UpdateAsync(Guid id, TU request)
     {
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
         UpdateEntity(entity, request);

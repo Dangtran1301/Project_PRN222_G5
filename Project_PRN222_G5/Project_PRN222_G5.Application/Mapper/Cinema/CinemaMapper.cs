@@ -16,8 +16,8 @@ public static class CinemaMapper
 
     public static void UpdateEntity(this Domain.Entities.Cinema.Cinema entity, UpdateCinemaDto request)
     {
-        var updateEntity = request.ToEntity();
-        entity.Name = updateEntity.Name;
-        entity.Address = updateEntity.Address;
+        entity.Name = request.Name;
+        entity.Address = request.Address;
+        entity.UpdatedAt = DateTimeOffset.UtcNow;
     }
 }
