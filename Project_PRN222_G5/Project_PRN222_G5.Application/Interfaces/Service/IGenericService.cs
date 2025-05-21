@@ -10,6 +10,8 @@ public interface IGenericService<TE, in TC, in TU, TR>
     where TU : class
     where TR : class
 {
+    #region CRUD
+
     Task<TR> GetByIdAsync(Guid id);
 
     Task<IEnumerable<TR>> GetAllAsync();
@@ -21,4 +23,6 @@ public interface IGenericService<TE, in TC, in TU, TR>
     Task<TR> UpdateAsync(Guid id, TU request);
 
     Task DeleteAsync(Guid id);
+
+    #endregion CRUD
 }

@@ -19,12 +19,8 @@ public class Program
 
         try
         {
-            logger.LogInformation("Starting application...");
-
             // Seed data
-            logger.LogInformation("Starting database seeding...");
             await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
-            logger.LogInformation("Finished seeding database.");
 
             logger.LogInformation("Running application...");
             await host.RunAsync();
@@ -35,6 +31,7 @@ public class Program
             throw;
         }
     }
+
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());

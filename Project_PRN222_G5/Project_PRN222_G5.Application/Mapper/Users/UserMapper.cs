@@ -23,8 +23,6 @@ public static class UserMapper
         var updateEntity = request.ToEntity();
         entity.FullName = updateEntity.FullName;
         entity.Gender = updateEntity.Gender;
-        entity.UpdatedAt = DateTimeOffset.UtcNow;
-        entity.UpdatedBy = string.Empty;
     }
 
     public static void ToUpdateInfoUser(this UpdateInfoUser request, UserResponse userResponse)
