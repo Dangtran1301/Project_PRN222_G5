@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Domain.Interfaces;
+namespace Project_PRN222_G5.Application.Interfaces.Service;
 
 public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 {
@@ -27,10 +27,14 @@ public interface IGenericRepositoryAsync<TEntity> where TEntity : class
         CancellationToken cancellationToken = default
     );
 
+    #endregion bool
+
+    #region count
+
     Task<int> CountAsync(
         Expression<Func<TEntity, bool>>? criteria = null,
         CancellationToken cancellationToken = default
     );
 
-    #endregion bool
+    #endregion count
 }

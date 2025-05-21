@@ -19,7 +19,7 @@ public class UpdateInfoUser : IMapTo<User>
     [EnumDataType(typeof(Gender))]
     public string Gender { get; set; } = string.Empty;
 
-    [FileExtensions(Extensions = "jgp,jpeg")]
+    [FileExtensions(Extensions = "jgp,jpeg,png")]
     public string Avatar { get; set; } = string.Empty;
 
     public User ToEntity() => new()

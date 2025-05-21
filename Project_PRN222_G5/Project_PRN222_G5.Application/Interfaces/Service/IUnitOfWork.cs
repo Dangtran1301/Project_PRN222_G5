@@ -1,6 +1,6 @@
 ﻿using Project_PRN222_G5.Domain.Common;
 
-namespace Project_PRN222_G5.Domain.Interfaces;
+namespace Project_PRN222_G5.Application.Interfaces.Service;
 
 public interface IUnitOfWork : IDisposable
 {

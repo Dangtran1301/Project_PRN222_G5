@@ -7,7 +7,6 @@ using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Mapper.Users;
 using Project_PRN222_G5.Domain.Entities.Users;
-using Project_PRN222_G5.Domain.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -38,7 +37,6 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
         var refreshToken = Guid.NewGuid().ToString();
         await unitOfWork.Repository<UserToken>().AddAsync(new UserToken
         {
-            Id = Guid.NewGuid(),
             UserId = user.Id,
             RefreshToken = refreshToken,
             ExpiredTime = DateTimeOffset.UtcNow.AddDays(7)
@@ -81,9 +79,11 @@ public class AuthService(IUnitOfWork unitOfWork, IValidationService validationSe
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Name, user.Username),
-            new Claim(ClaimTypes.Role, string.Join(",", user.Role))
+            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+            new Claim(JwtRegisteredClaimNames.Name, user.FullName),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
+            new Claim("uid",user.Id.ToString())
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
