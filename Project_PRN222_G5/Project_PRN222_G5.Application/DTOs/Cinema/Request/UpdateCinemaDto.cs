@@ -14,15 +14,10 @@ public class UpdateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
     public string Address { get; set; } = string.Empty;
 
     public Guid Id { get; set; }
-
-    public DateTimeOffset CreatedAt { get; set; }
-    public DateTimeOffset? UpdatedAt { get; set; }
-
     public Domain.Entities.Cinema.Cinema ToEntity() => new()
     {
         Id = Id,
         Name = Name,
         Address = Address,
-        UpdatedAt = DateTimeOffset.UtcNow
     };
 }
