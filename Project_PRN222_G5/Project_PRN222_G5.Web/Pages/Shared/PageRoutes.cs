@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Web.Utils
+﻿namespace Project_PRN222_G5.Web.Pages.Shared
 {
     public static class PageRoutes
     {

@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
-using Project_PRN222_G5.Web.Utils;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
 {
     [IgnoreAntiforgeryToken]
-    public class RegisterModel(IAuthService authService, ILogger<RegisterModel> logger) : PageModel
+    public class RegisterModel(IAuthService authService, ILogger<RegisterModel> logger) : BasePageModel
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
@@ -21,8 +20,6 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })
             .ToList();
 
-        public string? ErrorMessage { get; set; }
-
         public IActionResult OnGet()
         {
             return Page();
@@ -32,6 +29,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 return Page();
             }
 
@@ -42,8 +40,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Unexpected error during Register for {Username}.", Input.Username);
-                ErrorMessage = "An unexpected error occurred. Please try again.";
+                HandleException(ex);
                 return Page();
             }
         }

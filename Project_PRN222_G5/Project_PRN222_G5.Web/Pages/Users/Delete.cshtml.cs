@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Users.Responses;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Domain.Entities.Users.Enum;
-using Project_PRN222_G5.Web.Utils;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
     [Authorize(Roles = nameof(Role.Admin))]
-    public class DeleteModel(IAuthService authService) : PageModel
+    public class DeleteModel(IAuthService authService) : BasePageModel
     {
         public new UserResponse User { get; set; } = null!;
 
@@ -20,9 +19,10 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 User = await authService.GetByIdAsync(id);
                 return Page();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return RedirectToPage(PageRoutes.Users.Index);
             }
         }
 
@@ -33,9 +33,10 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 await authService.DeleteAsync(id);
                 return RedirectToPage(PageRoutes.Users.Index);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return Page();
             }
         }
     }

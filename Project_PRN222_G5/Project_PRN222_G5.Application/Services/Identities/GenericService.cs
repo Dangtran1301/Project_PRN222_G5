@@ -1,9 +1,10 @@
 ﻿using Project_PRN222_G5.Application.DTOs;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Application.Services;
+namespace Project_PRN222_G5.Application.Services.Identities;
 
 public abstract class GenericService<TE, TC, TU, TR>
     (IUnitOfWork unitOfWork) : IGenericService<TE, TC, TU, TR>
@@ -12,6 +13,8 @@ public abstract class GenericService<TE, TC, TU, TR>
     where TU : class
     where TR : class
 {
+    #region CRUD
+
     public async Task<TR> GetByIdAsync(Guid id)
     {
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
@@ -70,9 +73,16 @@ public abstract class GenericService<TE, TC, TU, TR>
         await unitOfWork.CompleteAsync();
     }
 
+    #endregion
+
+    #region Mapping
+
     protected abstract TR MapToResponse(TE entity);
 
     protected abstract TE MapToEntity(TC request);
 
     protected abstract void UpdateEntity(TE entity, TU request);
+
+    #endregion
+
 }

@@ -1,6 +1,7 @@
-﻿using Project_PRN222_G5.Domain.Common;
+﻿using Project_PRN222_G5.Application.Interfaces.Repository;
+using Project_PRN222_G5.Domain.Common;
 
-namespace Project_PRN222_G5.Application.Interfaces.Service;
+namespace Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
