@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.Application.Exceptions;
 using Project_PRN222_G5.Application.Interfaces.Data;
+using Project_PRN222_G5.Application.Interfaces.Repository;
 using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
-using Project_PRN222_G5.Application.Exceptions;
-using Project_PRN222_G5.Application.Interfaces.Repository;
 
 namespace Project_PRN222_G5.Infrastructure.Repositories
 {
@@ -45,7 +45,7 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
             _dbSet.Remove(entity);
         }
 
-        #endregion
+        #endregion CRUD
 
         #region bool
 
@@ -61,7 +61,7 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
             return await _dbSet.AnyAsync(criteria, cancellationToken);
         }
 
-        #endregion
+        #endregion bool
 
         #region count
 
@@ -77,6 +77,6 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
             return await _dbSet.CountAsync(criteria, cancellationToken);
         }
 
-        #endregion
+        #endregion count
     }
 }
