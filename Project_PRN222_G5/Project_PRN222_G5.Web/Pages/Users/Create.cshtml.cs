@@ -15,13 +15,15 @@ namespace Project_PRN222_G5.Web.Pages.Users
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
 
+        [ViewData]
+        public List<SelectListItem> Roles { get; set; } = Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(r => r != Role.Admin)
+            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })
+            .ToList();
+
         public IActionResult OnGet()
         {
-            ViewData["Roles"] = new List<SelectListItem>
-            {
-                new() { Value = nameof(Role.Customer), Text = nameof(Role.Customer) },
-                new() { Value = nameof(Role.Staff), Text = nameof(Role.Staff) }
-            };
             return Page();
         }
 
