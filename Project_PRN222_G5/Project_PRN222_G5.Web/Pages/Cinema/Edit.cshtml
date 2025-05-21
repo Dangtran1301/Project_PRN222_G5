@@ -7,6 +7,7 @@
 <h1>Edit Cinema</h1>
 
 <form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="CinemaId" />
     <div class="form-group">
         <label asp-for="CinemaDto.Name" class="control-label"></label>

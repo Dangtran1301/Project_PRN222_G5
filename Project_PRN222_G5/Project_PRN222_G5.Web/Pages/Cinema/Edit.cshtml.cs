@@ -60,7 +60,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error!");
+                ModelState.AddModelError(string.Empty, ex.Message);
                 CinemaId = id;
                 return Page();
             }
