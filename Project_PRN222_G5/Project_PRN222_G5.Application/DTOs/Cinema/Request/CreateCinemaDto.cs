@@ -17,6 +17,5 @@ public class CreateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
     {
         Name = Name,
         Address = Address,
-        CreatedAt = DateTimeOffset.UtcNow,
     };
 }

@@ -8,9 +8,9 @@ using Project_PRN222_G5.Application.Interfaces.Data;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Services;
-using Project_PRN222_G5.Domain.Interfaces;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
+using Project_PRN222_G5.Infrastructure.Service;
 using System.Text;
 
 namespace Project_PRN222_G5.Infrastructure.DependencyInjection
@@ -19,6 +19,7 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpContextAccessor();
             // Application - Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICinemaService, CinemaService>();
@@ -39,7 +40,8 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
             // Infrastructure - Repository & Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-
+            services.AddScoped<IDateTimeService, DateTimeService>();
+            services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
             return services;
         }
 
@@ -60,7 +62,8 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration
+                        ["Jwt:Key"]!))
                 };
 
                 options.Events = new JwtBearerEvents
@@ -75,6 +78,7 @@ namespace Project_PRN222_G5.Infrastructure.DependencyInjection
 
             return services;
         }
+
         public static IServiceCollection AddCustomLogging(this IServiceCollection services)
         {
             services.AddLogging(logging =>

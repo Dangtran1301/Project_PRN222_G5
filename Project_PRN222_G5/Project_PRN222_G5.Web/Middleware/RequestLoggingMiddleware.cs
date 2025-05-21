@@ -40,9 +40,9 @@ namespace Project_PRN222_G5.Web.Middleware
         {
             return milliSeconds switch
             {
-                < 100 => $"\x1b[32m{milliSeconds}\x1b[0m ms",
-                < 500 => $"\x1b[33m{milliSeconds}\x1b[0m ms",
-                _ => $"\x1b[31m{milliSeconds}\x1b[0m ms"
+                < 100 => $"\x1b[32m{milliSeconds}\x1b[0mms",
+                < 500 => $"\x1b[33m{milliSeconds}\x1b[0mms",
+                _ => $"\x1b[31m{milliSeconds}\x1b[0mms"
             };
         }
 

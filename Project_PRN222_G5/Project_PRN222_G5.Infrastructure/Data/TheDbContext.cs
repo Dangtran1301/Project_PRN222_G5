@@ -1,16 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Project_PRN222_G5.Application.Interfaces.Data;
+using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Domain.Common;
 using Project_PRN222_G5.Domain.Entities.Booking;
 using Project_PRN222_G5.Domain.Entities.Cinema;
 using Project_PRN222_G5.Domain.Entities.Movie;
 using Project_PRN222_G5.Domain.Entities.Users;
-using System.Reflection;
 
 namespace Project_PRN222_G5.Infrastructure.Data;
 
-public class TheDbContext(DbContextOptions<TheDbContext> options)
-    : DbContext(options), IDbContext
+public class TheDbContext(
+    DbContextOptions<TheDbContext> options,
+    IDateTimeService datetimeService,
+    IAuthenticatedUserService authenticatedUserService
+) : DbContext(options), IDbContext
 {
     public DatabaseFacade DatabaseFacade => Database;
     public DbSet<User> Users { get; set; }
@@ -26,15 +30,36 @@ public class TheDbContext(DbContextOptions<TheDbContext> options)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    }
+        foreach (var property in modelBuilder.Model.GetEntityTypes()
+                     .SelectMany(t => t.GetProperties())
+                     .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+        {
+            property.SetColumnType("decimal(18,6)");
+        }
 
-    public override int SaveChanges() => base.SaveChanges();
+        base.OnModelCreating(modelBuilder);
+    }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => base.SaveChangesAsync(cancellationToken);
+    {
+        foreach (var entry in ChangeTracker.Entries<IBaseAuditable>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = datetimeService.NowUtc;
+                    entry.Entity.CreatedBy = authenticatedUserService.UserId ?? "System";
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = datetimeService.NowUtc;
+                    entry.Entity.UpdatedBy = authenticatedUserService.UserId;
+                    break;
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
 }
