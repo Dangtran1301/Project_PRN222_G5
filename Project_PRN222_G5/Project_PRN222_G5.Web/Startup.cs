@@ -22,7 +22,7 @@ public class Startup(IConfiguration configuration)
         // Add Session
         services.AddSession(options =>
         {
-            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.IdleTimeout = TimeSpan.FromMinutes(60);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
             options.Cookie.SameSite = SameSiteMode.Strict;
@@ -41,17 +41,19 @@ public class Startup(IConfiguration configuration)
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
         app.UseSession();
+        app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseMiddleware<ValidationExceptionMiddleware>();
+        app.UseMiddleware<GlobalExceptionMiddleware>();
+
         app.UseRouting();
+        app.UseStaticFiles();
+
         app.UseAuthentication();
         app.UseAuthorization();
 
-        // Custom Middleware
-        app.UseMiddleware<ValidationExceptionMiddleware>();
-        app.UseMiddleware<GlobalExceptionMiddleware>();
-        app.UseMiddleware<TokenValidationMiddleware>();
-        app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseMiddleware<AccessTokenValidationMiddleware>();
+        app.UseMiddleware<AuthorizationMiddleware>();
 
         app.UseEndpoints(endpoints => endpoints.MapRazorPages());
     }

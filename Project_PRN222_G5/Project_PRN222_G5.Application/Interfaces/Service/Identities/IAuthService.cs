@@ -10,7 +10,5 @@ public interface IAuthService : IGenericService<User, RegisterUserRequest, Updat
 
     Task<UserResponse> RegisterUserAsync(RegisterUserRequest request);
 
-    Task<User> GetByUsernameAsync(string username);
-
-    Task<User> GetByEmailAsync(string email);
+    Task LogoutAsync(Guid userId, string refreshToken);
 }

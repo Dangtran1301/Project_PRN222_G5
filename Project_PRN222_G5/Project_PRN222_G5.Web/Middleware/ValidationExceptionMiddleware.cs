@@ -1,5 +1,4 @@
 ﻿using Project_PRN222_G5.Application.Exceptions;
-using Project_PRN222_G5.Web.Pages.Shared;
 using System.Text.Json;
 
 namespace Project_PRN222_G5.Web.Middleware;
@@ -14,7 +13,7 @@ public class ValidationExceptionMiddleware(RequestDelegate next)
         }
         catch (ValidationException ex)
         {
-            if (context.Request.Path.StartsWithSegments(PageRoutes.Static.Home))
+            if (context.Request.Path.StartsWithSegments(""))
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";

@@ -25,9 +25,11 @@ public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.UpdatedBy)
+            .HasMaxLength(100)
             .IsRequired(false);
 
         builder.HasOne(ut => ut.User)

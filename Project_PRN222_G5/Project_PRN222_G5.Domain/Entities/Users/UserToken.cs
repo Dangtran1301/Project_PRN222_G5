@@ -8,8 +8,6 @@ public class UserToken : BaseEntity
 
     public string? ClientIp { get; set; }
 
-    public bool IsBlocked { get; set; } = false;
-
     public DateTimeOffset ExpiredTime { get; set; }
 
     public Guid UserId { get; set; }

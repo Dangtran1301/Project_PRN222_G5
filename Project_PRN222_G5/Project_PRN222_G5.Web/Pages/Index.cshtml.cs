@@ -6,7 +6,6 @@ namespace Project_PRN222_G5.Web.Pages
     {
         public void OnGet()
         {
-            RedirectToPage(PageRoutes.Auth.Login);
         }
     }
 }

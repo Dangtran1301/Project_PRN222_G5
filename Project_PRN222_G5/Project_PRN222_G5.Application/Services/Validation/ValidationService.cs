@@ -3,7 +3,7 @@ using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Domain.Entities.Users;
 using System.ComponentModel.DataAnnotations;
 
-namespace Project_PRN222_G5.Application.Services;
+namespace Project_PRN222_G5.Application.Services.Validation;
 
 public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
 {

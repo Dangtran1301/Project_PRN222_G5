@@ -27,7 +27,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             try
             {
                 var response = await authService.LoginAsync(Input);
-                TempData["SuccessMessage"] = "Login successfully!";
+
                 Response.Cookies.Append("AccessToken", response.AccessToken, new CookieOptions
                 {
                     HttpOnly = true,
@@ -35,6 +35,16 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                     SameSite = SameSiteMode.Strict,
                     Expires = DateTimeOffset.UtcNow.AddHours(1)
                 });
+
+                Response.Cookies.Append("RefreshToken", response.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
+                });
+
+                TempData["SuccessMessage"] = "Login successfully!";
                 return RedirectToPage(PageRoutes.Users.Index);
             }
             catch (Exception ex)
