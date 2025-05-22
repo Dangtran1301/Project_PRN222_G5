@@ -24,6 +24,7 @@
             public static readonly string Login = Route("Auth", "Login");
             public static readonly string Register = Route("Auth", "Register");
             public static readonly string Logout = Route("Auth", "Logout");
+            public static readonly string Refresh = Route("Auth", "Refresh");
         }
 
         public static class Cinema
