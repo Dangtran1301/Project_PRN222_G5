@@ -36,5 +36,5 @@ public class DefaultDatetimeService : IDateTimeService
 
 public class DefaultAuthenticatedUserService : IAuthenticatedUserService
 {
-    public string UserId => Guid.Empty.ToString();
+    public Guid UserId => Guid.Empty;
 }

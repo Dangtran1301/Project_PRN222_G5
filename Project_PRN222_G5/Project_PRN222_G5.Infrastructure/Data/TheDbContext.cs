@@ -50,7 +50,7 @@ public class TheDbContext(
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = datetimeService.NowUtc;
-                    entry.Entity.CreatedBy ??= authenticatedUserService.UserId ?? "System"; /* if null then equal */
+                    entry.Entity.CreatedBy = authenticatedUserService.UserId;
                     break;
 
                 case EntityState.Modified:

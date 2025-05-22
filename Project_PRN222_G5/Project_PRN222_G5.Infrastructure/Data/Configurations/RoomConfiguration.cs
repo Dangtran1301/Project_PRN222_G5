@@ -24,11 +24,7 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
                 .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .HasMaxLength(100)
                 .IsRequired();
-
-            builder.Property(x => x.UpdatedBy)
-                .HasMaxLength(100);
         }
     }
 }

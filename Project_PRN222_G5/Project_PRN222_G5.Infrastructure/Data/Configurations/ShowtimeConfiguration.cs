@@ -36,10 +36,6 @@ public class ShowtimeConfiguration : IEntityTypeConfiguration<Showtime>
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasMaxLength(100)
             .IsRequired();
-
-        builder.Property(x => x.UpdatedBy)
-            .HasMaxLength(100);
     }
 }

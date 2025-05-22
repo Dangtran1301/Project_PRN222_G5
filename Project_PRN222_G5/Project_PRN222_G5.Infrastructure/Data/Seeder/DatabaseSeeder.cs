@@ -23,7 +23,7 @@ namespace Project_PRN222_G5.Infrastructure.Data.Seeder
                     Role = Role.Admin,
                     UserStatus = UserStatus.Active,
                     CreatedAt = DateTimeOffset.UtcNow,
-                    CreatedBy = "System"
+                    CreatedBy = Guid.Parse("System")
                 };
 
                 await unitOfWork.Repository<User>().AddAsync(adminUser);

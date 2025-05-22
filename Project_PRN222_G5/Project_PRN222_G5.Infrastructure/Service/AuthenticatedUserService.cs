@@ -6,5 +6,5 @@ namespace Project_PRN222_G5.Infrastructure.Service;
 
 public class AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) : IAuthenticatedUserService
 {
-    public string? UserId { get; } = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid")!;
+    public Guid UserId { get; } = Guid.Parse(httpContextAccessor.HttpContext?.User?.FindFirstValue("uid") ?? string.Empty);
 }
