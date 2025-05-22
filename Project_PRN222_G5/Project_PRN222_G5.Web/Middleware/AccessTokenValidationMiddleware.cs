@@ -6,7 +6,6 @@ public class AccessTokenValidationMiddleware(
     RequestDelegate next,
     ILogger<AccessTokenValidationMiddleware> logger)
 {
-
     public async Task InvokeAsync(HttpContext context)
     {
         var path = context.Request.Path;
