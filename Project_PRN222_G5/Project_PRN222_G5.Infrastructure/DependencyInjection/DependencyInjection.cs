@@ -11,12 +11,12 @@ using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Services.Identities;
+using Project_PRN222_G5.Application.Services.JWT;
 using Project_PRN222_G5.Application.Services.Validation;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
 using Project_PRN222_G5.Infrastructure.Service;
 using System.Text;
-using Project_PRN222_G5.Application.Services.JWT;
 
 namespace Project_PRN222_G5.Infrastructure.DependencyInjection;
 
