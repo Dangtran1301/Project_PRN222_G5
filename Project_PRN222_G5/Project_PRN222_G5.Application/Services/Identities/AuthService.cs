@@ -1,23 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.DTOs.Users.Requests;
 using Project_PRN222_G5.Application.DTOs.Users.Responses;
 using Project_PRN222_G5.Application.Exceptions;
+using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Mapper.Users;
 using Project_PRN222_G5.Domain.Entities.Users;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Project_PRN222_G5.Application.Services.Identities;
 
 public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
-    IConfiguration configuration
+    IConfiguration configuration,
+    IJwtService jwtService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -36,13 +34,14 @@ public class AuthService(
         {
             throw new ValidationException(new Dictionary<string, string[]>
             {
-                ["Credentials"] = ["Invalid credentials."]
+                ["Credentials"] = ["Username or Password is not correct."]
             });
         }
 
-        var token = GenerateJwtToken(user);
+        var accessToken = jwtService.GenerateAccessToken(user);
         var refreshToken = Guid.NewGuid().ToString();
         var userId = user.Id;
+
         await unitOfWork.Repository<UserToken>().AddAsync(new UserToken
         {
             UserId = userId,
@@ -50,9 +49,10 @@ public class AuthService(
             ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
             CreatedBy = userId.ToString().ToUpper(),
         });
+
         await unitOfWork.CompleteAsync();
 
-        return new LoginResponse { AccessToken = token, RefreshToken = refreshToken };
+        return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
     public async Task<UserResponse> RegisterUserAsync(RegisterUserRequest request)
@@ -82,27 +82,6 @@ public class AuthService(
             unitOfWork.Repository<UserToken>().Delete(token);
             await unitOfWork.CompleteAsync();
         }
-    }
-
-    private string GenerateJwtToken(User user)
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-            new Claim(JwtRegisteredClaimNames.Name, user.FullName),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("uid",user.Id.ToString().ToUpper())
-        };
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"],
-            audience: configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddHours(1),
-            signingCredentials: creds);
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     protected override UserResponse MapToResponse(User entity) => entity.ToResponse();

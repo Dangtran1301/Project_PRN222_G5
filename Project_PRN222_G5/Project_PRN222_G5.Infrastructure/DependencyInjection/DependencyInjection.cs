@@ -10,89 +10,91 @@ using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
-using Project_PRN222_G5.Application.Services;
 using Project_PRN222_G5.Application.Services.Identities;
+using Project_PRN222_G5.Application.Services.Validation;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
 using Project_PRN222_G5.Infrastructure.Service;
 using System.Text;
+using Project_PRN222_G5.Application.Services.JWT;
 
-namespace Project_PRN222_G5.Infrastructure.DependencyInjection
+namespace Project_PRN222_G5.Infrastructure.DependencyInjection;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+        services.AddHttpContextAccessor();
+        // Application - Services
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ICinemaService, CinemaService>();
+        services.AddScoped<IJwtService, JwtService>();
+
+        // Application - Validation
+        services.AddScoped<IValidationService, ValidationService>();
+        services.AddScoped<ITokenValidator, TokenValidator>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Infrastructure - DbContext
+        services.AddDbContext<TheDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddScoped<IDbContext, TheDbContext>();
+
+        // Infrastructure - Repository & Unit of Work
+        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+        services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+        services.AddSingleton<IDateTimeService, DateTimeService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(options =>
         {
-            services.AddHttpContextAccessor();
-            // Application - Services
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ICinemaService, CinemaService>();
-
-            // Application - Validation
-            services.AddScoped<IValidationService, ValidationService>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
         {
-            // Infrastructure - DbContext
-            services.AddDbContext<TheDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IDbContext, TheDbContext>();
-
-            // Infrastructure - Repository & Unit of Work
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
-            services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-            services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
-            services.AddSingleton<IDateTimeService, DateTimeService>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAuthentication(options =>
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration
+                    ["Jwt:Key"]!))
+            };
+
+            options.Events = new JwtBearerEvents
             {
-                options.TokenValidationParameters = new TokenValidationParameters
+                OnMessageReceived = context =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration
-                        ["Jwt:Key"]!))
-                };
+                    context.Token = context.Request.Cookies["AccessToken"];
+                    return Task.CompletedTask;
+                }
+            };
+        });
 
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        context.Token = context.Request.Cookies["AccessToken"];
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+        return services;
+    }
 
-            return services;
-        }
-
-        public static IServiceCollection AddCustomLogging(this IServiceCollection services)
+    public static IServiceCollection AddCustomLogging(this IServiceCollection services)
+    {
+        services.AddLogging(logging =>
         {
-            services.AddLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            });
+            logging.ClearProviders();
+            logging.AddConsole();
+        });
 
-            return services;
-        }
+        return services;
     }
 }
