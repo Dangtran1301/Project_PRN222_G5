@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.Interfaces.Data;
 using Project_PRN222_G5.Application.Interfaces.Repository;
@@ -16,39 +13,53 @@ using Project_PRN222_G5.Application.Services.Validation;
 using Project_PRN222_G5.Infrastructure.Data;
 using Project_PRN222_G5.Infrastructure.Repositories;
 using Project_PRN222_G5.Infrastructure.Service;
+using Project_PRN222_G5.Infrastructure.UnitOfWork;
 using System.Text;
 
-namespace Project_PRN222_G5.Infrastructure.DependencyInjection;
+namespace Project_PRN222_G5.Web;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        #region HttpContextAccessor
+
         services.AddHttpContextAccessor();
-        // Application - Services
+
+        #endregion
+
+        #region Service
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICinemaService, CinemaService>();
         services.AddScoped<IJwtService, JwtService>();
 
-        // Application - Validation
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<ITokenValidator, TokenValidator>();
+
+        #endregion
 
         return services;
     }
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Infrastructure - DbContext
+        #region DbContext
+
         services.AddDbContext<TheDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IDbContext, TheDbContext>();
 
-        // Infrastructure - Repository & Unit of Work
-        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        #endregion
+
+        #region UnitOfWork, Repository, Service
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
+
+        #endregion
 
         return services;
     }

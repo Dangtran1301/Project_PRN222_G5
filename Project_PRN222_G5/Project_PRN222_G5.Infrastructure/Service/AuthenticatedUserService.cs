@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Project_PRN222_G5.Infrastructure.Service;
 
-public class AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) : IAuthenticatedUserService
+public class AuthenticatedUserService(IHttpContextAccessor contextAccessor) : IAuthenticatedUserService
 {
-    public string? UserId { get; } = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid")!;
+    public string UserId { get; } = contextAccessor.HttpContext?.User.FindFirstValue("uid") ?? string.Empty;
 }

@@ -22,10 +22,6 @@ public class CinemaConfiguration : IEntityTypeConfiguration<Cinema>
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasMaxLength(100)
             .IsRequired();
-
-        builder.Property(x => x.UpdatedBy)
-            .HasMaxLength(100);
     }
 }

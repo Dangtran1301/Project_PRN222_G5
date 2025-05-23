@@ -31,10 +31,10 @@ public class TheDbContextFactory : IDesignTimeDbContextFactory<TheDbContext>
 
 public class DefaultDatetimeService : IDateTimeService
 {
-    public DateTime NowUtc => DateTime.UtcNow;
+    public DateTime NowUtc => DateTime.MinValue;
 }
 
 public class DefaultAuthenticatedUserService : IAuthenticatedUserService
 {
-    public string UserId => Guid.Empty.ToString();
+    public string UserId => string.Empty;
 }

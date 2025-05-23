@@ -34,8 +34,4 @@
 	  <ProjectReference Include="..\Project_PRN222_G5.Domain\Project_PRN222_G5.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="DependencyInjection\" />
-	</ItemGroup>
-
 </Project>
