@@ -46,20 +46,32 @@ public class TheDbContext(
     {
         foreach (var entry in ChangeTracker.Entries<IBaseAuditable>())
         {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = datetimeService.NowUtc;
-                    entry.Entity.CreatedBy = authenticatedUserService.UserId;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.UpdatedAt = datetimeService.NowUtc;
-                    entry.Entity.UpdatedBy = authenticatedUserService.UserId;
-                    break;
-            }
+            ApplyAudit(entry.Entity, entry.State);
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ApplyAudit(IBaseAuditable entity, EntityState state)
+    {
+        switch (state)
+        {
+            case EntityState.Added:
+                entity.CreatedAt = datetimeService.NowUtc;
+                if (entity.CreatedBy == Guid.Empty)
+                {
+                    entity.CreatedBy = Guid.TryParse(authenticatedUserService.UserId, out var userId)
+                        ? userId
+                        : Guid.Empty;
+                }
+                break;
+
+            case EntityState.Modified:
+                entity.UpdatedAt = datetimeService.NowUtc;
+                entity.UpdatedBy = Guid.TryParse(authenticatedUserService.UserId, out var updatedBy)
+                    ? updatedBy
+                    : null;
+                break;
+        }
     }
 }

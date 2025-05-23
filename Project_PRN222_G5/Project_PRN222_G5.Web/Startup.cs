@@ -1,5 +1,4 @@
-﻿using Project_PRN222_G5.Infrastructure.DependencyInjection;
-using Project_PRN222_G5.Web.Middleware;
+﻿using Project_PRN222_G5.Web.Middleware;
 
 namespace Project_PRN222_G5.Web;
 

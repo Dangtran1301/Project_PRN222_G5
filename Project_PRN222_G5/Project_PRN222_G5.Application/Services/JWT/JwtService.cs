@@ -21,7 +21,7 @@ public class JwtService(IConfiguration config, IDateTimeService timeService) : I
             new Claim(JwtRegisteredClaimNames.Name, user.FullName),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("uid",user.Id.ToString().ToUpper())
+            new Claim("uid", user.Id.ToString())
         };
 
         var token = new JwtSecurityToken(

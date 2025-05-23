@@ -47,7 +47,7 @@ public class AuthService(
             UserId = userId,
             RefreshToken = refreshToken,
             ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
-            CreatedBy = userId,
+            CreatedBy = userId
         });
 
         await unitOfWork.CompleteAsync();

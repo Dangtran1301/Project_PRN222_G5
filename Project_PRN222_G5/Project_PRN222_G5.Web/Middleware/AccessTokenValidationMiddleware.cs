@@ -11,7 +11,7 @@ public class AccessTokenValidationMiddleware(
         var path = context.Request.Path;
 
         if (path.StartsWithSegments(PageRoutes.Auth.Login)
-            || path.StartsWithSegments(PageRoutes.Auth.Logout)
+            || path.StartsWithSegments(PageRoutes.Auth.Register)
             || path.StartsWithSegments(PageRoutes.Auth.Refresh))
         {
             await next(context);
