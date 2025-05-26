@@ -4,6 +4,8 @@ namespace Project_PRN222_G5.Application.Interfaces.Repository;
 
 public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 {
+    IQueryable<TEntity> AsQueryable();
+
     #region CRUD
 
     Task<TEntity> GetByIdAsync(Guid id);

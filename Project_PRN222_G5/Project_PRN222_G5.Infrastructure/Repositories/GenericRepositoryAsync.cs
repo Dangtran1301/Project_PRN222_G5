@@ -12,6 +12,11 @@ namespace Project_PRN222_G5.Infrastructure.Repositories
     {
         private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
+        public IQueryable<TEntity> AsQueryable()
+        {
+            return _dbSet.AsNoTracking();
+        }
+
         #region CRUD
 
         public async Task<TEntity> GetByIdAsync(Guid id)
