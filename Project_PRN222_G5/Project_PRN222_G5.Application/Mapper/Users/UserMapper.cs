@@ -1,6 +1,6 @@
-﻿using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.DTOs.Users.Responses;
-using Project_PRN222_G5.Domain.Entities.Users;
+﻿using Project_PRN222_G5.Infrastructure.DTOs.Users.Requests;
+using Project_PRN222_G5.Infrastructure.DTOs.Users.Responses;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
 
 namespace Project_PRN222_G5.Application.Mapper.Users;
 

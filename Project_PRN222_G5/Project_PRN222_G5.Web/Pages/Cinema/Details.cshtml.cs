@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Domain.Entities.Movie;
+using Project_PRN222_G5.Infrastructure.Entities.Movie;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {

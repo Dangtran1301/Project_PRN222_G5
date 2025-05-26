@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Project_PRN222_G5.Application.Interfaces.Service;
-using Project_PRN222_G5.Domain.Entities.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
+using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 
 namespace Project_PRN222_G5.Application.Services.JWT;
 
@@ -28,7 +29,7 @@ public class JwtService(IConfiguration config, IDateTimeService timeService) : I
             issuer: config["Jwt:Issuer"],
             audience: config["Jwt:Audience"],
             claims: claims,
-            expires: timeService.NowUtc.AddSeconds(10),
+            expires: timeService.NowUtc.AddMinutes(60),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

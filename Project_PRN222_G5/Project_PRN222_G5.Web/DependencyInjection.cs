@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Repository;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Services.Identities;
 using Project_PRN222_G5.Application.Services.JWT;
@@ -15,6 +12,10 @@ using Project_PRN222_G5.Infrastructure.Repositories;
 using Project_PRN222_G5.Infrastructure.Service;
 using Project_PRN222_G5.Infrastructure.UnitOfWork;
 using System.Text;
+using Project_PRN222_G5.Infrastructure.Interfaces.Data;
+using Project_PRN222_G5.Infrastructure.Interfaces.Repository;
+using Project_PRN222_G5.Infrastructure.Interfaces.Service;
+using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.Web;
 

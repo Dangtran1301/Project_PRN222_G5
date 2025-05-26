@@ -1,9 +1,10 @@
-﻿using Project_PRN222_G5.Application.DTOs;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
+﻿using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.Validation;
-using Project_PRN222_G5.Domain.Common;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.Infrastructure.DTOs;
+using Project_PRN222_G5.Infrastructure.Entities.Common;
+using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.Application.Services.Identities;
 
@@ -30,22 +31,38 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return entities.Select(MapToResponse);
     }
 
-    public async Task<PagedResponse> GetPagedAsync(int page, int pageSize, Expression<Func<TE, bool>>? predicate = null)
+    public async Task<PagedResponse> GetPagedAsync(int page,
+        int pageSize,
+        Expression<Func<TE, bool>>? predicate = null,
+        Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null,
+        Func<IQueryable<TE>, IQueryable<TE>>? include = null,
+        string? searchTerm = null,
+        Expression<Func<TE, bool>>? searchPredicate = null)
     {
-        var entities = predicate != null
-            ? await unitOfWork.Repository<TE>().FindAsync(predicate)
-            : await unitOfWork.Repository<TE>().GetAllAsync();
+        var query = unitOfWork.Repository<TE>().AsQueryable();
 
-        var totalCount = entities.Count();
-        var pagedItems = entities
+        if (include != null)
+            query = include(query);
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm) && searchPredicate != null)
+            query = query.Where(searchPredicate);
+
+        if (orderBy != null)
+            query = orderBy(query);
+
+        var totalCount = await query.CountAsync();
+
+        var pagedItems = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .Select(MapToResponse)
-            .ToList();
+            .ToListAsync();
 
         return new PagedResponse
         {
-            Items = pagedItems,
+            Items = pagedItems.Select(MapToResponse),
             TotalCount = totalCount,
             PageNumber = page,
             PageSize = pageSize

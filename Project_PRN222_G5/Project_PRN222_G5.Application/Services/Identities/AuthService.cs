@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.DTOs.Users.Responses;
 using Project_PRN222_G5.Application.Exceptions;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
 using Project_PRN222_G5.Application.Mapper.Users;
-using Project_PRN222_G5.Domain.Entities.Users;
+using Project_PRN222_G5.Infrastructure.DTOs.Users.Requests;
+using Project_PRN222_G5.Infrastructure.DTOs.Users.Responses;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
+using Project_PRN222_G5.Infrastructure.Interfaces.Service;
+using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.Application.Services.Identities;
 
@@ -15,7 +16,8 @@ public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
     IConfiguration configuration,
-    IJwtService jwtService
+    IJwtService jwtService,
+    IAuthenticatedUserService authenticatedUserService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -47,7 +49,8 @@ public class AuthService(
             UserId = userId,
             RefreshToken = refreshToken,
             ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
-            CreatedBy = userId
+            CreatedBy = userId,
+            ClientIp = authenticatedUserService.ClientIp
         });
 
         await unitOfWork.CompleteAsync();

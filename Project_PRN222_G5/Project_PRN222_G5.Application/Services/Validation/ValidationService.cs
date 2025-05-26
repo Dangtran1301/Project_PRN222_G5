@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
-using Project_PRN222_G5.Application.Interfaces.Validation;
-using Project_PRN222_G5.Domain.Entities.Users;
+﻿using Project_PRN222_G5.Application.Interfaces.Validation;
 using System.ComponentModel.DataAnnotations;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
+using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.Application.Services.Validation;
 
