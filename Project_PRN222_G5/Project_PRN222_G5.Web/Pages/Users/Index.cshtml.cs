@@ -11,11 +11,11 @@ namespace Project_PRN222_G5.Web.Pages.Users
     {
         public PagedResponse Response { get; set; } = new();
 
-        public async Task OnGetAsync(int page = 1)
+        public async Task OnGetAsync(int pageNumber = 1)
         {
-            if (page < 1) page = 1;
+            if (pageNumber < 1) pageNumber = 1;
             const int pageSize = 10;
-            Response = await authService.GetPagedAsync(page, pageSize);
+            Response = await authService.GetPagedAsync(pageNumber, pageSize);
         }
     }
 }
