@@ -2,5 +2,7 @@
 
 public interface IAuthenticatedUserService
 {
-    string? UserId { get; }
+    string UserId { get; }
+
+    string ClientIp { get; }
 }

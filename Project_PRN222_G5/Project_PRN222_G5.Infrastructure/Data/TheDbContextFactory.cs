@@ -37,4 +37,5 @@ public class DefaultDatetimeService : IDateTimeService
 public class DefaultAuthenticatedUserService : IAuthenticatedUserService
 {
     public string UserId => string.Empty;
+    public string ClientIp => string.Empty;
 }

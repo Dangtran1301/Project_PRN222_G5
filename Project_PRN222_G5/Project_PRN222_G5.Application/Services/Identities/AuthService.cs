@@ -15,7 +15,8 @@ public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
     IConfiguration configuration,
-    IJwtService jwtService
+    IJwtService jwtService,
+    IAuthenticatedUserService authenticatedUserService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -47,7 +48,8 @@ public class AuthService(
             UserId = userId,
             RefreshToken = refreshToken,
             ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
-            CreatedBy = userId
+            CreatedBy = userId,
+            ClientIp = authenticatedUserService.ClientIp
         });
 
         await unitOfWork.CompleteAsync();
