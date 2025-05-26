@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Project_PRN222_G5.Application.DTOs;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.Infrastructure.DTOs;
+using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Users

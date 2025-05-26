@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Service;
-using Project_PRN222_G5.Domain.Common;
-using Project_PRN222_G5.Domain.Entities.Booking;
-using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Domain.Entities.Movie;
-using Project_PRN222_G5.Domain.Entities.Users;
+using Project_PRN222_G5.Infrastructure.Entities.Booking;
+using Project_PRN222_G5.Infrastructure.Entities.Cinema;
+using Project_PRN222_G5.Infrastructure.Entities.Common;
+using Project_PRN222_G5.Infrastructure.Entities.Movie;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
+using Project_PRN222_G5.Infrastructure.Interfaces.Data;
+using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 
 namespace Project_PRN222_G5.Infrastructure.Data;
 

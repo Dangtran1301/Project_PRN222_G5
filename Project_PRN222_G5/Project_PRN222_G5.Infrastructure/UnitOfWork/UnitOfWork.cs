@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Repository;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
-using Project_PRN222_G5.Domain.Common;
+﻿using Project_PRN222_G5.Infrastructure.Entities.Common;
+using Project_PRN222_G5.Infrastructure.Interfaces.Data;
+using Project_PRN222_G5.Infrastructure.Interfaces.Repository;
+using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Infrastructure.Repositories;
 
 namespace Project_PRN222_G5.Infrastructure.UnitOfWork

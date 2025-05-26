@@ -2,6 +2,18 @@
   "version": 1,
   "dependencies": {
     "net8.0": {
+      "BCrypt": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "/ibwe2Sg7MJR26IrEzW2Rde9/+A+AYXB5Kf9w/8BVLDdzSfUe4W2M7i2efy1Wa9wHh1k0y81Q6h9Ty8C6IrUGA=="
+      },
+      "BCrypt.Net-Core": {
+        "type": "Direct",
+        "requested": "[1.6.0, )",
+        "resolved": "1.6.0",
+        "contentHash": "hsKiHGjrnlDW05MzuzzlD9gNP8YOW2KbZ+FbvISrilsKJJ76tXKhWey6psZX5sd7DczNpSU2U6ldjPoblk8BLw=="
+      },
       "FluentValidation.DependencyInjectionExtensions": {
         "type": "Direct",
         "requested": "[12.0.0, )",
@@ -126,11 +138,11 @@
       },
       "Microsoft.IdentityModel.JsonWebTokens": {
         "type": "Direct",
-        "requested": "[8.9.0, )",
-        "resolved": "8.9.0",
-        "contentHash": "QcNC57hJLc6LIcy2PTYlD8iRBQBm6bqPKbCjsRYWlp7QTyJisF0ImUWaa3mx6wWaS1upwYneYVPiIiNSlAy16g==",
+        "requested": "[8.11.0, )",
+        "resolved": "8.11.0",
+        "contentHash": "rLvApg2vqs/Kz5kVHwHUMAe3owInYrsPX8QP8CQktubX9R63P+J47nR/IOS4n6ddJCvGInUGRBKqcBGJtuA4Rw==",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "8.9.0"
+          "Microsoft.IdentityModel.Tokens": "8.11.0"
         }
       },
       "Newtonsoft.Json": {
@@ -168,11 +180,6 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
-      "BCrypt.Net-Next": {
-        "type": "Transitive",
-        "resolved": "4.0.3",
-        "contentHash": "W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA=="
-      },
       "FluentValidation": {
         "type": "Transitive",
         "resolved": "12.0.0",
@@ -187,11 +194,6 @@
         "type": "Transitive",
         "resolved": "7.0.0",
         "contentHash": "3aeMZ1N0lJoSyzqiP03hqemtb1BijhsJADdobn/4nsMJ8V1H+CrpuduUe4hlRdx+ikBQju1VGjMD1GJ3Sk05Eg=="
-      },
-      "Microsoft.Bcl.Memory": {
-        "type": "Transitive",
-        "resolved": "9.0.0",
-        "contentHash": "bTUtGfpGyJnohQzjdXbtc7MqNzkv7CWUSRz54+ucNm0i32rZiIU0VdVPHDBShOl1qhVKRjW8mnEBz3d2vH93tQ=="
       },
       "Microsoft.Build.Framework": {
         "type": "Transitive",
@@ -481,15 +483,15 @@
       },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",
-        "resolved": "8.9.0",
-        "contentHash": "b/87S+lb86U7Ns7xgTKnqql6XGNr8hBE+k0rj5sRWwXeJe6uA+3mSjvpZ9GoQo3cB9zlwzcbGBU8KM44qX0t1g=="
+        "resolved": "8.11.0",
+        "contentHash": "X92UuBmvHYtsVrD+R+senFn6wOtSVtliSZNTZI8oHD+WqhYLmLNlHH6avYcbXqEznozxshSYzD/DVAuz54jjtg=="
       },
       "Microsoft.IdentityModel.Logging": {
         "type": "Transitive",
-        "resolved": "8.9.0",
-        "contentHash": "rswvH4ZANbFsJYEn+PGEOj7nkkBRjnsb7LcYGAS16VUJpSeKULLeYSy/7SK6jLO1WTT12xqdeL4mj3dYT7GdoQ==",
+        "resolved": "8.11.0",
+        "contentHash": "/JNOMdYOQ4Tgbdwu9GbEcRJEpzakizuECCE8dCgY5lKXyqZUdAKXyeq4zITgS81eZYThqjhQZUYaJxOPofbmrg==",
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "8.9.0"
+          "Microsoft.IdentityModel.Abstractions": "8.11.0"
         }
       },
       "Microsoft.IdentityModel.Protocols": {
@@ -512,12 +514,11 @@
       },
       "Microsoft.IdentityModel.Tokens": {
         "type": "Transitive",
-        "resolved": "8.9.0",
-        "contentHash": "qK6kW5qZvDj7E5RLWQ9gzJxQe5GUz7+7bXrLQQydSDF9hTf5Ip2qHuAQW3Fg9GND6jkjTr7IXAZFmBHadNQi4Q==",
+        "resolved": "8.11.0",
+        "contentHash": "E0iKSD9vv9X+tbHGriMTLkSNK/OOjxOPuf1dt9q32d25Ig+OZaidUqDoUTSS3mWTvPw+x5oXrCTHtDatbzRzTQ==",
         "dependencies": {
-          "Microsoft.Bcl.Memory": "9.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
-          "Microsoft.IdentityModel.Logging": "8.9.0"
+          "Microsoft.IdentityModel.Logging": "8.11.0"
         }
       },
       "Microsoft.SqlServer.Server": {
@@ -757,21 +758,6 @@
         "dependencies": {
           "System.Drawing.Common": "6.0.0"
         }
-      },
-      "project_prn222_g5.application": {
-        "type": "Project",
-        "dependencies": {
-          "BCrypt.Net-Next": "[4.0.3, )",
-          "JWT": "[11.0.0, )",
-          "Microsoft.EntityFrameworkCore": "[9.0.4, )",
-          "Microsoft.Extensions.Configuration": "[9.0.5, )",
-          "Microsoft.IdentityModel.JsonWebTokens": "[8.9.0, )",
-          "Project_PRN222_G5.Domain": "[1.0.0, )",
-          "System.IdentityModel.Tokens.Jwt": "[6.35.0, )"
-        }
-      },
-      "project_prn222_g5.domain": {
-        "type": "Project"
       }
     }
   }

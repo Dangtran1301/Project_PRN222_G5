@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.DTOs.Cinema.Response;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Infrastructure.DTOs.Cinema.Response;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {

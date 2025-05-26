@@ -1,4 +1,4 @@
-﻿using Project_PRN222_G5.Domain.Entities.Users.Enum;
+﻿using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.Web.Middleware;
 

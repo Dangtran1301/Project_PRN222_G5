@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 
 namespace Project_PRN222_G5.Infrastructure.Data;
 

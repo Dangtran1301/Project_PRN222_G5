@@ -1,5 +1,5 @@
-﻿using Project_PRN222_G5.Domain.Entities.Users;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Project_PRN222_G5.Infrastructure.Entities.Users;
 
 namespace Project_PRN222_G5.Application.Interfaces.Service;
 

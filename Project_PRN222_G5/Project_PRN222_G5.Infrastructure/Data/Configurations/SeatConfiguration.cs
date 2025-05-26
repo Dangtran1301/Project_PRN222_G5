@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Domain.Entities.Cinema;
+using Project_PRN222_G5.Infrastructure.Entities.Cinema;
 
 namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
 
