@@ -1,5 +1,6 @@
 ﻿using Project_PRN222_G5.Application.DTOs.Cinema.Request;
 using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+using Project_PRN222_G5.Application.Exceptions;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Application.Interfaces.Validation;
@@ -11,7 +12,7 @@ namespace Project_PRN222_G5.Application.Services.Identities;
 public class CinemaService(
     IUnitOfWork unitOfWork,
     IValidationService validationService
-    ) : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
+) : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
 {
     protected override CinemaResponse MapToResponse(Cinema entity) => entity.ToCinemaResponse();
 
@@ -19,24 +20,21 @@ public class CinemaService(
 
     protected override void UpdateEntity(Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
 
-    //Check Duplicate
+    // Check Duplicate Name
     public async Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null)
     {
         var repo = unitOfWork.Repository<Cinema>();
 
-        bool exists;
-        if (excludingId.HasValue)
-        {
-            exists = await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value);
-        }
-        else
-        {
-            exists = await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
-        }
+        bool exists = excludingId.HasValue
+            ? await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value)
+            : await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
 
         if (exists)
         {
-            throw new ValidationException($"Cinema with the name '{name}' already exists.");
+            throw new ValidationException(new Dictionary<string, string[]>
+            {
+                { "Name", new[] { $"Cinema with the name '{name}' already exists." } }
+            });
         }
     }
 

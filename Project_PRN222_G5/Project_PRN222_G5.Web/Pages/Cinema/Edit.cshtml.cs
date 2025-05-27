@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Cinema.Request;
 using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class EditModel : PageModel
+    public class EditModel : BasePageModel
     {
         private readonly ICinemaService _cinemaService;
 
@@ -21,8 +22,6 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null) return NotFound();
-
             try
             {
                 var cinema = await _cinemaService.GetByIdAsync(id.Value);
@@ -38,17 +37,18 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return Page();
             }
         }
-
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 CinemaId = id;
                 return Page();
             }
@@ -56,11 +56,11 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             try
             {
                 await _cinemaService.UpdateAsync(id, CinemaDto);
-                return RedirectToPage("./Index");
+                return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                HandleException(ex);
                 CinemaId = id;
                 return Page();
             }

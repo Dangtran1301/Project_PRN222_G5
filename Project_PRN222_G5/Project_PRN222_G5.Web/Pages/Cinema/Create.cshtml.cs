@@ -5,38 +5,41 @@ using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class CreateModel(ICinemaService cinemaService) : BasePageModel
+    public class CreateModel : BasePageModel
     {
-        _cinemaService = cinemaService;
-    }
+        private readonly ICinemaService _cinemaService;
 
-    [BindProperty]
-    public CreateCinemaDto CinemaDto { get; set; } = new();
-
-    public IActionResult OnGet()
-    {
-        return Page();
-    }
+        public CreateModel(ICinemaService cinemaService)
+        {
+            _cinemaService = cinemaService;
+        }
 
         [BindProperty]
-        public CreateCinemaDto Input { get; set; } = null!;
+        public CreateCinemaDto CinemaDto { get; set; } = new();
+
+        public IActionResult OnGet()
+        {
+            return Page();
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 return Page();
             }
 
-        try
-        {
-            await _cinemaService.CreateAsync(CinemaDto);
-            return RedirectToPage("./Index");
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError(string.Empty, ex.Message);
-            return Page();
+            try
+            {
+                await _cinemaService.CreateAsync(CinemaDto);
+                return RedirectToPage(PageRoutes.Cinema.Index);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return Page();
+            }
         }
     }
 }

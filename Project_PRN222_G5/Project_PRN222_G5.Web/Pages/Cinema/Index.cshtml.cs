@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.DTOs.Cinema.Response;
+﻿using Microsoft.AspNetCore.Mvc;
+using Project_PRN222_G5.Application.DTOs;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private readonly ICinemaService _cinemaService;
 
@@ -13,12 +14,23 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             _cinemaService = cinemaService;
         }
 
-        public IList<CinemaResponse> Cinemas { get; set; } = new List<CinemaResponse>();
+        public PagedResponse Response { get; set; } = new();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int page = 1)
         {
-            var cinemas = await _cinemaService.GetAllAsync();
-            Cinemas = cinemas.ToList();
+            if (page < 1) page = 1;
+            const int pageSize = 10;
+
+            try
+            {
+                Response = await _cinemaService.GetPagedAsync(page, pageSize);
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return Page();
+            }
         }
     }
 }

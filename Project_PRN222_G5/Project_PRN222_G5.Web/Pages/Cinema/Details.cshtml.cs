@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.Application.DTOs.Cinema.Response;
 using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : BasePageModel
     {
         private readonly ICinemaService _cinemaService;
 
@@ -18,16 +19,15 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null) return NotFound();
-
             try
             {
                 Cinema = await _cinemaService.GetByIdAsync(id.Value);
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return RedirectToPage(PageRoutes.Static.NotFound);
             }
         }
     }
