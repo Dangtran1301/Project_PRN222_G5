@@ -5,6 +5,7 @@ using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
 using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -30,10 +31,8 @@ public class CinemaService(
 
         if (exists)
         {
-            throw new ValidationException(new Dictionary<string, string[]>
-            {
-                { "Name", new[] { $"Cinema with the name '{name}' already exists." } }
-            });
+            // Sử dụng ValidationException với message
+            throw new ValidationException($"Cinema with the name '{name}' already exists.");
         }
     }
 

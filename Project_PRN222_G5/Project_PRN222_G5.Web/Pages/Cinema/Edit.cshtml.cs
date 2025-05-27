@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
 using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
-using Project_PRN222_G5.Application.DTOs.Cinema.Request;
-using Project_PRN222_G5.Application.Interfaces.Service;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema

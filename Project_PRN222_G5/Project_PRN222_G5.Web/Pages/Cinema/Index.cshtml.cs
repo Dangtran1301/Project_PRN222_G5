@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Microsoft.AspNetCore.Mvc;
-using Project_PRN222_G5.Application.DTOs;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
+    [Authorize(Roles = nameof(Role.Admin))]
     public class IndexModel : BasePageModel
     {
         private readonly ICinemaService _cinemaService;
@@ -19,9 +20,10 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
 
         public PagedResponse Response { get; set; } = new();
 
-        public async Task<IActionResult> OnGetAsync(int page = 1)
+        // Nếu dùng @page "{pageNumber:int?}" trong .cshtml
+        public async Task<IActionResult> OnGetAsync(int? pageNumber)
         {
-            if (page < 1) page = 1;
+            int page = pageNumber ?? 1;
             const int pageSize = 10;
 
             try
@@ -35,5 +37,6 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 return Page();
             }
         }
+
     }
 }

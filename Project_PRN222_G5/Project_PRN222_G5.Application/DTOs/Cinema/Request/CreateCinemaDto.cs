@@ -1,4 +1,5 @@
 ﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
 

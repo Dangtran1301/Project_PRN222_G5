@@ -1,5 +1,5 @@
-﻿@page "{page:int?}"
-@using Project_PRN222_G5.Application.DTOs.Cinema.Response
+﻿@page "{pageNumber:int?}"
+@using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response
 @model Project_PRN222_G5.Web.Pages.Cinema.IndexModel
 @{
     ViewData["Title"] = "Cinema List";
@@ -56,16 +56,16 @@
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item @(Model.Response.PageNumber == 1 ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-page="@(Model.Response.PageNumber - 1)">Previous</a>
+                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.Response.PageNumber - 1)">Previous</a>
             </li>
             @for (var i = 1; i <= totalPages; i++)
             {
                 <li class="page-item @(i == Model.Response.PageNumber ? "active" : "")">
-                    <a class="page-link" asp-page="Index" asp-route-page="@i">@i</a>
+                    <a class="page-link" asp-page="Index" asp-route-pageNumber="@i">@i</a>
                 </li>
             }
             <li class="page-item @(Model.Response.PageNumber >= totalPages ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-page="@(Model.Response.PageNumber + 1)">Next</a>
+                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.Response.PageNumber + 1)">Next</a>
             </li>
         </ul>
     </nav>
