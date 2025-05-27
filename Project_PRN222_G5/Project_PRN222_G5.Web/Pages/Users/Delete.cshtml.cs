@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -14,30 +15,14 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            try
-            {
                 User = await authService.GetByIdAsync(id);
                 return Page();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
         }
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            try
-            {
                 await authService.DeleteAsync(id);
                 return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
         }
     }
 }

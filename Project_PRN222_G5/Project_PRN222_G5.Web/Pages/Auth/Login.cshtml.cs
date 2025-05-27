@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
 {
     [IgnoreAntiforgeryToken]
-    public class LoginModel(IAuthService authService) : BasePageModel
+    public class LoginModel(IAuthService authService, ICookieService cookieService) : BasePageModel
     {
         [BindProperty]
         public LoginRequest Input { get; set; } = null!;
@@ -24,34 +25,18 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            try
-            {
-                var response = await authService.LoginAsync(Input);
+            var response = await authService.LoginAsync(Input);
+            await cookieService.SetAuthCookiesAsync(Input.Username, response.AccessToken, response.RefreshToken);
 
-                Response.Cookies.Append("AccessToken", response.AccessToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.UtcNow.AddHours(1)
-                });
+            TempData["SuccessMessage"] = "Login successfully!";
+            return RedirectToPage(PageRoutes.Users.Index);
+        }
 
-                Response.Cookies.Append("RefreshToken", response.RefreshToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.UtcNow.AddDays(7)
-                });
-
-                TempData["SuccessMessage"] = "Login successfully!";
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+        public IActionResult OnPostLogoutAsync()
+        {
+            cookieService.RemoveAuthCookies();
+            TempData["SuccessMessage"] = "Logged out successfully!";
+            return RedirectToPage(PageRoutes.Auth.Login);
         }
     }
 }

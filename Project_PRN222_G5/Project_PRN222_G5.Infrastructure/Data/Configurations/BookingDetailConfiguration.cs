@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Booking;
 
 namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 

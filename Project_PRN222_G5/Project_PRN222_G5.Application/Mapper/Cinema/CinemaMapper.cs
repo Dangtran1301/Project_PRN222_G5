@@ -5,14 +5,14 @@ namespace Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
 
 public static class CinemaMapper
 {
-    public static CinemaResponse ToCinemaResponse(this DataAccess.Entities.Identities.Cinema.Cinema entity) => new()
+    public static CinemaResponse ToCinemaResponse(this DataAccess.Entities.Cinemas.Cinema entity) => new()
     {
         Id = entity.Id,
         Name = entity.Name,
         Address = entity.Address,
     };
 
-    public static void UpdateEntity(this DataAccess.Entities.Identities.Cinema.Cinema entity, UpdateCinemaDto request)
+    public static void UpdateEntity(this DataAccess.Entities.Cinemas.Cinema entity, UpdateCinemaDto request)
     {
         var updateEntity = request.ToEntity();
         entity.Name = updateEntity.Name;

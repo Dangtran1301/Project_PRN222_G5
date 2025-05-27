@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -34,16 +35,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 return Page();
             }
 
-            try
-            {
-                await authService.RegisterUserAsync(Input);
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            await authService.RegisterUserAsync(Input);
+            return RedirectToPage(PageRoutes.Users.Index);
         }
     }
 }

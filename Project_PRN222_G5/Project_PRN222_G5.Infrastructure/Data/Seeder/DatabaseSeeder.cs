@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.DataAccess.Data.Seeder

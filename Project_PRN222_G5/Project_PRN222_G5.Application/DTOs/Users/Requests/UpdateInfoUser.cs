@@ -1,6 +1,6 @@
 ﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
@@ -19,7 +19,7 @@ public class UpdateInfoUser : IMapTo<User>
     [EnumDataType(typeof(Gender))]
     public string Gender { get; set; } = string.Empty;
 
-    [FileExtensions(Extensions = "jgp,jpeg,png")]
+    [FileExtensions(Extensions = "jpg,jpeg,png")]
     public string Avatar { get; set; } = string.Empty;
 
     public User ToEntity() => new()

@@ -1,4 +1,5 @@
-﻿using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+﻿using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
+using System.Security.Claims;
 
 namespace Project_PRN222_G5.Web.Middleware;
 
@@ -7,10 +8,19 @@ public class AuthorizationMiddleware(RequestDelegate next, ILogger<Authorization
     public async Task InvokeAsync(HttpContext context)
     {
         var path = context.Request.Path;
+
         if (path.StartsWithSegments("/Users"))
         {
+            if (!context.User.Identity?.IsAuthenticated ?? true)
+            {
+                logger.LogWarning("Unauthenticated access attempt to {Path}", path);
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsync("Unauthorized: Please log in.");
+                return;
+            }
+
             var roles = context.User.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
                 .ToList();
 
