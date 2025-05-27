@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Entities.Common;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
 
-namespace Project_PRN222_G5.Infrastructure.Entities.Movie;
+namespace Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
 
 public class Showtime : BaseEntity<int>
 {

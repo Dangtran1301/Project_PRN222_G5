@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Infrastructure.Entities.Common;
+﻿namespace Project_PRN222_G5.DataAccess.Entities.Common;
 
 public interface IBaseAuditable
 {

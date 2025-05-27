@@ -1,6 +1,6 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Cinema;
+﻿using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
 
-namespace Project_PRN222_G5.Infrastructure.Entities.Booking;
+namespace Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
 
 public class BookingDetail
 {

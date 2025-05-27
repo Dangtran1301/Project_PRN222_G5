@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Infrastructure.Interfaces.Service;
+﻿namespace Project_PRN222_G5.DataAccess.Interfaces.Service;
 
 public interface IDateTimeService
 {

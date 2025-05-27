@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Users;
-using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 

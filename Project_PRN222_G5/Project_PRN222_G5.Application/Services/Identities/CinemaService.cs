@@ -3,8 +3,8 @@ using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
-using Project_PRN222_G5.Infrastructure.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 

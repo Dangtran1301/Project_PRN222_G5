@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Booking;
-using Project_PRN222_G5.Infrastructure.Entities.Common;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
 
-namespace Project_PRN222_G5.Infrastructure.Entities.Cinema;
+namespace Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
 
 public class Seat : BaseEntity
 {

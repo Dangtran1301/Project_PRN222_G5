@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Project_PRN222_G5.Infrastructure.Interfaces.Data;
+namespace Project_PRN222_G5.DataAccess.Interfaces.Data;
 
 public interface IDbContext : IDisposable
 {

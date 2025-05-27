@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Common;
-using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
 
-namespace Project_PRN222_G5.Infrastructure.Entities.Users;
+namespace Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 
 public class User : BaseEntity
 {

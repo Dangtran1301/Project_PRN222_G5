@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Infrastructure.Entities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
+namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
 public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
 {

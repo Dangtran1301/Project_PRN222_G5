@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Project_PRN222_G5.BusinessLogic.DTOs;
-using Project_PRN222_G5.Infrastructure.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Common;
 
 namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 

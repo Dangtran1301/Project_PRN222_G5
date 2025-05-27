@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Common;
-using Project_PRN222_G5.Infrastructure.Entities.Movie.Enum;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie.Enum;
 
-namespace Project_PRN222_G5.Infrastructure.Entities.Movie;
+namespace Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
 
 public class Movie : BaseEntity
 {
