@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Infrastructure.DTOs.Users.Responses;
+﻿namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 
 public class LoginResponse
 {

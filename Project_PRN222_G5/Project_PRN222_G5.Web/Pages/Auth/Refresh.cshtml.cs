@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Project_PRN222_G5.Application.Interfaces.Service;
-using Project_PRN222_G5.Application.Interfaces.Validation;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.Infrastructure.Entities.Users;
 using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 using Project_PRN222_G5.Web.Pages.Shared;

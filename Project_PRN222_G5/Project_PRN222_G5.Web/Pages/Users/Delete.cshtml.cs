@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Infrastructure.DTOs.Users.Responses;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
 

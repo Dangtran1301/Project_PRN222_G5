@@ -1,9 +1,9 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Validation;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.Infrastructure.Entities.Users;
 using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
-namespace Project_PRN222_G5.Application.Services.Validation;
+namespace Project_PRN222_G5.BusinessLogic.Services.Validation;
 
 public class TokenValidator(IUnitOfWork unitOfWork, IDateTimeService timeService) : ITokenValidator
 {

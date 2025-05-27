@@ -15,21 +15,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="b311864d-2d51-47ad-97a0-4f44ad862b23.tmp" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Folder Include="Exceptions\" />
 	  <Folder Include="Mapper\Cinema\" />
-	  <Folder Include="Services\JWT\" />
+	  <Folder Include="Services\Jwt\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="BCrypt" Version="1.0.0" />
-	  <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
-	  <PackageReference Include="JWT" Version="11.0.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
-	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5">
+	    <TreatAsUsed>true</TreatAsUsed>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.5">
+	    <TreatAsUsed>true</TreatAsUsed>
+	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.Infrastructure.csproj" />
+	  <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.DataAccess.csproj" />
 	</ItemGroup>
 
 </Project>

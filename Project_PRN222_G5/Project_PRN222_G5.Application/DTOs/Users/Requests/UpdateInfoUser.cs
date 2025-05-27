@@ -1,9 +1,9 @@
 ﻿using Project_PRN222_G5.Infrastructure.Entities.Users;
 using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
-using Project_PRN222_G5.Infrastructure.Interfaces.Mapping;
 using System.ComponentModel.DataAnnotations;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 
-namespace Project_PRN222_G5.Infrastructure.DTOs.Users.Requests;
+namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 
 public class UpdateInfoUser : IMapTo<User>
 {

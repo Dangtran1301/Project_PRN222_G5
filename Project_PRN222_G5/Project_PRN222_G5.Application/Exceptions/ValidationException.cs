@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Application.Exceptions;
+﻿namespace Project_PRN222_G5.BusinessLogic.Exceptions;
 
 public class ValidationException : Exception
 {

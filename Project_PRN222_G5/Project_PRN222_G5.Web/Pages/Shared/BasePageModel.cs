@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.Application.Exceptions;
 using System.Text;
+using Project_PRN222_G5.BusinessLogic.Exceptions;
 
 namespace Project_PRN222_G5.Web.Pages.Shared;
 

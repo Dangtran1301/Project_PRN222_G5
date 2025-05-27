@@ -1,12 +1,12 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.Validation;
-using Project_PRN222_G5.Application.Mapper.Cinema;
-using Project_PRN222_G5.Infrastructure.DTOs.Cinema.Request;
-using Project_PRN222_G5.Infrastructure.DTOs.Cinema.Response;
+﻿using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
 using Project_PRN222_G5.Infrastructure.Entities.Cinema;
 using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
-namespace Project_PRN222_G5.Application.Services.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
 public class CinemaService(
     IUnitOfWork unitOfWork,
