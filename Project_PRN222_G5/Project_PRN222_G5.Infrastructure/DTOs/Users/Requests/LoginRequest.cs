@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Project_PRN222_G5.Infrastructure.Entities.Users;
+﻿using Project_PRN222_G5.Infrastructure.Entities.Users;
 using Project_PRN222_G5.Infrastructure.Interfaces.Mapping;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.Infrastructure.DTOs.Users.Requests;
 

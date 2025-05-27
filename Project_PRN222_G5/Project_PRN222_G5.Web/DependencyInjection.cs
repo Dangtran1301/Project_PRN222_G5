@@ -8,14 +8,14 @@ using Project_PRN222_G5.Application.Services.Identities;
 using Project_PRN222_G5.Application.Services.JWT;
 using Project_PRN222_G5.Application.Services.Validation;
 using Project_PRN222_G5.Infrastructure.Data;
-using Project_PRN222_G5.Infrastructure.Repositories;
-using Project_PRN222_G5.Infrastructure.Service;
-using Project_PRN222_G5.Infrastructure.UnitOfWork;
-using System.Text;
 using Project_PRN222_G5.Infrastructure.Interfaces.Data;
 using Project_PRN222_G5.Infrastructure.Interfaces.Repository;
 using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
+using Project_PRN222_G5.Infrastructure.Repositories;
+using Project_PRN222_G5.Infrastructure.Service;
+using Project_PRN222_G5.Infrastructure.UnitOfWork;
+using System.Text;
 
 namespace Project_PRN222_G5.Web;
 
@@ -27,7 +27,7 @@ public static class DependencyInjection
 
         services.AddHttpContextAccessor();
 
-        #endregion
+        #endregion HttpContextAccessor
 
         #region Service
 
@@ -38,7 +38,7 @@ public static class DependencyInjection
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<ITokenValidator, TokenValidator>();
 
-        #endregion
+        #endregion Service
 
         return services;
     }
@@ -51,7 +51,7 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IDbContext, TheDbContext>();
 
-        #endregion
+        #endregion DbContext
 
         #region UnitOfWork, Repository, Service
 
@@ -60,7 +60,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
 
-        #endregion
+        #endregion UnitOfWork, Repository, Service
 
         return services;
     }

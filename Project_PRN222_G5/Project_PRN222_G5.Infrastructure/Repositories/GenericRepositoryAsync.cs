@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.Infrastructure.Entities.Common;
 using Project_PRN222_G5.Infrastructure.Interfaces.Data;
 using Project_PRN222_G5.Infrastructure.Interfaces.Repository;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.Infrastructure.Repositories
 {
