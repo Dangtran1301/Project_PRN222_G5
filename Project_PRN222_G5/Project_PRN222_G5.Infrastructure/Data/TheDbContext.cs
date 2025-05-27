@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Project_PRN222_G5.DataAccess.Entities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Entities.Common;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Movies;
+using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Data;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 

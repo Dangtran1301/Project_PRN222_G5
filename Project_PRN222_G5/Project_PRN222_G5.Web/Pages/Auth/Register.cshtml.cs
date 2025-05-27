@@ -34,15 +34,8 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            try
-            {
-                await authService.RegisterUserAsync(Input);
-                return RedirectToPage(PageRoutes.Auth.Login);
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            await authService.RegisterUserAsync(Input);
+            return RedirectToPage(PageRoutes.Auth.Login);
         }
     }
 }

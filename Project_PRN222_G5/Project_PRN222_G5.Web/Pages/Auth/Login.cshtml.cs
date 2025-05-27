@@ -25,18 +25,11 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            try
-            {
-                var response = await authService.LoginAsync(Input);
-                await cookieService.SetAuthCookiesAsync(Input.Username, response.AccessToken, response.RefreshToken);
+            var response = await authService.LoginAsync(Input);
+            await cookieService.SetAuthCookiesAsync(Input.Username, response.AccessToken, response.RefreshToken);
 
-                TempData["SuccessMessage"] = "Login successfully!";
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            TempData["SuccessMessage"] = "Login successfully!";
+            return RedirectToPage(PageRoutes.Users.Index);
         }
 
         public IActionResult OnPostLogoutAsync()

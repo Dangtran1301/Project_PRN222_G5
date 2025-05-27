@@ -11,15 +11,9 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            try
-            {
                 User = await authService.GetByIdAsync(id);
                 return Page();
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+
         }
     }
 }

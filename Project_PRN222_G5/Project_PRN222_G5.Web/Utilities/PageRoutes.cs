@@ -6,7 +6,7 @@
 
         public static class Public
         {
-            public const string Home = "~/";
+            public const string Home = "/Index";
             public const string Error = "/Shared/Error";
         }
 

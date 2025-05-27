@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Movies;
 
 namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 

@@ -1,7 +1,7 @@
 ﻿using Project_PRN222_G5.DataAccess.Entities.Common;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Movies;
 
-namespace Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
+namespace Project_PRN222_G5.DataAccess.Entities.Cinemas;
 
 public class Room : BaseEntity
 {

@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.BusinessLogic.DTOs;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.DataAccess.Entities.Common;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Services;
 
 public abstract class GenericService<TE, TC, TU, TR>(
     IUnitOfWork unitOfWork,

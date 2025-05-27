@@ -20,16 +20,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            try
-            {
-                Input.ToUpdateInfoUser(await authService.GetByIdAsync(id));
-                return Page();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            Input.ToUpdateInfoUser(await authService.GetByIdAsync(id));
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid id)
@@ -40,15 +32,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 return Page();
             }
 
-            try
-            {
-                await authService.UpdateAsync(id, Input);
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
+            await authService.UpdateAsync(id, Input);
+            return RedirectToPage(PageRoutes.Users.Index);
         }
     }
 }

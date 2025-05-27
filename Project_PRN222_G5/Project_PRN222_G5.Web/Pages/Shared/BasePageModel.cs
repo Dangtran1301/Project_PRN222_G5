@@ -32,24 +32,4 @@ public abstract class BasePageModel : PageModel
             ErrorMessage = errors.ToString().Trim();
         }
     }
-
-    protected IActionResult HandleException(Exception ex)
-    {
-        string message;
-        if (ex is ValidationException validationEx)
-        {
-            var errors = new StringBuilder();
-            foreach (var error in validationEx.Errors)
-            {
-                errors.AppendLine(string.Join(", ", error.Value));
-            }
-            message = errors.ToString().Trim();
-        }
-        else
-        {
-            message = $"An error occurred: {ex.Message}";
-        }
-
-        return RedirectToPage(PageRoutes.Public.Error, new { message });
-    }
 }

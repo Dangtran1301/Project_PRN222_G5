@@ -1,6 +1,6 @@
 ﻿using Project_PRN222_G5.DataAccess.Entities.Common;
 
-namespace Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
+namespace Project_PRN222_G5.DataAccess.Entities.Cinemas;
 
 public class Cinema : BaseEntity
 {

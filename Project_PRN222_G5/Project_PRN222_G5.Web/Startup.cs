@@ -12,7 +12,6 @@ public class Startup(IConfiguration configuration)
         #region Razor Pages
 
         services.AddRazorPages();
-        services.AddControllers();
 
         #endregion Razor Pages
 
@@ -46,15 +45,15 @@ public class Startup(IConfiguration configuration)
     {
         if (env.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
+            app.UseExceptionHandler(PageRoutes.Public.Error);
         }
         else
         {
             app.UseHsts();
+            app.UseExceptionHandler(PageRoutes.Public.Error);
         }
 
         app.UseHttpsRedirection();
-        app.UseGlobalExceptionMiddleware();
 
         app.UseRouting();
         app.UseStaticFiles();
@@ -65,10 +64,7 @@ public class Startup(IConfiguration configuration)
         app.UseLoggerMiddleware();
         app.UseAuthorizationMiddleware();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapRazorPages();
-        });
+        app.UseEndpoints(endpoints => endpoints.MapRazorPages()
+        );
     }
 }
