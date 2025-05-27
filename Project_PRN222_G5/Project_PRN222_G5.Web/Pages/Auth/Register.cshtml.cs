@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
 {
     [IgnoreAntiforgeryToken]
-    public class RegisterModel(IAuthService authService, ILogger<RegisterModel> logger) : BasePageModel
+    public class RegisterModel(IAuthService authService) : BasePageModel
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
@@ -33,16 +34,8 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            try
-            {
-                await authService.RegisterUserAsync(Input);
-                return RedirectToPage(PageRoutes.Auth.Login);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            await authService.RegisterUserAsync(Input);
+            return RedirectToPage(PageRoutes.Auth.Login);
         }
     }
 }

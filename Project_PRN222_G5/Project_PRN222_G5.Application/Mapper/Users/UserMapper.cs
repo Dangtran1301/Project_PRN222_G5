@@ -1,6 +1,6 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Users;
 
 namespace Project_PRN222_G5.BusinessLogic.Mapper.Users;
 
@@ -23,6 +23,9 @@ public static class UserMapper
         var updateEntity = request.ToEntity();
         entity.FullName = updateEntity.FullName;
         entity.Gender = updateEntity.Gender;
+        entity.DayOfBirth = updateEntity.DayOfBirth;
+        entity.PhoneNumber = updateEntity.PhoneNumber;
+        entity.Avatar = updateEntity.Avatar;
     }
 
     public static void ToUpdateInfoUser(this UpdateInfoUser request, UserResponse userResponse)

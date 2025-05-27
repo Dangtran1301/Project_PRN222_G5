@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.BusinessLogic.Services.Cinema;
 using Project_PRN222_G5.BusinessLogic.Services.Identities;
-using Project_PRN222_G5.BusinessLogic.Services.Jwt;
 using Project_PRN222_G5.BusinessLogic.Validation;
 using Project_PRN222_G5.DataAccess.Data;
 using Project_PRN222_G5.DataAccess.Interfaces.Data;
@@ -35,6 +35,7 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<ITokenValidator, TokenValidator>();
+        services.AddScoped<ICookieService, CookieService>();
 
         #endregion Service
 
@@ -51,13 +52,13 @@ public static class DependencyInjection
 
         #endregion DbContext
 
-        #region UnitOfWork, Repository, Service
+        #region UnitOfWork, Service
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
 
-        #endregion UnitOfWork, Repository, Service
+        #endregion UnitOfWork, Service
 
         return services;
     }

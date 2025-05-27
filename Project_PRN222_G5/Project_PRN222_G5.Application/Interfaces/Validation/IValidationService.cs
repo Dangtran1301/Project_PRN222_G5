@@ -2,7 +2,7 @@
 
 public interface IValidationService
 {
-    Task<Dictionary<string, string[]>> ValidateAsync<T>(T model);
+    Dictionary<string, string[]> Validate<T>(T model);
 
     Task ValidateUniqueUserAsync(string username, string email);
 }

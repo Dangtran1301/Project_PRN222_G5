@@ -4,8 +4,9 @@ using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Mapper.Users;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -19,16 +20,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            try
-            {
-                Input.ToUpdateInfoUser(await authService.GetByIdAsync(id));
-                return Page();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            Input.ToUpdateInfoUser(await authService.GetByIdAsync(id));
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid id)
@@ -39,16 +32,8 @@ namespace Project_PRN222_G5.Web.Pages.Users
                 return Page();
             }
 
-            try
-            {
-                await authService.UpdateAsync(id, Input);
-                return RedirectToPage(PageRoutes.Users.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            await authService.UpdateAsync(id, Input);
+            return RedirectToPage(PageRoutes.Users.Index);
         }
     }
 }

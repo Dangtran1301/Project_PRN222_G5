@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Movies;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
