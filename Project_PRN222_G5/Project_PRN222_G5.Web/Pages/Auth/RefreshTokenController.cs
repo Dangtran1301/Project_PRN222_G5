@@ -45,7 +45,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow.AddSeconds(3)
+                Expires = DateTimeOffset.UtcNow.AddHours(1)
             });
 
             return Ok(new { AccessToken = newAccessToken });
