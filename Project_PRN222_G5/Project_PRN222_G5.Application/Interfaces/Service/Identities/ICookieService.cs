@@ -3,6 +3,8 @@
 public interface ICookieService
 {
     Task SetAuthCookiesAsync(string username, string accessToken, string refreshToken);
+
     void RemoveAuthCookies();
+
     string? GetRefreshToken();
 }

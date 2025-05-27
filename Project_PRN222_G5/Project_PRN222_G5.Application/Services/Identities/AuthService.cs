@@ -3,7 +3,6 @@ using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Users;
 using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
@@ -12,17 +11,16 @@ using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
-public class AuthService(
+public sealed class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
-    IConfiguration configuration,
     IJwtService jwtService,
     IAuthenticatedUserService authenticatedUserService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
-        var errors = await validationService.ValidateAsync(request);
+        var errors = validationService.Validate(request);
         if (errors.Any())
         {
             throw new ValidationException(errors);
@@ -60,7 +58,7 @@ public class AuthService(
 
     public async Task<UserResponse> RegisterUserAsync(RegisterUserRequest request)
     {
-        var errors = await validationService.ValidateAsync(request);
+        var errors = validationService.Validate(request);
         if (errors.Any())
         {
             throw new ValidationException(errors);

@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Project_PRN222_G5.BusinessLogic.Services.Jwt
+namespace Project_PRN222_G5.BusinessLogic.Services.Identities
 {
     public class JwtService(IConfiguration config, IDateTimeService timeService) : IJwtService
     {

@@ -74,7 +74,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public async Task<TR> CreateAsync(TC request)
     {
-        await validationService.ValidateAsync(request);
+        validationService.Validate(request);
         var entity = MapToEntity(request);
         await unitOfWork.Repository<TE>().AddAsync(entity);
         await unitOfWork.CompleteAsync();
@@ -83,7 +83,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public async Task<TR> UpdateAsync(Guid id, TU request)
     {
-        await validationService.ValidateAsync(request);
+        validationService.Validate(request);
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
         UpdateEntity(entity, request);
         unitOfWork.Repository<TE>().Update(entity);

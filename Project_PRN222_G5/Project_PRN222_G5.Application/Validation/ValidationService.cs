@@ -7,7 +7,7 @@ namespace Project_PRN222_G5.BusinessLogic.Validation;
 
 public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
 {
-    public async Task<Dictionary<string, string[]>> ValidateAsync<T>(T model)
+    public Dictionary<string, string[]> Validate<T>(T model)
     {
         if (model == null)
         {

@@ -1,7 +1,7 @@
 ﻿using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 using System.Security.Claims;
 
-namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
+namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 
 public interface IJwtService
 {

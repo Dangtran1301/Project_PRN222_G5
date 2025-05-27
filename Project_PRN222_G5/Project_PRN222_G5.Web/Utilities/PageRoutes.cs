@@ -4,10 +4,10 @@
     {
         private static string Route(string controller, string action) => $"/{controller}/{action}";
 
-        public static class Static
+        public static class Public
         {
-            public const string Home = "/Index";
-            public const string NotFound = "/404";
+            public const string Home = "~/";
+            public const string Error = "/Shared/Error";
         }
 
         public static class Users

@@ -1,4 +1,4 @@
-﻿using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+﻿using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using System.Security.Claims;
 
 namespace Project_PRN222_G5.Web.Middleware;

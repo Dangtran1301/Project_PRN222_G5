@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
+using Project_PRN222_G5.Web.Utilities;
 using System.Text;
 
 namespace Project_PRN222_G5.Web.Pages.Shared;
@@ -31,8 +33,9 @@ public abstract class BasePageModel : PageModel
         }
     }
 
-    protected void HandleException(Exception ex)
+    protected IActionResult HandleException(Exception ex)
     {
+        string message;
         if (ex is ValidationException validationEx)
         {
             var errors = new StringBuilder();
@@ -40,11 +43,13 @@ public abstract class BasePageModel : PageModel
             {
                 errors.AppendLine(string.Join(", ", error.Value));
             }
-            ErrorMessage = errors.ToString().Trim();
+            message = errors.ToString().Trim();
         }
         else
         {
-            ErrorMessage = $"An error occurred: {ex.Message}";
+            message = $"An error occurred: {ex.Message}";
         }
+
+        return RedirectToPage(PageRoutes.Public.Error, new { message });
     }
 }

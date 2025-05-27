@@ -1,12 +1,6 @@
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
@@ -51,8 +45,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             }
             catch (Exception ex)
             {
-                HandleException(ex);
-                return Unauthorized();
+                return HandleException(ex);
             }
         }
     }

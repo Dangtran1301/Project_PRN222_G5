@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.BusinessLogic.Services.Identities;
 using Project_PRN222_G5.Web.Pages.Shared;
 using Project_PRN222_G5.Web.Utilities;
 
@@ -36,8 +35,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             }
             catch (Exception ex)
             {
-                HandleException(ex);
-                return Page();
+                return HandleException(ex);
             }
         }
 

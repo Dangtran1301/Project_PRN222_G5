@@ -2,7 +2,6 @@
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.Web.Pages.Shared;
-using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
@@ -19,8 +18,7 @@ namespace Project_PRN222_G5.Web.Pages.Users
             }
             catch (Exception ex)
             {
-                HandleException(ex);
-                return RedirectToPage(PageRoutes.Static.NotFound);
+                return HandleException(ex);
             }
         }
     }

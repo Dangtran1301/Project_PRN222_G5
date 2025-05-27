@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using System.Security.Claims;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Project_PRN222_G5.Web.Middleware;
+﻿using Project_PRN222_G5.Web.Middleware;
 using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web;
@@ -15,7 +14,7 @@ public class Startup(IConfiguration configuration)
         services.AddRazorPages();
         services.AddControllers();
 
-        #endregion
+        #endregion Razor Pages
 
         #region Services
 
@@ -25,7 +24,7 @@ public class Startup(IConfiguration configuration)
             .AddJwtAuthentication(Configuration)
             .AddCustomLogging();
 
-        #endregion
+        #endregion Services
 
         #region Cookie
 
@@ -40,7 +39,7 @@ public class Startup(IConfiguration configuration)
                 options.Cookie.SameSite = SameSiteMode.Strict;
             });
 
-        #endregion
+        #endregion Cookie
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
