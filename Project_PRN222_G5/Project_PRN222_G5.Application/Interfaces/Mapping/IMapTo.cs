@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Application.Interfaces.Mapping;
+﻿namespace Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 
 public interface IMapTo<out TEntity>
 {

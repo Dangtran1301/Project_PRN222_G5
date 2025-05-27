@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Domain.Entities.Cinema;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
+namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
 public class RoomConfiguration : IEntityTypeConfiguration<Room>
 {
@@ -24,11 +24,7 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
                 .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .HasMaxLength(100)
                 .IsRequired();
-
-            builder.Property(x => x.UpdatedBy)
-                .HasMaxLength(100);
         }
     }
 }

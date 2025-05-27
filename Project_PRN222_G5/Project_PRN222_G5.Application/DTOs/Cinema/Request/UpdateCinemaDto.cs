@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Project_PRN222_G5.Application.Interfaces.Mapping;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 
-namespace Project_PRN222_G5.Application.DTOs.Cinema.Request;
+namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
 
-public class UpdateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
+public class UpdateCinemaDto : IMapTo<DataAccess.Entities.Identities.Cinema.Cinema>
 {
     [Required(ErrorMessage = "Cinema name is required.")]
     [StringLength(100, MinimumLength = 2, ErrorMessage = "Cinema name must be between 2 and 100 characters.")]

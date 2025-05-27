@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Project_PRN222_G5.Application.DTOs;
+namespace Project_PRN222_G5.BusinessLogic.DTOs;
 
 public class PagedResponse
 {

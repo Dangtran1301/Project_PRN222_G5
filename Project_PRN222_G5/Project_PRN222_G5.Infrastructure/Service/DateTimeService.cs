@@ -1,6 +1,6 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Service;
+﻿using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
-namespace Project_PRN222_G5.Infrastructure.Service;
+namespace Project_PRN222_G5.DataAccess.Service;
 
 public class DateTimeService : IDateTimeService
 {

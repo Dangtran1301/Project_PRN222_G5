@@ -5,11 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project_PRN222_G5.Web", "Project_PRN222_G5.Web\Project_PRN222_G5.Web.csproj", "{9180C9DA-7873-40F9-8AB5-A4D76CEACA7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Domain", "Project_PRN222_G5.Domain\Project_PRN222_G5.Domain.csproj", "{7A385540-E07E-440B-B8AB-211F2BDC3DE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.BusinessLogic", "Project_PRN222_G5.Application\Project_PRN222_G5.BusinessLogic.csproj", "{05F0F805-CE7F-4C5C-B296-90FF486A404C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Application", "Project_PRN222_G5.Application\Project_PRN222_G5.Application.csproj", "{05F0F805-CE7F-4C5C-B296-90FF486A404C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.Infrastructure", "Project_PRN222_G5.Infrastructure\Project_PRN222_G5.Infrastructure.csproj", "{B668014A-6E51-4C38-A409-A992CDD9670C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_PRN222_G5.DataAccess", "Project_PRN222_G5.Infrastructure\Project_PRN222_G5.DataAccess.csproj", "{B668014A-6E51-4C38-A409-A992CDD9670C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		{9180C9DA-7873-40F9-8AB5-A4D76CEACA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9180C9DA-7873-40F9-8AB5-A4D76CEACA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9180C9DA-7873-40F9-8AB5-A4D76CEACA7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A385540-E07E-440B-B8AB-211F2BDC3DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A385540-E07E-440B-B8AB-211F2BDC3DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A385540-E07E-440B-B8AB-211F2BDC3DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A385540-E07E-440B-B8AB-211F2BDC3DE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05F0F805-CE7F-4C5C-B296-90FF486A404C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05F0F805-CE7F-4C5C-B296-90FF486A404C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05F0F805-CE7F-4C5C-B296-90FF486A404C}.Release|Any CPU.ActiveCfg = Release|Any CPU

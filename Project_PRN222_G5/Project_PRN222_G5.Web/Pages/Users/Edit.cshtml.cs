@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.DTOs.Users.Responses;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Mapper.Users;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Mapper.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
 using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Users

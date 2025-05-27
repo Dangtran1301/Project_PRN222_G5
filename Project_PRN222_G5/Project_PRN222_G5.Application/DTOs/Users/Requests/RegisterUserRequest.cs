@@ -1,9 +1,9 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Mapping;
-using Project_PRN222_G5.Domain.Entities.Users;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
 using System.ComponentModel.DataAnnotations;
 
-namespace Project_PRN222_G5.Application.DTOs.Users.Requests;
+namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 
 public class RegisterUserRequest : IMapTo<User>
 {
@@ -32,6 +32,7 @@ public class RegisterUserRequest : IMapTo<User>
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Role is required.")]
+    [EnumDataType(typeof(Role), ErrorMessage = "Invalid role.")]
     public string Role { get; set; } = string.Empty;
 
     public User ToEntity() => new()

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using System.Security.Claims;
 
-namespace Project_PRN222_G5.Infrastructure.Service;
+namespace Project_PRN222_G5.DataAccess.Service;
 
-public class AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) : IAuthenticatedUserService
+public class AuthenticatedUserService(IHttpContextAccessor contextAccessor) : IAuthenticatedUserService
 {
-    public string? UserId { get; } = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid")!;
+    public string UserId { get; } = contextAccessor.HttpContext?.User.FindFirstValue("uid") ?? string.Empty;
+    public string ClientIp { get; } = contextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
 }

@@ -1,8 +1,8 @@
-﻿using Project_PRN222_G5.Application.DTOs.Users.Requests;
-using Project_PRN222_G5.Application.DTOs.Users.Responses;
-using Project_PRN222_G5.Domain.Entities.Users;
+﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 
-namespace Project_PRN222_G5.Application.Interfaces.Service.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 
 public interface IAuthService : IGenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>
 {
@@ -10,5 +10,5 @@ public interface IAuthService : IGenericService<User, RegisterUserRequest, Updat
 
     Task<UserResponse> RegisterUserAsync(RegisterUserRequest request);
 
-    Task LogoutAsync(Guid userId,string refreshToken);
+    Task LogoutAsync(Guid userId, string refreshToken);
 }

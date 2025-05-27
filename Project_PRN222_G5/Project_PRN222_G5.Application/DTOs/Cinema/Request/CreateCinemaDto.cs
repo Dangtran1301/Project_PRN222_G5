@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Project_PRN222_G5.Application.Interfaces.Mapping;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 
-namespace Project_PRN222_G5.Application.DTOs.Cinema.Request;
+namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
 
-public class CreateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
+public class CreateCinemaDto : IMapTo<DataAccess.Entities.Identities.Cinema.Cinema>
 {
     [Required(ErrorMessage = "Cinema name is required.")]
     [StringLength(100, MinimumLength = 3, ErrorMessage = "Cinema name must be between 3 and 100 characters.")]
@@ -13,7 +12,7 @@ public class CreateCinemaDto : IMapTo<Domain.Entities.Cinema.Cinema>
     [StringLength(200, MinimumLength = 5, ErrorMessage = "Address must be between 5 and 200 characters.")]
     public string Address { get; set; } = string.Empty;
 
-    public Domain.Entities.Cinema.Cinema ToEntity() => new()
+    public DataAccess.Entities.Identities.Cinema.Cinema ToEntity() => new()
     {
         Name = Name,
         Address = Address,

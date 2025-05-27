@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Domain.Entities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
+namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
 public class MovieConfiguration : IEntityTypeConfiguration<Movie>
 {
@@ -32,10 +32,6 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasMaxLength(100)
             .IsRequired();
-
-        builder.Property(x => x.UpdatedBy)
-            .HasMaxLength(100);
     }
 }

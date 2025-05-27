@@ -1,16 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Application.Exceptions;
-using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Repository;
-using Project_PRN222_G5.Domain.Common;
+using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.Data;
+using Project_PRN222_G5.DataAccess.Interfaces.Repository;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Infrastructure.Repositories
+namespace Project_PRN222_G5.DataAccess.Repositories
 {
     public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepositoryAsync<TEntity>
         where TEntity : BaseEntity
     {
         private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
+
+        public IQueryable<TEntity> AsQueryable()
+        {
+            return _dbSet.AsNoTracking();
+        }
 
         #region CRUD
 

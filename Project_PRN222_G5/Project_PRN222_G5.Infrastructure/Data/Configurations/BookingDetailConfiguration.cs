@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Domain.Entities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
+namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
 public class BookingDetailConfiguration : IEntityTypeConfiguration<BookingDetail>
 {

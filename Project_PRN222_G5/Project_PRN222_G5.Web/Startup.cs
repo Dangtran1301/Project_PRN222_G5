@@ -1,5 +1,4 @@
-﻿using Project_PRN222_G5.Infrastructure.DependencyInjection;
-using Project_PRN222_G5.Web.Middleware;
+﻿using Project_PRN222_G5.Web.Middleware;
 
 namespace Project_PRN222_G5.Web;
 
@@ -11,6 +10,7 @@ public class Startup(IConfiguration configuration)
     {
         // Add Razor Pages
         services.AddRazorPages();
+        services.AddControllers();
 
         // Add services
         services
@@ -41,18 +41,23 @@ public class Startup(IConfiguration configuration)
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
         app.UseSession();
+        app.UseGlobalExceptionMiddleware();
+
         app.UseRouting();
+        app.UseStaticFiles();
+
         app.UseAuthentication();
         app.UseAuthorization();
 
-        // Custom Middleware
-        app.UseMiddleware<ValidationExceptionMiddleware>();
-        app.UseMiddleware<GlobalExceptionMiddleware>();
-        app.UseMiddleware<TokenValidationMiddleware>();
-        app.UseMiddleware<RequestLoggingMiddleware>();
+        app.UseLoggerMiddleware();
+        app.UseAccessTokenValidationMiddleware();
+        app.UseAuthorizationMiddleware();
 
-        app.UseEndpoints(endpoints => endpoints.MapRazorPages());
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapRazorPages();
+        });
     }
 }

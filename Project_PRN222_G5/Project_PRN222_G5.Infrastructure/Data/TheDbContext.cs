@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Service;
-using Project_PRN222_G5.Domain.Common;
-using Project_PRN222_G5.Domain.Entities.Booking;
-using Project_PRN222_G5.Domain.Entities.Cinema;
-using Project_PRN222_G5.Domain.Entities.Movie;
-using Project_PRN222_G5.Domain.Entities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Interfaces.Data;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
-namespace Project_PRN222_G5.Infrastructure.Data;
+namespace Project_PRN222_G5.DataAccess.Data;
 
 public class TheDbContext(
     DbContextOptions<TheDbContext> options,
@@ -46,20 +46,32 @@ public class TheDbContext(
     {
         foreach (var entry in ChangeTracker.Entries<IBaseAuditable>())
         {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = datetimeService.NowUtc;
-                    entry.Entity.CreatedBy ??= authenticatedUserService.UserId ?? "System"; /* if null then equal */
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.UpdatedAt = datetimeService.NowUtc;
-                    entry.Entity.UpdatedBy = authenticatedUserService.UserId;
-                    break;
-            }
+            ApplyAudit(entry.Entity, entry.State);
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ApplyAudit(IBaseAuditable entity, EntityState state)
+    {
+        switch (state)
+        {
+            case EntityState.Added:
+                entity.CreatedAt = datetimeService.NowUtc;
+                if (entity.CreatedBy == Guid.Empty)
+                {
+                    entity.CreatedBy = Guid.TryParse(authenticatedUserService.UserId, out var userId)
+                        ? userId
+                        : Guid.Empty;
+                }
+                break;
+
+            case EntityState.Modified:
+                entity.UpdatedAt = datetimeService.NowUtc;
+                entity.UpdatedBy = Guid.TryParse(authenticatedUserService.UserId, out var updatedBy)
+                    ? updatedBy
+                    : null;
+                break;
+        }
     }
 }

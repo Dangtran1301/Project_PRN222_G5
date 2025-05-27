@@ -1,11 +1,12 @@
-﻿using Project_PRN222_G5.Application.DTOs;
-using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
-using Project_PRN222_G5.Application.Interfaces.Validation;
-using Project_PRN222_G5.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
 
-namespace Project_PRN222_G5.Application.Services.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
 public abstract class GenericService<TE, TC, TU, TR>(
     IUnitOfWork unitOfWork,
@@ -26,26 +27,45 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public async Task<IEnumerable<TR>> GetAllAsync()
     {
-        var entities = await unitOfWork.Repository<TE>().GetAllAsync();
+        var entities =
+            (await unitOfWork.Repository<TE>().GetAllAsync())
+            .OrderByDescending(x => x.CreatedAt);
         return entities.Select(MapToResponse);
     }
 
-    public async Task<PagedResponse> GetPagedAsync(int page, int pageSize, Expression<Func<TE, bool>>? predicate = null)
+    public async Task<PagedResponse> GetPagedAsync(int page,
+        int pageSize,
+        Expression<Func<TE, bool>>? predicate = null,
+        Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null,
+        Func<IQueryable<TE>, IQueryable<TE>>? include = null,
+        string? searchTerm = null,
+        Expression<Func<TE, bool>>? searchPredicate = null)
     {
-        var entities = predicate != null
-            ? await unitOfWork.Repository<TE>().FindAsync(predicate)
-            : await unitOfWork.Repository<TE>().GetAllAsync();
+        var query = unitOfWork.Repository<TE>().AsQueryable();
 
-        var totalCount = entities.Count();
-        var pagedItems = entities
+        if (include != null)
+            query = include(query);
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm) && searchPredicate != null)
+            query = query.Where(searchPredicate);
+
+        if (orderBy != null)
+            query = orderBy(query);
+
+        var totalCount = await query.CountAsync();
+
+        var pagedItems = await query
+            .OrderByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .Select(MapToResponse)
-            .ToList();
+            .ToListAsync();
 
         return new PagedResponse
         {
-            Items = pagedItems,
+            Items = pagedItems.Select(MapToResponse),
             TotalCount = totalCount,
             PageNumber = page,
             PageSize = pageSize

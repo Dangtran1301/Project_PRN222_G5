@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Project_PRN222_G5.Domain.Entities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Configurations;
+namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
 public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
 {
@@ -25,11 +25,9 @@ public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.UpdatedBy)
-            .HasMaxLength(100)
             .IsRequired(false);
 
         builder.HasOne(ut => ut.User)

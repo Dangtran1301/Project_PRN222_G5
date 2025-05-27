@@ -1,10 +1,10 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Data;
-using Project_PRN222_G5.Application.Interfaces.Repository;
-using Project_PRN222_G5.Application.Interfaces.UnitOfWork;
-using Project_PRN222_G5.Domain.Common;
-using Project_PRN222_G5.Infrastructure.Repositories;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.Data;
+using Project_PRN222_G5.DataAccess.Interfaces.Repository;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
+using Project_PRN222_G5.DataAccess.Repositories;
 
-namespace Project_PRN222_G5.Infrastructure.UnitOfWork
+namespace Project_PRN222_G5.DataAccess.UnitOfWork
 {
     public class UnitOfWork(IDbContext context) : IUnitOfWork
     {

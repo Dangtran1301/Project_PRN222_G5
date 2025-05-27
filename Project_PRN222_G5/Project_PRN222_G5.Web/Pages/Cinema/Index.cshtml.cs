@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.Application.DTOs;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;
 using Project_PRN222_G5.Web.Pages.Shared;

@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.DataAccess.Data;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
 using Project_PRN222_G5.Application.DTOs.Cinema.Response;
 using Project_PRN222_G5.Application.Interfaces.Service;
 using Project_PRN222_G5.Application.Interfaces.Service.Identities;

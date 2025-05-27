@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Project_PRN222_G5.Application.Interfaces.Service;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
-namespace Project_PRN222_G5.Infrastructure.Data;
+namespace Project_PRN222_G5.DataAccess.Data;
 
 public class TheDbContextFactory : IDesignTimeDbContextFactory<TheDbContext>
 {
@@ -31,10 +31,11 @@ public class TheDbContextFactory : IDesignTimeDbContextFactory<TheDbContext>
 
 public class DefaultDatetimeService : IDateTimeService
 {
-    public DateTime NowUtc => DateTime.UtcNow;
+    public DateTime NowUtc => DateTime.MinValue;
 }
 
 public class DefaultAuthenticatedUserService : IAuthenticatedUserService
 {
-    public string UserId => Guid.Empty.ToString();
+    public string UserId => string.Empty;
+    public string ClientIp => string.Empty;
 }
