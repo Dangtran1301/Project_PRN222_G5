@@ -58,7 +58,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         var totalCount = await query.CountAsync();
 
         var pagedItems = await query
-            .OrderByDescending(x=>x.CreatedAt)
+            .OrderByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

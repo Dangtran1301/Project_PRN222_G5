@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Project_PRN222_G5.Web.Middleware;
 
-public class GlobalExceptionMiddleware(RequestDelegate next)
+public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -17,14 +17,18 @@ public class GlobalExceptionMiddleware(RequestDelegate next)
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         var (statusCode, errorMessage) = ex switch
         {
             UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Unauthorized access."),
             InvalidOperationException => (HttpStatusCode.BadRequest, ex.Message),
-            _ => (HttpStatusCode.InternalServerError, ex.Message)
+            _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
         };
+
+        logger.LogError(ex, "Error occurred for request: {Path}, Status: {StatusCode}, Message: {Message}",
+            context.Request.Path, statusCode, errorMessage);
+
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
@@ -36,6 +40,14 @@ public class GlobalExceptionMiddleware(RequestDelegate next)
         };
 
         var json = JsonSerializer.Serialize(errorResponse);
-        return context.Response.WriteAsync(json);
+        await context.Response.WriteAsync(json);
+    }
+}
+
+public static class GlobalExceptionMiddlewareExtensions
+{
+    public static IApplicationBuilder UseGlobalExceptionMiddleware(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<GlobalExceptionMiddleware>();
     }
 }

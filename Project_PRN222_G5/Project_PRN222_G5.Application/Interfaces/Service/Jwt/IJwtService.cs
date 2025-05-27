@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+﻿using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using System.Security.Claims;
 
 namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
 

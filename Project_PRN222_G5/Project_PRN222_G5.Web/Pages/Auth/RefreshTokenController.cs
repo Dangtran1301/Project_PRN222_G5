@@ -1,37 +1,42 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Jwt;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
-using Project_PRN222_G5.Infrastructure.Entities.Users;
-using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
-using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
 {
-    public class RefreshModel(IUnitOfWork unitOfWork, ITokenValidator tokenValidator, IJwtService jwtService)
-        : BasePageModel
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RefreshTokenController(
+        IUnitOfWork unitOfWork,
+        ITokenValidator tokenValidator,
+        IJwtService jwtService,
+        ILogger logger) : ControllerBase
     {
-        public async Task<IActionResult> OnGetAsync()
+        [HttpPost]
+        public async Task<IActionResult> Refresh()
         {
             var refreshToken = Request.Cookies["RefreshToken"];
             var accessToken = Request.Cookies["AccessToken"];
 
             if (string.IsNullOrWhiteSpace(refreshToken) || string.IsNullOrWhiteSpace(accessToken))
-                return RedirectToPage(PageRoutes.Auth.Login);
+                return Unauthorized();
 
             var principal = jwtService.GetClaimsPrincipalFromExpiredToken(accessToken);
             var userIdClaim = principal?.FindFirst("uid")?.Value;
 
             if (!Guid.TryParse(userIdClaim, out var userId))
-                return RedirectToPage(PageRoutes.Auth.Login);
+                return Unauthorized();
 
             var isValid = await tokenValidator.IsRefreshTokenValidAsync(userId, refreshToken);
             if (!isValid)
-                return RedirectToPage(PageRoutes.Auth.Login);
+                return Unauthorized();
 
             var user = await unitOfWork.Repository<User>().FindAsync(u => u.Id == userId);
             var userEntity = user.FirstOrDefault();
-            if (userEntity is null)
-                return RedirectToPage(PageRoutes.Auth.Login);
+            if (userEntity == null)
+                return Unauthorized();
 
             var newAccessToken = jwtService.GenerateAccessToken(userEntity);
 
@@ -43,7 +48,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 Expires = DateTimeOffset.UtcNow.AddSeconds(3)
             });
 
-            return Redirect(Request.Headers.Referer.ToString() ?? "/");
+            return Ok(new { AccessToken = newAccessToken });
         }
     }
 }

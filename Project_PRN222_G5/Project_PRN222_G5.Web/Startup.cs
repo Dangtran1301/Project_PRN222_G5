@@ -10,6 +10,7 @@ public class Startup(IConfiguration configuration)
     {
         // Add Razor Pages
         services.AddRazorPages();
+        services.AddControllers();
 
         // Add services
         services
@@ -41,9 +42,7 @@ public class Startup(IConfiguration configuration)
 
         app.UseHttpsRedirection();
         app.UseSession();
-        app.UseMiddleware<RequestLoggingMiddleware>();
-        app.UseMiddleware<ValidationExceptionMiddleware>();
-        app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseGlobalExceptionMiddleware();
 
         app.UseRouting();
         app.UseStaticFiles();
@@ -51,9 +50,14 @@ public class Startup(IConfiguration configuration)
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseMiddleware<AccessTokenValidationMiddleware>();
-        app.UseMiddleware<AuthorizationMiddleware>();
+        app.UseLoggerMiddleware();
+        app.UseAccessTokenValidationMiddleware();
+        app.UseAuthorizationMiddleware();
 
-        app.UseEndpoints(endpoints => endpoints.MapRazorPages());
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapRazorPages();
+        });
     }
 }

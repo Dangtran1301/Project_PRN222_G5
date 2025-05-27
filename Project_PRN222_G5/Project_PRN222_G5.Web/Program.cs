@@ -1,4 +1,4 @@
-using Project_PRN222_G5.Infrastructure.Data.Seeder;
+using Project_PRN222_G5.DataAccess.Data.Seeder;
 
 namespace Project_PRN222_G5.Web;
 
