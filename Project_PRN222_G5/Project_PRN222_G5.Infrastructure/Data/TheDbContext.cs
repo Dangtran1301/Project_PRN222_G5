@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Project_PRN222_G5.Infrastructure.Entities.Booking;
-using Project_PRN222_G5.Infrastructure.Entities.Cinema;
-using Project_PRN222_G5.Infrastructure.Entities.Common;
-using Project_PRN222_G5.Infrastructure.Entities.Movie;
-using Project_PRN222_G5.Infrastructure.Entities.Users;
-using Project_PRN222_G5.Infrastructure.Interfaces.Data;
-using Project_PRN222_G5.Infrastructure.Interfaces.Service;
+using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Cinema;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Interfaces.Data;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
-namespace Project_PRN222_G5.Infrastructure.Data;
+namespace Project_PRN222_G5.DataAccess.Data;
 
 public class TheDbContext(
     DbContextOptions<TheDbContext> options,

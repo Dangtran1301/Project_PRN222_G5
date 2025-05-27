@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Infrastructure.Entities.Movie;
+using Project_PRN222_G5.DataAccess.Data;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Movie;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class EditModel : PageModel
     {
-        private readonly Project_PRN222_G5.Infrastructure.Data.TheDbContext _context;
+        private readonly TheDbContext _context;
 
-        public EditModel(Project_PRN222_G5.Infrastructure.Data.TheDbContext context)
+        public EditModel(TheDbContext context)
         {
             _context = context;
         }

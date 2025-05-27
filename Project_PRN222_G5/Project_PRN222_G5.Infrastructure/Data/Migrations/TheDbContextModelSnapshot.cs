@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project_PRN222_G5.Infrastructure.Data;
+using Project_PRN222_G5.DataAccess.Data;
 
 #nullable disable
 

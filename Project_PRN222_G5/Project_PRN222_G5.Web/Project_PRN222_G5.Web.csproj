@@ -9,8 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Project_PRN222_G5.Application\Project_PRN222_G5.Application.csproj" />
-    <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.Infrastructure.csproj" />
+    <ProjectReference Include="..\Project_PRN222_G5.Application\Project_PRN222_G5.BusinessLogic.csproj" />
+    <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
 </Project>

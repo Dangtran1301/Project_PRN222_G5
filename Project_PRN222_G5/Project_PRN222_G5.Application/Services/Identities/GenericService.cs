@@ -1,12 +1,12 @@
-﻿using Project_PRN222_G5.Application.Interfaces.Service.Identities;
-using Project_PRN222_G5.Application.Interfaces.Validation;
+﻿using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.Infrastructure.DTOs;
-using Project_PRN222_G5.Infrastructure.Entities.Common;
-using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
 
-namespace Project_PRN222_G5.Application.Services.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
 public abstract class GenericService<TE, TC, TU, TR>(
     IUnitOfWork unitOfWork,
@@ -27,7 +27,9 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public async Task<IEnumerable<TR>> GetAllAsync()
     {
-        var entities = await unitOfWork.Repository<TE>().GetAllAsync();
+        var entities =
+            (await unitOfWork.Repository<TE>().GetAllAsync())
+            .OrderByDescending(x => x.CreatedAt);
         return entities.Select(MapToResponse);
     }
 
@@ -56,6 +58,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         var totalCount = await query.CountAsync();
 
         var pagedItems = await query
+            .OrderByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

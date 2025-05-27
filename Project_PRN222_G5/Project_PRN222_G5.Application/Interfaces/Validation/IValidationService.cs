@@ -1,4 +1,4 @@
-﻿namespace Project_PRN222_G5.Application.Interfaces.Validation;
+﻿namespace Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 
 public interface IValidationService
 {

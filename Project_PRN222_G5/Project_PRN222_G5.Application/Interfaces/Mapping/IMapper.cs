@@ -1,6 +1,6 @@
-﻿namespace Project_PRN222_G5.Application.Interfaces.Mapping;
+﻿namespace Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 
-public interface IMapper<TEntity, in TRequest, TResponse>
+public interface IMapper<TEntity, in TRequest, out TResponse>
     where TEntity : class
     where TRequest : class
     where TResponse : class

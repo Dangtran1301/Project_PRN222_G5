@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using System.Security.Claims;
-using Project_PRN222_G5.Infrastructure.Interfaces.Service;
 
-namespace Project_PRN222_G5.Infrastructure.Service;
+namespace Project_PRN222_G5.DataAccess.Service;
 
 public class AuthenticatedUserService(IHttpContextAccessor contextAccessor) : IAuthenticatedUserService
 {

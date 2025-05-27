@@ -1,7 +1,7 @@
-﻿using Project_PRN222_G5.Infrastructure.Entities.Common;
-using Project_PRN222_G5.Infrastructure.Interfaces.Repository;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.Repository;
 
-namespace Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
+namespace Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {

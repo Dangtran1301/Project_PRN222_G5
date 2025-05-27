@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Project_PRN222_G5.Infrastructure.Entities.Users;
-using Project_PRN222_G5.Infrastructure.Entities.Users.Enum;
-using Project_PRN222_G5.Infrastructure.Interfaces.UnitOfWork;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users;
+using Project_PRN222_G5.DataAccess.Entities.Identities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 
-namespace Project_PRN222_G5.Infrastructure.Data.Seeder
+namespace Project_PRN222_G5.DataAccess.Data.Seeder
 {
     public class DatabaseSeeder
     {
