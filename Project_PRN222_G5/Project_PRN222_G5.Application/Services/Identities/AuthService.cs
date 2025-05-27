@@ -87,6 +87,42 @@ public class AuthService(
         }
     }
 
+    public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
+    {
+        var token = (await unitOfWork.Repository<UserToken>()
+                .FindAsync(t => t.UserId == request.UserId && t.RefreshToken == request.RefreshToken))
+            .FirstOrDefault();
+
+        if (token == null || token.ExpiredTime < DateTimeOffset.UtcNow)
+        {
+            throw new ValidationException(new Dictionary<string, string[]>
+            {
+                ["RefreshToken"] = ["Invalid or expired refresh token."]
+            });
+        }
+
+        var user = await unitOfWork.Repository<User>().GetByIdAsync(request.UserId);
+        if (user == null)
+        {
+            throw new ValidationException(new Dictionary<string, string[]>
+            {
+                ["User"] = ["User not found."]
+            });
+        }
+
+        var newAccessToken = jwtService.GenerateAccessToken(user);
+        var newRefreshToken = Guid.NewGuid().ToString();
+
+        token.RefreshToken = newRefreshToken;
+        token.ExpiredTime = DateTimeOffset.UtcNow.AddDays(7);
+        token.ClientIp = authenticatedUserService.ClientIp;
+
+        unitOfWork.Repository<UserToken>().Update(token);
+        await unitOfWork.CompleteAsync();
+
+        return new LoginResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+    }
+
     protected override UserResponse MapToResponse(User entity) => entity.ToResponse();
 
     protected override User MapToEntity(RegisterUserRequest request) => request.ToEntity();

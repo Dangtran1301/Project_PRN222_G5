@@ -1,4 +1,6 @@
-﻿using Project_PRN222_G5.Web.Middleware;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Project_PRN222_G5.Web.Middleware;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web;
 
@@ -8,25 +10,37 @@ public class Startup(IConfiguration configuration)
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add Razor Pages
+        #region Razor Pages
+
         services.AddRazorPages();
         services.AddControllers();
 
-        // Add services
+        #endregion
+
+        #region Services
+
         services
             .AddApplicationServices(Configuration)
             .AddInfrastructureServices(Configuration)
             .AddJwtAuthentication(Configuration)
             .AddCustomLogging();
 
-        // Add Session
-        services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromMinutes(60);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-            options.Cookie.SameSite = SameSiteMode.Strict;
-        });
+        #endregion
+
+        #region Cookie
+
+        services.AddAuthentication("Cookies")
+            .AddCookie("Cookies", options =>
+            {
+                options.LoginPath = PageRoutes.Auth.Login;
+                options.AccessDeniedPath = "/Auth/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
+
+        #endregion
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,7 +55,6 @@ public class Startup(IConfiguration configuration)
         }
 
         app.UseHttpsRedirection();
-        app.UseSession();
         app.UseGlobalExceptionMiddleware();
 
         app.UseRouting();
@@ -51,7 +64,6 @@ public class Startup(IConfiguration configuration)
         app.UseAuthorization();
 
         app.UseLoggerMiddleware();
-        app.UseAccessTokenValidationMiddleware();
         app.UseAuthorizationMiddleware();
 
         app.UseEndpoints(endpoints =>

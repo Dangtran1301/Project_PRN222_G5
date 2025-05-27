@@ -35,6 +35,7 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<ITokenValidator, TokenValidator>();
+        services.AddScoped<ICookieService, CookieService>();
 
         #endregion Service
 
