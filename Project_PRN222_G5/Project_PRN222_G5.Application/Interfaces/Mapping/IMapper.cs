@@ -1,13 +1,16 @@
-﻿namespace Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+﻿using Project_PRN222_G5.DataAccess.Entities.Common;
 
-public interface IMapper<TEntity, in TRequest, out TResponse>
-    where TEntity : class
-    where TRequest : class
-    where TResponse : class
+namespace Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+
+public interface IMapper<TE, in TC, in TU, out TR>
+    where TE : BaseEntity
+    where TC : class
+    where TU : class
+    where TR : class
 {
-    TEntity MapToEntity(TRequest request);
+    TE MapToEntity(TC request);
 
-    TResponse MapToResponse(TEntity entity);
+    TR MapToResponse(TE entity);
 
-    void UpdateEntity(TEntity entity, TRequest request);
+    void UpdateEntity(TE entity, TU request);
 }

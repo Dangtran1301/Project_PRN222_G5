@@ -1,10 +1,11 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
 using Project_PRN222_G5.DataAccess.Entities.Common;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 
-public interface IGenericService<TE, in TC, in TU, TR>
+public interface IGenericService<TE, in TC, in TU, TR> : IMapper<TE, TC, TU, TR>
     where TE : BaseEntity
     where TC : class
     where TU : class
@@ -16,7 +17,7 @@ public interface IGenericService<TE, in TC, in TU, TR>
 
     Task<IEnumerable<TR>> GetAllAsync();
 
-    Task<PagedResponse> GetPagedAsync(
+    Task<PaginationResponse<TR>> GetPagedAsync(
         int page,
         int pageSize,
         Expression<Func<TE, bool>>? predicate = null,

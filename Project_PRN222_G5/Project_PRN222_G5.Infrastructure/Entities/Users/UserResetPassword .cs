@@ -2,7 +2,7 @@
 
 namespace Project_PRN222_G5.DataAccess.Entities.Users;
 
-public class UserResetPassword : BaseEntity
+public class UserResetPassword : DefaultEntity
 {
     public string Token { get; set; } = string.Empty;
 

@@ -10,6 +10,13 @@ public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 
     Task<TEntity> GetByIdAsync(Guid id);
 
+    Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedAsync(
+        int page,
+        int pageSize,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null);
+
     Task<IEnumerable<TEntity>> GetAllAsync();
 
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);

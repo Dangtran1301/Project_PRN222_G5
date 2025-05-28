@@ -50,6 +50,41 @@ namespace Project_PRN222_G5.DataAccess.Repositories
             _dbSet.Remove(entity);
         }
 
+        public async Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedAsync(
+            int page,
+            int pageSize,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
+        {
+            IQueryable<TEntity> query = _dbSet.AsQueryable();
+
+            if (include is not null)
+            {
+                query = include(query);
+            }
+
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (orderBy is not null)
+            {
+                query = orderBy(query);
+            }
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
+
         #endregion CRUD
 
         #region bool

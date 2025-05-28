@@ -12,9 +12,9 @@ public class CinemaService(
     IValidationService validationService
     ) : GenericService<DataAccess.Entities.Cinemas.Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
 {
-    protected override CinemaResponse MapToResponse(DataAccess.Entities.Cinemas.Cinema entity) => entity.ToCinemaResponse();
+    public override CinemaResponse MapToResponse(DataAccess.Entities.Cinemas.Cinema entity) => entity.ToCinemaResponse();
 
-    protected override DataAccess.Entities.Cinemas.Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
+    public override DataAccess.Entities.Cinemas.Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
 
-    protected override void UpdateEntity(DataAccess.Entities.Cinemas.Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
+    public override void UpdateEntity(DataAccess.Entities.Cinemas.Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
 }

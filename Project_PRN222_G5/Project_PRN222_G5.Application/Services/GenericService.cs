@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.BusinessLogic.DTOs;
+﻿using Project_PRN222_G5.BusinessLogic.DTOs;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.DataAccess.Entities.Common;
@@ -33,7 +32,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return entities.Select(MapToResponse);
     }
 
-    public async Task<PagedResponse> GetPagedAsync(int page,
+    public async Task<PaginationResponse<TR>> GetPagedAsync(int page,
         int pageSize,
         Expression<Func<TE, bool>>? predicate = null,
         Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null,
@@ -41,35 +40,28 @@ public abstract class GenericService<TE, TC, TU, TR>(
         string? searchTerm = null,
         Expression<Func<TE, bool>>? searchPredicate = null)
     {
-        var query = unitOfWork.Repository<TE>().AsQueryable();
-
-        if (include != null)
-            query = include(query);
-
-        if (predicate != null)
-            query = query.Where(predicate);
-
-        if (!string.IsNullOrWhiteSpace(searchTerm) && searchPredicate != null)
-            query = query.Where(searchPredicate);
-
-        if (orderBy != null)
-            query = orderBy(query);
-
-        var totalCount = await query.CountAsync();
-
-        var pagedItems = await query
-            .OrderByDescending(x => x.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-        return new PagedResponse
+        var finalPredicate = predicate;
+        if (searchPredicate != null)
         {
-            Items = pagedItems.Select(MapToResponse),
-            TotalCount = totalCount,
-            PageNumber = page,
-            PageSize = pageSize
-        };
+            if (predicate != null)
+            {
+                var param = Expression.Parameter(typeof(TE));
+                var body = Expression.AndAlso(
+                    Expression.Invoke(predicate, param),
+                    Expression.Invoke(searchPredicate, param));
+                finalPredicate = Expression.Lambda<Func<TE, bool>>(body, param);
+            }
+            else
+            {
+                finalPredicate = searchPredicate;
+            }
+        }
+
+        var (items, totalCount) = await unitOfWork.Repository<TE>().GetPagedAsync(
+                page, pageSize, finalPredicate, orderBy, include);
+        var data = items.Select(MapToResponse);
+
+        return new PaginationResponse<TR>(data, totalCount, page, pageSize);
     }
 
     public async Task<TR> CreateAsync(TC request)
@@ -102,11 +94,11 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     #region Mapping
 
-    protected abstract TR MapToResponse(TE entity);
+    public abstract TR MapToResponse(TE entity);
 
-    protected abstract TE MapToEntity(TC request);
+    public abstract TE MapToEntity(TC request);
 
-    protected abstract void UpdateEntity(TE entity, TU request);
+    public abstract void UpdateEntity(TE entity, TU request);
 
     #endregion Mapping
 }

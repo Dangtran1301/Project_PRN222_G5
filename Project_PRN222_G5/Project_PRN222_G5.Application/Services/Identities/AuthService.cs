@@ -122,9 +122,9 @@ public class AuthService(
         return new LoginResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
     }
 
-    protected override UserResponse MapToResponse(User entity) => entity.ToResponse();
+    public override UserResponse MapToResponse(User entity) => entity.ToResponse();
 
-    protected override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
+    public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 
-    protected override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request);
+    public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request);
 }
