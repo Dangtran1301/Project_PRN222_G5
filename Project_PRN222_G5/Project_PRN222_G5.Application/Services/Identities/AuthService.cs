@@ -57,7 +57,7 @@ public class AuthService(
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    public async Task<UserResponse> RegisterUserAsync(RegisterUserRequest request)
+    public new async Task<UserResponse> CreateAsync(RegisterUserRequest request)
     {
         var errors = validationService.Validate(request);
         if (errors.Any())

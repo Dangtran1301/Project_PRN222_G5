@@ -34,7 +34,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            await authService.RegisterUserAsync(Input);
+            await authService.CreateAsync(Input);
             return RedirectToPage(PageRoutes.Auth.Login);
         }
     }

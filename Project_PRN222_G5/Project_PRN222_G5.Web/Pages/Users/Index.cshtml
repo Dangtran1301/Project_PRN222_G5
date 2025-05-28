@@ -1,5 +1,4 @@
-﻿@page
-@using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses
+﻿@page "{pageNumber:int?}"
 @model Project_PRN222_G5.Web.Pages.Users.IndexModel
 @{
     ViewData["Title"] = "Users";
@@ -23,9 +22,9 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.PaginationResponse.Data != null)
+        @if (Model.PaginationResponse.Data != null && Model.PaginationResponse.Data.Any())
         {
-            @foreach (var user in Model.PaginationResponse.Data)
+            foreach (var user in Model.PaginationResponse.Data)
             {
                 <tr>
                     <td>@user.FullName</td>
@@ -42,32 +41,30 @@
         }
         else
         {
-            <tr>
-                <td colspan="4">No users found.</td>
-            </tr>
+            <tr><td colspan="5" class="text-center">No users found.</td></tr>
         }
     </tbody>
 </table>
 
 @{
-    var totalPages = Model.PaginationResponse.Paging.TotalPage;
+    var paging = Model.PaginationResponse.Paging;
 }
 
-@if (totalPages > 1)
+@if (paging.TotalPage > 1)
 {
     <nav aria-label="Page navigation">
         <ul class="pagination">
-            <li class="page-item @(Model.PaginationResponse.Paging.HasPreviousPage ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.PaginationResponse.Paging.CurrentPage - 1)">Previous</a>
+            <li class="page-item @(paging.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(paging.CurrentPage - 1)">Previous</a>
             </li>
-            @for (var i = 1; i <= totalPages; i++)
+            @for (var i = 1; i <= paging.TotalPage; i++)
             {
-                <li class="page-item @(i == Model.PaginationResponse.Paging.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-page="Index" asp-route-pageNumber="@i">@i</a>
+                <li class="page-item @(i == paging.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-page="./Index" asp-route-pageNumber="@i">@i</a>
                 </li>
             }
-            <li class="page-item @(Model.PaginationResponse.Paging.HasNextPage ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.PaginationResponse.Paging.CurrentPage + 1)">Next</a>
+            <li class="page-item @(paging.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(paging.CurrentPage + 1)">Next</a>
             </li>
         </ul>
     </nav>

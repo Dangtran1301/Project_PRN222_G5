@@ -13,7 +13,7 @@ public class ValidationException : Exception
     public ValidationException(string error)
         : base(error)
     {
-        Errors = new Dictionary<string, string[]> { { string.Empty, new[] { error } } };
+        Errors = new Dictionary<string, string[]> { { string.Empty, [error] } };
     }
 
     public ValidationException(IDictionary<string, string[]> errors)

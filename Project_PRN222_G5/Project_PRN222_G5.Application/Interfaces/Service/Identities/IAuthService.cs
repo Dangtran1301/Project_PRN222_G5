@@ -8,8 +8,6 @@ public interface IAuthService : IGenericService<User, RegisterUserRequest, Updat
 {
     Task<LoginResponse> LoginAsync(LoginRequest loginRequest);
 
-    Task<UserResponse> RegisterUserAsync(RegisterUserRequest request);
-
     Task LogoutAsync(Guid userId, string refreshToken);
 
     Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request);

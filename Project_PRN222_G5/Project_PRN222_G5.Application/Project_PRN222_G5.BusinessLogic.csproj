@@ -36,4 +36,10 @@
 	  <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.DataAccess.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+	    <HintPath>C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.15\ref\net8.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>
