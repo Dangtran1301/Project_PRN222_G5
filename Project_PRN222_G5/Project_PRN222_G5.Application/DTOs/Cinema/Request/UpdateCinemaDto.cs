@@ -6,7 +6,7 @@ namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request
     public class UpdateCinemaDto : IMapTo<Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema>
     {
         [Required(ErrorMessage = "Cinema name is required.")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Cinema name must be between 2 and 100 characters.")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Cinema name must be between 3 and 100 characters.")]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Address is required.")]
