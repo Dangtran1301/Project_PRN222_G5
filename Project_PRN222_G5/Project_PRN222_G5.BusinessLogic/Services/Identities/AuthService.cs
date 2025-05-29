@@ -56,7 +56,7 @@ public class AuthService(
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    public new async Task<UserResponse> CreateAsync(RegisterUserRequest request)
+    public override async Task<UserResponse> CreateAsync(RegisterUserRequest request)
     {
         var errors = validationService.Validate(request);
         if (errors.Any())
@@ -127,7 +127,7 @@ public class AuthService(
 
     public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request);
 
-    public override Expression<Func<User, string>>[] GetSearchFields() =>
+    protected override Expression<Func<User, string>>[] GetSearchFields() =>
     [
         u => u.Username,
         u=>u.FullName,
