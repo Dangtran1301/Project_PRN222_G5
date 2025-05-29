@@ -1,21 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
+using Project_PRN222_G5.BusinessLogic.Extensions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
-using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
 
-namespace Project_PRN222_G5.Web.Pages.Users
+namespace Project_PRN222_G5.Web.Pages.Users;
+
+[Authorize(Roles = nameof(Role.Admin))]
+public class IndexModel(IAuthService authService) : BasePageModel
 {
-    [Authorize(Roles = nameof(Role.Admin))]
-    public class IndexModel(IAuthService authService) : BasePageModel
-    {
-        public PagedResponse PagedResponse { get; set; } = new();
+    [BindProperty(SupportsGet = true)]
+    public PagedRequest PagedRequest { get; set; } = new();
+    public PaginationResponse<UserResponse> PaginationResponse { get; set; } = null!;
 
-        public async Task OnGetAsync(int pageNumber = 1)
-        {
-            if (pageNumber < 1) pageNumber = 1;
-            const int pageSize = 10;
-            PagedResponse = await authService.GetPagedAsync(pageNumber, pageSize);
-        }
+    public string[] DisplayProps { get; set; } = ["FullName", "Username", "Email", "DayOfBirth", "PhoneNumber", "Gender"];
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        PaginationResponse = await authService.GetPagedAsync(PagedRequest);
+
+        return Page();
     }
 }
