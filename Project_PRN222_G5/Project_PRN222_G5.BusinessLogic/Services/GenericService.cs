@@ -74,7 +74,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return new PaginationResponse<TR>(data, request.PageNumber, totalCount, request.PageSize);
     }
 
-    public async Task<TR> CreateAsync(TC request)
+    public virtual async Task<TR> CreateAsync(TC request)
     {
         validationService.Validate(request);
         var entity = MapToEntity(request);
@@ -83,7 +83,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return MapToResponse(entity);
     }
 
-    public async Task<TR> UpdateAsync(Guid id, TU request)
+    public virtual async Task<TR> UpdateAsync(Guid id, TU request)
     {
         validationService.Validate(request);
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
@@ -93,7 +93,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return MapToResponse(entity);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
         unitOfWork.Repository<TE>().Delete(entity);
@@ -112,5 +112,5 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     #endregion Mapping
 
-    public abstract Expression<Func<TE, string>>[] GetSearchFields();
+    protected abstract Expression<Func<TE, string>>[] GetSearchFields();
 }

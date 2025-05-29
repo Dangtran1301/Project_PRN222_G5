@@ -19,7 +19,7 @@ public class CinemaService(
 
     public override void UpdateEntity(DataAccess.Entities.Cinemas.Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
 
-    public override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
+    protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
         [
             x=>x.Address,
             x=>x.Name
