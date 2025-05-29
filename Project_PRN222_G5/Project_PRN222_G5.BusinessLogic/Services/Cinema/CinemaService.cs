@@ -16,11 +16,11 @@ public class CinemaService(
     IValidationService validationService
 ) : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
 {
-    protected override CinemaResponse MapToResponse(Cinema entity) => entity.ToCinemaResponse();
+    public override CinemaResponse MapToResponse(Cinema entity) => entity.ToCinemaResponse();
 
-    protected override Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
+    public override Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
 
-    protected override void UpdateEntity(Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
+    public override void UpdateEntity(Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
 
     // Check Duplicate Name
     public async Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null)
@@ -63,4 +63,9 @@ public class CinemaService(
 
         return MapToResponse(entity);
     }
+    protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
+        [
+            x=>x.Address,
+            x=>x.Name
+        ];
 }

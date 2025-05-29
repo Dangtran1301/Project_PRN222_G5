@@ -1,5 +1,4 @@
-﻿@page "{pageNumber:int?}"
-@using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response
+﻿@page
 @model Project_PRN222_G5.Web.Pages.Cinema.IndexModel
 @{
     ViewData["Title"] = "Cinema List";
@@ -8,65 +7,27 @@
 
 <h1>Cinema List</h1>
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
-</p>
+<div>
+    <p>
+        <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
+    </p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Response.Items != null)
-        {
-            @foreach (var cinema in Model.Response.Items.Cast<CinemaResponse>())
-            {
-                <tr>
-                    <td>@cinema.Name</td>
-                    <td>@cinema.Address</td>
-                    <td>
-                        <a asp-page="Details" asp-route-id="@cinema.Id" class="btn btn-info btn-sm">Details</a>
-                        <a asp-page="Edit" asp-route-id="@cinema.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-page="Delete" asp-route-id="@cinema.Id" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">No cinemas found.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text"
+                   name="PagedRequest.Search"
+                   value="@Model.PagedRequest.Search"
+                   class="form-control"
+                   placeholder="Search..." />
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+    </form>
+</div>
 
-@{
-    var totalPages = Model.Response.TotalCount > 0
-        ? (int)Math.Ceiling((double)Model.Response.TotalCount / Model.Response.PageSize)
-        : 1;
-}
-
-@if (totalPages > 1)
+@await Html.PartialAsync("Shared/PartialViews/_GenericTable", new ViewDataDictionary(ViewData)
 {
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item @(Model.Response.PageNumber == 1 ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.Response.PageNumber - 1)">Previous</a>
-            </li>
-            @for (var i = 1; i <= totalPages; i++)
-            {
-                <li class="page-item @(i == Model.Response.PageNumber ? "active" : "")">
-                    <a class="page-link" asp-page="Index" asp-route-pageNumber="@i">@i</a>
-                </li>
-            }
-            <li class="page-item @(Model.Response.PageNumber >= totalPages ? "disabled" : "")">
-                <a class="page-link" asp-page="Index" asp-route-pageNumber="@(Model.Response.PageNumber + 1)">Next</a>
-            </li>
-        </ul>
-    </nav>
-}
+    { "Items", Model.PaginationResponse.Data! },
+    { "Paging", Model.PaginationResponse.Paging },
+    { "Request", Model.PagedRequest },
+    { "DisplayProps", Model.DisplayProps }
+})
