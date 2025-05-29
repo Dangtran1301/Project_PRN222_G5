@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request
 {
-    public class UpdateCinemaDto : IMapTo<Project_PRN222_G5.DataAccess.Entities.Identities.Cinema.Cinema>
+    public class UpdateCinemaDto : IMapTo<Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema>
     {
         [Required(ErrorMessage = "Cinema name is required.")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Cinema name must be between 2 and 100 characters.")]
@@ -15,7 +15,7 @@ namespace Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request
 
         public Guid Id { get; set; }
 
-        public Project_PRN222_G5.DataAccess.Entities.Identities.Cinema.Cinema ToEntity() => new()
+        public Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema ToEntity() => new()
         {
             Id = Id,
             Name = Name,

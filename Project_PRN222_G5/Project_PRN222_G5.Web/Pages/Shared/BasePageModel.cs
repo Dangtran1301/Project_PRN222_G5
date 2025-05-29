@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
-using Project_PRN222_G5.Web.Utilities;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
-
-namespace Project_PRN222_G5.Web.Pages.Shared;
 
 public abstract class BasePageModel : PageModel
 {
@@ -31,5 +26,9 @@ public abstract class BasePageModel : PageModel
             }
             ErrorMessage = errors.ToString().Trim();
         }
+    }
+    protected void HandleException(Exception ex)
+    {
+        ErrorMessage = ex.Message;
     }
 }

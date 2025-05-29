@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.Web.Pages.Shared;
-
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     public class DeleteModel : BasePageModel
