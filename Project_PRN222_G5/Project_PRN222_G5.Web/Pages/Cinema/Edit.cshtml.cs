@@ -55,21 +55,11 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             if (!ModelState.IsValid)
             {
                 HandleModelStateErrors();
-                CinemaId = id;
                 return Page();
             }
-
-            try
-            {
                 await _cinemaService.UpdateAsync(id, CinemaDto);
                 return RedirectToPage(PageRoutes.Cinema.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                CinemaId = id;
-                return Page();
-            }
+
         }
     }
 }

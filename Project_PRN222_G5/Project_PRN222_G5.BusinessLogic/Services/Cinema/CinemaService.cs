@@ -22,47 +22,33 @@ public class CinemaService(
 
     public override void UpdateEntity(Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
 
-    // Check Duplicate Name
-    public async Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null)
+    public async Task<CinemaResponse> CreateAsync(CreateCinemaDto request)
     {
-        var repo = unitOfWork.Repository<Cinema>();
+        await validationService.ValidateUniqueCinemaAsync(request.Name);
 
-        bool exists = excludingId.HasValue
-            ? await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value)
-            : await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
-
-        if (exists)
-        {
-            // Sử dụng ValidationException với message
-            throw new ValidationException($"Cinema with the name '{name}' already exists.");
-        }
-    }
-
-    public override async Task<CinemaResponse> CreateAsync(CreateCinemaDto request)
-    {
-        await ValidateUniqueCinemaAsync(request.Name);
-
-        var entity = MapToEntity(request);
+        var entity = request.ToEntity();
         await unitOfWork.Repository<Cinema>().AddAsync(entity);
         await unitOfWork.CompleteAsync();
 
-        return MapToResponse(entity);
+        return entity.ToCinemaResponse();
     }
 
-    public override async Task<CinemaResponse> UpdateAsync(Guid id, UpdateCinemaDto request)
+    public async Task<CinemaResponse> UpdateAsync(Guid id, UpdateCinemaDto request)
     {
         var entity = await unitOfWork.Repository<Cinema>().GetByIdAsync(id);
         if (entity == null)
             throw new KeyNotFoundException("Cinema not found.");
 
-        await ValidateUniqueCinemaAsync(request.Name, id);
+        await validationService.ValidateUniqueCinemaAsync(request.Name, id);
 
-        UpdateEntity(entity, request);
+        entity.Name = request.Name;
+        entity.Address = request.Address;
         unitOfWork.Repository<Cinema>().Update(entity);
         await unitOfWork.CompleteAsync();
 
-        return MapToResponse(entity);
+        return entity.ToCinemaResponse();
     }
+
     protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
         [
             x=>x.Address,

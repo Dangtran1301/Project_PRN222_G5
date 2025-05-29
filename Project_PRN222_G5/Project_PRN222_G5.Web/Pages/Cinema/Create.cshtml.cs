@@ -30,17 +30,10 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 HandleModelStateErrors();
                 return Page();
             }
-
-            try
-            {
-                await _cinemaService.CreateAsync(CinemaDto);
-                return RedirectToPage(PageRoutes.Cinema.Index);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return Page();
-            }
+            await _cinemaService.CreateAsync(CinemaDto);
+            return RedirectToPage(PageRoutes.Cinema.Index);
         }
+
     }
 }
+
