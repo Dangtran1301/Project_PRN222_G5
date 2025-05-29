@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
+﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
@@ -14,7 +13,6 @@ namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
-    IConfiguration configuration,
     IJwtService jwtService,
     IAuthenticatedUserService authenticatedUserService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService

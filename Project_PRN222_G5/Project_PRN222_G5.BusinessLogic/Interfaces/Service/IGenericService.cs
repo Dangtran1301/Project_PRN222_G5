@@ -18,10 +18,8 @@ public interface IGenericService<TE, in TC, in TU, TR> : IMapper<TE, TC, TU, TR>
     Task<IEnumerable<TR>> GetAllAsync();
 
     Task<PaginationResponse<TR>> GetPagedAsync(
-        int page,
-        int pageSize,
+        PagedRequest request,
         Expression<Func<TE, bool>>? predicate = null,
-        Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null,
         Func<IQueryable<TE>, IQueryable<TE>>? include = null,
         string? searchTerm = null,
         Expression<Func<TE, bool>>? searchPredicate = null);

@@ -21,6 +21,7 @@
 	<ItemGroup>
 	  <Folder Include="Exceptions\" />
 	  <Folder Include="Mapper\Cinema\" />
+	  <Folder Include="Extensions\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,6 +34,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Project_PRN222_G5.DataAccess\Project_PRN222_G5.DataAccess.csproj" />
 	  <ProjectReference Include="..\Project_PRN222_G5.Infrastructure\Project_PRN222_G5.DataAccess.csproj" />
 	</ItemGroup>
 

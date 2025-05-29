@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.Web.Utilities;
 using System.Text;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
 using static System.String;
 
-namespace Project_PRN222_G5.Web.Pages.Shared;
+namespace Project_PRN222_G5.Web.Pages.Shared.Models;
 
 public abstract class BasePageModel : PageModel
 {
@@ -33,6 +33,7 @@ public abstract class BasePageModel : PageModel
             ErrorMessage = errors.ToString().Trim();
         }
     }
+
     protected IActionResult HandleException(Exception ex)
     {
         string message;

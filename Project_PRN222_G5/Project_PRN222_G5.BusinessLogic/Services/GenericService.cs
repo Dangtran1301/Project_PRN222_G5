@@ -1,4 +1,5 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.Extensions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.DataAccess.Entities.Common;
@@ -32,10 +33,9 @@ public abstract class GenericService<TE, TC, TU, TR>(
         return entities.Select(MapToResponse);
     }
 
-    public async Task<PaginationResponse<TR>> GetPagedAsync(int page,
-        int pageSize,
+    public async Task<PaginationResponse<TR>> GetPagedAsync(
+        PagedRequest request,
         Expression<Func<TE, bool>>? predicate = null,
-        Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null,
         Func<IQueryable<TE>, IQueryable<TE>>? include = null,
         string? searchTerm = null,
         Expression<Func<TE, bool>>? searchPredicate = null)
@@ -57,11 +57,23 @@ public abstract class GenericService<TE, TC, TU, TR>(
             }
         }
 
-        var (items, totalCount) = await unitOfWork.Repository<TE>().GetPagedAsync(
-                page, pageSize, finalPredicate, orderBy, include);
-        var data = items.Select(MapToResponse);
+        Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null;
 
-        return new PaginationResponse<TR>(data, totalCount, page, pageSize);
+        if (!string.IsNullOrWhiteSpace(request.Sort))
+        {
+            orderBy = q => q.ApplyOrdering(request.Sort, request.SortDir?.ToLower() != "desc");
+        }
+
+        var (items, totalCount) = await unitOfWork.Repository<TE>().GetPagedAsync(
+            page: request.PageNumber,
+            pageSize: request.PageSize,
+            predicate: finalPredicate,
+            orderBy: orderBy,
+            include: include
+        );
+
+        var data = items.Select(MapToResponse);
+        return new PaginationResponse<TR>(data, request.PageNumber, totalCount, request.PageSize);
     }
 
     public async Task<TR> CreateAsync(TC request)

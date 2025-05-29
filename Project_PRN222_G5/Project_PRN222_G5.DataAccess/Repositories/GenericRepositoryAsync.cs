@@ -57,7 +57,7 @@ namespace Project_PRN222_G5.DataAccess.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
         {
-            IQueryable<TEntity> query = _dbSet.AsQueryable();
+            var query = _dbSet.AsQueryable();
 
             if (include is not null)
             {
@@ -69,7 +69,8 @@ namespace Project_PRN222_G5.DataAccess.Repositories
                 query = query.Where(predicate);
             }
 
-            var totalCount = await query.CountAsync();
+            var countQuery = query;
+            var totalCount = await countQuery.CountAsync();
 
             if (orderBy is not null)
             {

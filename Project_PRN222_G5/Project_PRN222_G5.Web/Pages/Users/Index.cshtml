@@ -1,4 +1,4 @@
-﻿@page "{pageNumber:int?}"
+﻿@page
 @model Project_PRN222_G5.Web.Pages.Users.IndexModel
 @{
     ViewData["Title"] = "Users";
@@ -11,61 +11,11 @@
     <a asp-page="Create" class="btn btn-primary">Create New User</a>
 </p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.PaginationResponse.Data != null && Model.PaginationResponse.Data.Any())
-        {
-            foreach (var user in Model.PaginationResponse.Data)
-            {
-                <tr>
-                    <td>@user.FullName</td>
-                    <td>@user.Username</td>
-                    <td>@user.Email</td>
-                    <td>@string.Join(", ", user.Role)</td>
-                    <td>
-                        <a asp-page="Details" asp-route-id="@user.Id" class="btn btn-info btn-sm">Details</a>
-                        <a asp-page="Edit" asp-route-id="@user.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-page="Delete" asp-route-id="@user.Id" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr><td colspan="5" class="text-center">No users found.</td></tr>
-        }
-    </tbody>
-</table>
 
-@{
-    var paging = Model.PaginationResponse.Paging;
-}
-
-@if (paging.TotalPage > 1)
+@await Html.PartialAsync("Shared/PartialViews/_GenericTable", new ViewDataDictionary(ViewData)
 {
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item @(paging.HasPreviousPage ? "" : "disabled")">
-                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(paging.CurrentPage - 1)">Previous</a>
-            </li>
-            @for (var i = 1; i <= paging.TotalPage; i++)
-            {
-                <li class="page-item @(i == paging.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-page="./Index" asp-route-pageNumber="@i">@i</a>
-                </li>
-            }
-            <li class="page-item @(paging.HasNextPage ? "" : "disabled")">
-                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(paging.CurrentPage + 1)">Next</a>
-            </li>
-        </ul>
-    </nav>
-}
+    { "Items", Model.PaginationResponse.Data! },
+    { "Paging", Model.PaginationResponse.Paging },
+    { "Request", Model.Request },
+    { "DisplayProps", Model.DisplayProps }
+})
