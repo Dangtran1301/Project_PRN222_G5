@@ -7,15 +7,27 @@
 
 <h1>Users</h1>
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create New User</a>
-</p>
+<div>
+    <p>
+        <a asp-page="Create" class="btn btn-primary">Create New User</a>
+    </p>
 
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text"
+                   name="PagedRequest.Search"
+                   value="@Model.PagedRequest.Search"
+                   class="form-control"
+                   placeholder="Search..." />
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+    </form>
+</div>
 
 @await Html.PartialAsync("Shared/PartialViews/_GenericTable", new ViewDataDictionary(ViewData)
 {
     { "Items", Model.PaginationResponse.Data! },
     { "Paging", Model.PaginationResponse.Paging },
-    { "Request", Model.Request },
+    { "Request", Model.PagedRequest },
     { "DisplayProps", Model.DisplayProps }
 })

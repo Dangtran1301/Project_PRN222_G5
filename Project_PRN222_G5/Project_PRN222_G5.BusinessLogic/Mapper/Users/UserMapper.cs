@@ -12,7 +12,7 @@ public static class UserMapper
         FullName = entity.FullName,
         Username = entity.Username,
         Email = entity.Email,
-        DayOfBirth = entity.DayOfBirth.ToString() ?? "N/A",
+        DayOfBirth = entity.DayOfBirth?.ToString("dd-MM-yyyy") ?? "N/A",
         PhoneNumber = entity.PhoneNumber,
         Gender = entity.Gender.ToString(),
         Role = entity.Role.ToString()

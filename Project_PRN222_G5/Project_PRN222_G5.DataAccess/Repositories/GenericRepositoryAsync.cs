@@ -72,10 +72,7 @@ namespace Project_PRN222_G5.DataAccess.Repositories
             var countQuery = query;
             var totalCount = await countQuery.CountAsync();
 
-            if (orderBy is not null)
-            {
-                query = orderBy(query);
-            }
+            query = orderBy != null ? orderBy(query) : query.OrderBy(e => e.Id);
 
             var items = await query
                 .Skip((page - 1) * pageSize)

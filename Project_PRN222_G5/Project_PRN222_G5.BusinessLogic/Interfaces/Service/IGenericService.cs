@@ -20,9 +20,7 @@ public interface IGenericService<TE, in TC, in TU, TR> : IMapper<TE, TC, TU, TR>
     Task<PaginationResponse<TR>> GetPagedAsync(
         PagedRequest request,
         Expression<Func<TE, bool>>? predicate = null,
-        Func<IQueryable<TE>, IQueryable<TE>>? include = null,
-        string? searchTerm = null,
-        Expression<Func<TE, bool>>? searchPredicate = null);
+        Func<IQueryable<TE>, IQueryable<TE>>? include = null);
 
     Task<TR> CreateAsync(TC request);
 

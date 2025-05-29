@@ -7,6 +7,7 @@ using Project_PRN222_G5.BusinessLogic.Mapper.Users;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
+using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -125,4 +126,12 @@ public class AuthService(
     public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 
     public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request);
+
+    public override Expression<Func<User, string>>[] GetSearchFields() =>
+    [
+        u => u.Username,
+        u=>u.FullName,
+        u=>u.Email,
+        u=>u.PhoneNumber
+    ];
 }

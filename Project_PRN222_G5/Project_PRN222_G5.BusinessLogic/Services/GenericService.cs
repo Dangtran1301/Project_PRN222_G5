@@ -36,40 +36,38 @@ public abstract class GenericService<TE, TC, TU, TR>(
     public async Task<PaginationResponse<TR>> GetPagedAsync(
         PagedRequest request,
         Expression<Func<TE, bool>>? predicate = null,
-        Func<IQueryable<TE>, IQueryable<TE>>? include = null,
-        string? searchTerm = null,
-        Expression<Func<TE, bool>>? searchPredicate = null)
+        Func<IQueryable<TE>, IQueryable<TE>>? include = null)
     {
-        var finalPredicate = predicate;
-        if (searchPredicate != null)
+        var searchPredicate = request.BuildSearchPredicate(GetSearchFields());
+
+        Expression<Func<TE, bool>>? finalPredicate = null;
+
+        if (predicate != null && searchPredicate != null)
         {
-            if (predicate != null)
-            {
-                var param = Expression.Parameter(typeof(TE));
-                var body = Expression.AndAlso(
-                    Expression.Invoke(predicate, param),
-                    Expression.Invoke(searchPredicate, param));
-                finalPredicate = Expression.Lambda<Func<TE, bool>>(body, param);
-            }
-            else
-            {
-                finalPredicate = searchPredicate;
-            }
+            var param = Expression.Parameter(typeof(TE));
+            var body = Expression.AndAlso(
+                Expression.Invoke(predicate, param),
+                Expression.Invoke(searchPredicate, param)
+            );
+            finalPredicate = Expression.Lambda<Func<TE, bool>>(body, param);
+        }
+        else
+        {
+            finalPredicate = predicate ?? searchPredicate;
         }
 
         Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null;
-
         if (!string.IsNullOrWhiteSpace(request.Sort))
         {
             orderBy = q => q.ApplyOrdering(request.Sort, request.SortDir?.ToLower() != "desc");
         }
 
         var (items, totalCount) = await unitOfWork.Repository<TE>().GetPagedAsync(
-            page: request.PageNumber,
-            pageSize: request.PageSize,
-            predicate: finalPredicate,
-            orderBy: orderBy,
-            include: include
+            request.PageNumber,
+            request.PageSize,
+            finalPredicate,
+            orderBy,
+            include
         );
 
         var data = items.Select(MapToResponse);
@@ -113,4 +111,6 @@ public abstract class GenericService<TE, TC, TU, TR>(
     public abstract void UpdateEntity(TE entity, TU request);
 
     #endregion Mapping
+
+    public abstract Expression<Func<TE, string>>[] GetSearchFields();
 }
