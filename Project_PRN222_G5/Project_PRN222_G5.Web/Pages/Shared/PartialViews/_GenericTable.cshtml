@@ -1,0 +1,122 @@
+﻿@{
+    var items = ViewData["Items"] as IEnumerable<object>;
+    var paging = ViewData["Paging"] as BusinessLogic.DTOs.Paging;
+    var request = ViewData["Request"] as BusinessLogic.DTOs.PagedRequest;
+    var displayProps = ViewData["DisplayProps"] as string[] ?? [];
+
+    var sortField = request?.Sort;
+    var sortOrder = request?.SortDir ?? "asc";
+    var currentPage = request?.PageNumber ?? 1;
+}
+
+@if (items == null || !items.Any())
+{
+    <div class="alert alert-info text-center">No data found.</div>
+}
+else
+{
+    var props = items.First().GetType().GetProperties().Where(p => displayProps.Contains(p.Name)).ToArray();
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                @foreach (var prop in props)
+                {
+                    var isCurrentSort = prop.Name == sortField;
+                    var nextOrder = isCurrentSort && sortOrder == "asc" ? "desc" : "asc";
+                    <th>
+                        <a asp-route-Request.Sort="@prop.Name"
+                           asp-route-Request.SortDir="@nextOrder"
+                           asp-route-Request.PageNumber="@currentPage">
+                            @prop.Name
+                            @if (isCurrentSort)
+                            {
+                                <span>@(sortOrder == "asc" ? "▲" : "▼")</span>
+                            }
+                        </a>
+                    </th>
+                }
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                var id = item.GetType().GetProperty("Id")?.GetValue(item);
+                <tr>
+                    @foreach (var prop in props)
+                    {
+                        <td>@(prop.GetValue(item))</td>
+                    }
+                    <td>
+                        <a class="btn btn-sm btn-info" asp-page="Details" asp-route-id="@id">Detail</a>
+                        <a class="btn btn-sm btn-warning" asp-page="Edit" asp-route-id="@id">Edit</a>
+                        <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    if (paging is { TotalPage: > 1 })
+    {
+        const int visiblePages = 5;
+        var startPage = Math.Max(1, paging.CurrentPage - visiblePages / 2);
+        var endPage = Math.Min(paging.TotalPage, startPage + visiblePages - 1);
+        if (endPage - startPage + 1 < visiblePages)
+        {
+            startPage = Math.Max(1, endPage - visiblePages + 1);
+        }
+
+        <nav aria-label="Pagination" class="mt-3">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(paging.HasPreviousPage ? "" : "disabled")">
+                    <a class="page-link" asp-route-Request.PageNumber="@(paging.CurrentPage - 1)"
+                       asp-route-Request.Sort="@sortField"
+                       asp-route-Request.SortDir="@sortOrder">Previous</a>
+                </li>
+
+                @if (startPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-Request.PageNumber="1"
+                           asp-route-Request.Sort="@sortField"
+                           asp-route-Request.SortDir="@sortOrder">1</a>
+                    </li>
+                    @if (startPage > 2)
+                    {
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    }
+                }
+
+                @for (var i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == paging.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-route-Request.PageNumber="@i"
+                           asp-route-Request.Sort="@sortField"
+                           asp-route-Request.SortDir="@sortOrder">@i</a>
+                    </li>
+                }
+
+                @if (endPage < paging.TotalPage)
+                {
+                    @if (endPage < paging.TotalPage - 1)
+                    {
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" asp-route-Request.PageNumber="@paging.TotalPage"
+                           asp-route-Request.Sort="@sortField"
+                           asp-route-Request.SortDir="@sortOrder">@paging.TotalPage</a>
+                    </li>
+                }
+
+                <li class="page-item @(paging.HasNextPage ? "" : "disabled")">
+                    <a class="page-link" asp-route-Request.PageNumber="@(paging.CurrentPage + 1)"
+                       asp-route-Request.Sort="@sortField"
+                       asp-route-Request.SortDir="@sortOrder">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}

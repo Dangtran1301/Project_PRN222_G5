@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
 using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Auth
@@ -25,11 +25,18 @@ namespace Project_PRN222_G5.Web.Pages.Auth
                 return Page();
             }
 
-            var response = await authService.LoginAsync(Input);
-            await cookieService.SetAuthCookiesAsync(Input.Username, response.AccessToken, response.RefreshToken);
+            try
+            {
+                var response = await authService.LoginAsync(Input);
+                await cookieService.SetAuthCookiesAsync(Input.Username, response.AccessToken, response.RefreshToken);
 
-            TempData["SuccessMessage"] = "Login successfully!";
-            return RedirectToPage(PageRoutes.Users.Index);
+                TempData["SuccessMessage"] = "Login successfully!";
+                return RedirectToPage(PageRoutes.Users.Index);
+            }
+            catch (Exception ex)
+            {
+                return HandleValidationExceptionOrThrow(ex);
+            }
         }
 
         public IActionResult OnPostLogoutAsync()

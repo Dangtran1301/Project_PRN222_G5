@@ -1,0 +1,17 @@
+﻿@model object
+@{
+    var props = Model.GetType().GetProperties();
+}
+
+<table class="table table-bordered">
+    <tbody>
+        @foreach (var prop in props)
+        {
+            <tr>
+                <th>@prop.Name</th>
+                <td>@prop.GetValue(Model)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-secondary" asp-page="Index">Back</a>
