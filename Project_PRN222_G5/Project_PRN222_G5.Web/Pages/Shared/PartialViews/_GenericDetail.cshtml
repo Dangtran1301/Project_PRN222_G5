@@ -1,17 +1,22 @@
 ﻿@model object
 @{
     var props = Model.GetType().GetProperties();
+    var id = Model.GetType().GetProperty("Id")?.GetValue(Model);
 }
 
-<table class="table table-bordered">
+<table class="table table-bordered table-hover">
     <tbody>
-        @foreach (var prop in props)
-        {
-            <tr>
-                <th>@prop.Name</th>
-                <td>@prop.GetValue(Model)</td>
-            </tr>
-        }
+    @foreach (var prop in props)
+    {
+        <tr>
+            <th>@prop.Name</th>
+            <td>@prop.GetValue(Model)</td>
+        </tr>
+    }
     </tbody>
 </table>
-<a class="btn btn-secondary" asp-page="Index">Back</a>
+
+<div class="mt-3 d-flex gap-2">
+    <a asp-page="Edit" asp-route-id="@id" class="btn btn-warning">Edit</a>
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>

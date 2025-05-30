@@ -1,28 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.Web.Utilities;
-using Project_PRN222_G5.Web.Pages.Shared.Models;
-
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class EditModel : BasePageModel
+    public class EditModel(ICinemaService cinemaService) : BasePageModel
     {
-        private readonly ICinemaService _cinemaService;
-
-        public EditModel(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
-
         [BindProperty]
-        public UpdateCinemaDto CinemaDto { get; set; } = default!;
+        public UpdateCinemaDto CinemaDto { get; set; } = null!;
 
         public Guid CinemaId { get; set; }
 
@@ -30,8 +17,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                var cinema = await _cinemaService.GetByIdAsync(id.Value);
-                if (cinema == null) return NotFound();
+                var cinema = await cinemaService.GetByIdAsync(id.Value);
 
                 CinemaId = id.Value;
                 CinemaDto = new UpdateCinemaDto
@@ -45,8 +31,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
             }
             catch (Exception ex)
             {
-                HandleException(ex);
-                return Page();
+                return HandleValidationExceptionOrThrow(ex, PageRoutes.Cinema.Edit);
             }
         }
 
@@ -57,9 +42,15 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 HandleModelStateErrors();
                 return Page();
             }
-                await _cinemaService.UpdateAsync(id, CinemaDto);
+            try
+            {
+                await cinemaService.UpdateAsync(id, CinemaDto);
                 return RedirectToPage(PageRoutes.Cinema.Index);
-
+            }
+            catch (Exception e)
+            {
+                return HandleValidationExceptionOrThrow(e);
+            }
         }
     }
 }

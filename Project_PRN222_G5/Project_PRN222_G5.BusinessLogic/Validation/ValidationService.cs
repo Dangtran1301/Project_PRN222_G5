@@ -1,6 +1,4 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
-using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
@@ -23,7 +21,7 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
         var validationResults = new List<ValidationResult>();
         var validationContext = new ValidationContext(model);
 
-        Validator.TryValidateObject(model, validationContext, validationResults, validateAllProperties: true);
+        Validator.TryValidateObject(model, validationContext, validationResults, true);
 
         var errors = validationResults
             .GroupBy(v => v.MemberNames.FirstOrDefault() ?? "General")
@@ -43,7 +41,7 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
     public async Task ValidateUniqueUserAsync(string username, string email)
     {
         var userRepository = unitOfWork.Repository<User>();
-        bool exists = await userRepository.AnyAsync(u => u.Username == username || u.Email == email);
+        var exists = await userRepository.AnyAsync(u => u.Username == username || u.Email == email);
         if (exists)
         {
             throw new ValidationException("Username or email already exists.");
@@ -54,7 +52,7 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
     {
         var repo = unitOfWork.Repository<Cinema>();
 
-        bool exists = excludingId.HasValue
+        var exists = excludingId.HasValue
             ? await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value)
             : await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
 

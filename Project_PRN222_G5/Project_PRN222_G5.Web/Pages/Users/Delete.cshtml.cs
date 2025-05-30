@@ -15,14 +15,14 @@ namespace Project_PRN222_G5.Web.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-                User = await authService.GetByIdAsync(id);
-                return Page();
+            User = await authService.GetByIdAsync(id);
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-                await authService.DeleteAsync(id);
-                return RedirectToPage(PageRoutes.Users.Index);
+            await authService.DeleteAsync(id);
+            return RedirectToPage(PageRoutes.Users.Index);
         }
     }
 }

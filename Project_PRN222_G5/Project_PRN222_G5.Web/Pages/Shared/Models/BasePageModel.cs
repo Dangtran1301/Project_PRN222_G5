@@ -59,8 +59,12 @@ public abstract class BasePageModel : PageModel
         if (ex is ValidationException vex)
         {
             foreach (var error in vex.Errors)
+            {
                 foreach (var message in error.Value)
+                {
                     ModelState.AddModelError(error.Key, message);
+                }
+            }
 
             HandleModelStateErrors();
             return IsNullOrEmpty(returnPage) ? Page() : RedirectToPage(returnPage);

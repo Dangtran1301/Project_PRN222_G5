@@ -39,7 +39,7 @@ namespace Project_PRN222_G5.Web.Pages.Auth
             }
         }
 
-        public IActionResult OnPostLogoutAsync()
+        public IActionResult OnPostLogout()
         {
             cookieService.RemoveAuthCookies();
             TempData["SuccessMessage"] = "Logged out successfully!";

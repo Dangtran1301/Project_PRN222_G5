@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
@@ -17,6 +18,12 @@ namespace Project_PRN222_G5.Web.Pages.Users
         public UpdateInfoUser Input { get; set; } = new();
 
         public new UserResponse User { get; set; } = null!;
+
+        [ViewData]
+        public List<SelectListItem> Roles { get; set; } = [.. Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(r => r != Role.Admin)
+            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })];
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {

@@ -9,15 +9,8 @@ using Project_PRN222_G5.Web.Pages.Shared.Models;
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
     [Authorize(Roles = nameof(Role.Admin))]
-    public class IndexModel : BasePageModel
+    public class IndexModel(ICinemaService cinemaService) : BasePageModel
     {
-        private readonly ICinemaService _cinemaService;
-
-        public IndexModel(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
-
         [BindProperty(SupportsGet = true)]
         public PagedRequest PagedRequest { get; set; } = new();
 
@@ -27,7 +20,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
 
         public async Task<IActionResult> OnGetAsync()
         {
-            PaginationResponse = await _cinemaService.GetPagedAsync(PagedRequest);
+            PaginationResponse = await cinemaService.GetPagedAsync(PagedRequest);
             return Page();
         }
     }

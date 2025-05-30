@@ -1,4 +1,5 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs;
+using Project_PRN222_G5.BusinessLogic.Exceptions;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.BusinessLogic.Extensions;
@@ -37,7 +38,12 @@ public static class PagedRequestExtensions
         bool ascending)
     {
         if (string.IsNullOrWhiteSpace(propertyName))
-            throw new ArgumentException("Property name is required", nameof(propertyName));
+        {
+            throw new ValidationException(new Dictionary<string, string[]>
+            {
+                [nameof(propertyName)] = ["Property name is required"]
+            });
+        }
 
         var parameter = Expression.Parameter(typeof(T), "x");
         var property = Expression.PropertyOrField(parameter, propertyName);
