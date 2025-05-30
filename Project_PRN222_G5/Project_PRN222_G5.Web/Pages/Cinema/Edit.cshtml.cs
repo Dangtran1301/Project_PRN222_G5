@@ -2,71 +2,64 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.DataAccess.Entities.Movies;
+using Project_PRN222_G5.Web.Utilities;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
+
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class EditModel : PageModel
+    public class EditModel : BasePageModel
     {
-        private readonly TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public EditModel(TheDbContext context)
+        public EditModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
         [BindProperty]
-        public Movie Movie { get; set; } = default!;
+        public UpdateCinemaDto CinemaDto { get; set; } = default!;
+
+        public Guid CinemaId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var cinema = await _cinemaService.GetByIdAsync(id.Value);
+                if (cinema == null) return NotFound();
 
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
-            {
-                return NotFound();
+                CinemaId = id.Value;
+                CinemaDto = new UpdateCinemaDto
+                {
+                    Id = id.Value,
+                    Name = cinema.Name,
+                    Address = cinema.Address
+                };
+
+                return Page();
             }
-            Movie = movie;
-            return Page();
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return Page();
+            }
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Guid id)
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 return Page();
             }
+                await _cinemaService.UpdateAsync(id, CinemaDto);
+                return RedirectToPage(PageRoutes.Cinema.Index);
 
-            _context.Attach(Movie).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(Movie.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool MovieExists(Guid id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
         }
     }
 }

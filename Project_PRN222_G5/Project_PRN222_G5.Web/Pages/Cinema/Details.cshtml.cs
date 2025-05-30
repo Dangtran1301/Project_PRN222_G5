@@ -2,38 +2,39 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.DataAccess.Entities.Movies;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.Web.Pages.Shared;
+using Project_PRN222_G5.Web.Utilities;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : BasePageModel
     {
-        private readonly TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public DetailsModel(TheDbContext context)
+        public DetailsModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
-        public Movie Movie { get; set; } = default!;
+        public CinemaResponse Cinema { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                Cinema = await _cinemaService.GetByIdAsync(id.Value);
+                return Page();
             }
-
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return Page();
             }
-            else
-            {
-                Movie = movie;
-            }
-            return Page();
         }
     }
 }

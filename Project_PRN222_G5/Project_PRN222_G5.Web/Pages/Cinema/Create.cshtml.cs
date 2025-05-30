@@ -6,15 +6,22 @@ using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class CreateModel(ICinemaService cinemaService) : BasePageModel
+    public class CreateModel : BasePageModel
     {
+        private readonly ICinemaService _cinemaService;
+
+        public CreateModel(ICinemaService cinemaService)
+        {
+            _cinemaService = cinemaService;
+        }
+
+        [BindProperty]
+        public CreateCinemaDto CinemaDto { get; set; } = new();
+
         public IActionResult OnGet()
         {
             return Page();
         }
-
-        [BindProperty]
-        public CreateCinemaDto Input { get; set; } = null!;
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -23,9 +30,10 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 HandleModelStateErrors();
                 return Page();
             }
-
-            await cinemaService.CreateAsync(Input);
+            await _cinemaService.CreateAsync(CinemaDto);
             return RedirectToPage(PageRoutes.Cinema.Index);
         }
+
     }
 }
+

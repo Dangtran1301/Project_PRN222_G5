@@ -1,23 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Project_PRN222_G5.BusinessLogic.DTOs;
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class IndexModel(ICinemaService cinemaService) : PageModel
+    [Authorize(Roles = nameof(Role.Admin))]
+    public class IndexModel : BasePageModel
     {
-        public IEnumerable<CinemaResponse> List { get; set; } = [];
-        public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }
-        public int PageSize { get; set; } = 10;
-        public int TotalCount { get; set; }
+        private readonly ICinemaService _cinemaService;
 
-        public async Task OnGetAsync(int page = 1)
+        public IndexModel(ICinemaService cinemaService)
         {
-            if (page < 1) page = 1;
-            CurrentPage = page;
-            List = await cinemaService.GetAllAsync();
-            TotalPages = (int)Math.Ceiling((double)TotalCount / PageSize);
+            _cinemaService = cinemaService;
+        }
+
+        [BindProperty(SupportsGet = true)]
+        public PagedRequest PagedRequest { get; set; } = new();
+
+        public PaginationResponse<CinemaResponse> PaginationResponse { get; set; } = null!;
+
+        public string[] DisplayProps { get; set; } = ["Name", "Address"];
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            PaginationResponse = await _cinemaService.GetPagedAsync(PagedRequest);
+            return Page();
         }
     }
 }

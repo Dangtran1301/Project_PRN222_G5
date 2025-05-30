@@ -2,58 +2,52 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.DataAccess.Entities.Movies;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
+using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
+using Project_PRN222_G5.Web.Utilities;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasePageModel
     {
-        private readonly TheDbContext _context;
+        private readonly ICinemaService _cinemaService;
 
-        public DeleteModel(TheDbContext context)
+        public DeleteModel(ICinemaService cinemaService)
         {
-            _context = context;
+            _cinemaService = cinemaService;
         }
 
         [BindProperty]
-        public Movie Movie { get; set; } = default!;
+        public CinemaResponse Cinema { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var cinema = await _cinemaService.GetByIdAsync(id.Value);
+                Cinema = cinema;
+                return Page();
             }
-
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (movie == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                HandleException(ex);
+                return RedirectToPage(PageRoutes.Cinema.Index);
             }
-            else
-            {
-                Movie = movie;
-            }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                await _cinemaService.DeleteAsync(id.Value);
+                return RedirectToPage(PageRoutes.Cinema.Index);
             }
-
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
+            catch (Exception ex)
             {
-                Movie = movie;
-                _context.Movies.Remove(Movie);
-                await _context.SaveChangesAsync();
+                HandleException(ex);
+                return Page();
             }
-
-            return RedirectToPage("./Index");
         }
     }
 }
