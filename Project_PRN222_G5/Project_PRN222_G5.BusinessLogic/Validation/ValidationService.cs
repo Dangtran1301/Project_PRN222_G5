@@ -41,7 +41,7 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
     public async Task ValidateUniqueUserAsync(string username, string email)
     {
         var userRepository = unitOfWork.Repository<User>();
-        bool exists = await userRepository.AnyAsync(u => u.Username == username || u.Email == email);
+        var exists = await userRepository.AnyAsync(u => u.Username == username || u.Email == email);
         if (exists)
         {
             throw new ValidationException("Username or email already exists.");
@@ -53,8 +53,8 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
         var repo = unitOfWork.Repository<Cinema>();
 
         var exists = excludingId.HasValue
-            ? await repo.AnyAsync(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && c.Id != excludingId.Value)
-            : await repo.AnyAsync(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            ? await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value)
+            : await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
 
         if (exists)
         {
