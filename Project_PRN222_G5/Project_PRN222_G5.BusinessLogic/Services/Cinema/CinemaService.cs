@@ -1,50 +1,49 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
-using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
-using System.ComponentModel.DataAnnotations;
+using Project_PRN222_G5.BusinessLogic.Exceptions;
 
-namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
+namespace Project_PRN222_G5.BusinessLogic.Services.Cinema;
 
 public class CinemaService(
     IUnitOfWork unitOfWork,
     IValidationService validationService
-) : GenericService<Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
+) : GenericService<DataAccess.Entities.Cinemas.Cinema, CreateCinemaDto, UpdateCinemaDto, CinemaResponse>(unitOfWork, validationService), ICinemaService
 {
-    public override CinemaResponse MapToResponse(Cinema entity) => entity.ToCinemaResponse();
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IValidationService _validationService = validationService;
 
-    public override Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
+    public override CinemaResponse MapToResponse(DataAccess.Entities.Cinemas.Cinema entity) => entity.ToCinemaResponse();
 
-    public override void UpdateEntity(Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
+    public override DataAccess.Entities.Cinemas.Cinema MapToEntity(CreateCinemaDto request) => request.ToEntity();
 
-    public async Task<CinemaResponse> CreateAsync(CreateCinemaDto request)
+    public override void UpdateEntity(DataAccess.Entities.Cinemas.Cinema entity, UpdateCinemaDto request) => entity.UpdateEntity(request);
+
+    public override async Task<CinemaResponse> CreateAsync(CreateCinemaDto request)
     {
-        await validationService.ValidateUniqueCinemaAsync(request.Name);
+        await _validationService.ValidateUniqueCinemaAsync(request.Name);
 
         var entity = request.ToEntity();
-        await unitOfWork.Repository<Cinema>().AddAsync(entity);
-        await unitOfWork.CompleteAsync();
+        await _unitOfWork.Repository<DataAccess.Entities.Cinemas.Cinema>().AddAsync(entity);
+        await _unitOfWork.CompleteAsync();
 
         return entity.ToCinemaResponse();
     }
 
-    public async Task<CinemaResponse> UpdateAsync(Guid id, UpdateCinemaDto request)
+    public override async Task<CinemaResponse> UpdateAsync(Guid id, UpdateCinemaDto request)
     {
-        var entity = await unitOfWork.Repository<Cinema>().GetByIdAsync(id);
-        if (entity == null)
-            throw new KeyNotFoundException("Cinema not found.");
-
-        await validationService.ValidateUniqueCinemaAsync(request.Name, id);
+        var entity = await _unitOfWork.Repository<DataAccess.Entities.Cinemas.Cinema>().GetByIdAsync(id)
+                     ?? throw new ValidationException("Cinema not found.");
+        await _validationService.ValidateUniqueCinemaAsync(request.Name, id);
 
         entity.Name = request.Name;
         entity.Address = request.Address;
-        unitOfWork.Repository<Cinema>().Update(entity);
-        await unitOfWork.CompleteAsync();
+        _unitOfWork.Repository<DataAccess.Entities.Cinemas.Cinema>().Update(entity);
+        await _unitOfWork.CompleteAsync();
 
         return entity.ToCinemaResponse();
     }

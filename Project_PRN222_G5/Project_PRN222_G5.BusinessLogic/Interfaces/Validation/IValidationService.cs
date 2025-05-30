@@ -5,6 +5,6 @@ public interface IValidationService
     Dictionary<string, string[]> Validate<T>(T model);
 
     Task ValidateUniqueUserAsync(string username, string email);
-    Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null);
 
+    Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null);
 }

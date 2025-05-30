@@ -1,31 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
-using Project_PRN222_G5.Web.Utilities;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.Web.Pages.Shared.Models;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class DeleteModel : BasePageModel
+    public class DeleteModel(ICinemaService cinemaService) : BasePageModel
     {
-        private readonly ICinemaService _cinemaService;
-
-        public DeleteModel(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
-
         [BindProperty]
-        public CinemaResponse Cinema { get; set; } = default!;
+        public CinemaResponse Cinema { get; set; } = null!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             try
             {
-                var cinema = await _cinemaService.GetByIdAsync(id.Value);
+                var cinema = await cinemaService.GetByIdAsync(id.Value);
                 Cinema = cinema;
                 return Page();
             }
@@ -40,7 +30,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                await _cinemaService.DeleteAsync(id.Value);
+                await cinemaService.DeleteAsync(id.Value);
                 return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception ex)

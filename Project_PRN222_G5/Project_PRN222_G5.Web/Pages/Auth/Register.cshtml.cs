@@ -15,11 +15,10 @@ namespace Project_PRN222_G5.Web.Pages.Auth
         public RegisterUserRequest Input { get; set; } = new();
 
         [ViewData]
-        public List<SelectListItem> Roles { get; set; } = Enum.GetValues(typeof(Role))
+        public List<SelectListItem> Roles { get; set; } = [.. Enum.GetValues(typeof(Role))
             .Cast<Role>()
             .Where(r => r != Role.Admin)
-            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })
-            .ToList();
+            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })];
 
         public IActionResult OnGet()
         {

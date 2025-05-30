@@ -18,15 +18,18 @@ public class AuthService(
     IAuthenticatedUserService authenticatedUserService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IValidationService _validationService = validationService;
+
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
-        var errors = validationService.Validate(request);
-        if (errors.Any())
+        var errors = _validationService.Validate(request);
+        if (errors.Count != 0)
         {
             throw new ValidationException(errors);
         }
 
-        var user = (await unitOfWork.Repository<User>()
+        var user = (await _unitOfWork.Repository<User>()
                 .FindAsync(u => u.Username == request.Username))
             .FirstOrDefault();
 
@@ -42,7 +45,7 @@ public class AuthService(
         var refreshToken = Guid.NewGuid().ToString();
         var userId = user.Id;
 
-        await unitOfWork.Repository<UserToken>().AddAsync(new UserToken
+        await _unitOfWork.Repository<UserToken>().AddAsync(new UserToken
         {
             UserId = userId,
             RefreshToken = refreshToken,
@@ -51,43 +54,43 @@ public class AuthService(
             ClientIp = authenticatedUserService.ClientIp
         });
 
-        await unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync();
 
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
     public override async Task<UserResponse> CreateAsync(RegisterUserRequest request)
     {
-        var errors = validationService.Validate(request);
-        if (errors.Any())
+        var errors = _validationService.Validate(request);
+        if (errors.Count != 0)
         {
             throw new ValidationException(errors);
         }
 
-        await validationService.ValidateUniqueUserAsync(request.Username, request.Email);
+        await _validationService.ValidateUniqueUserAsync(request.Username, request.Email);
 
         var user = MapToEntity(request);
-        await unitOfWork.Repository<User>().AddAsync(user);
-        await unitOfWork.CompleteAsync();
+        await _unitOfWork.Repository<User>().AddAsync(user);
+        await _unitOfWork.CompleteAsync();
 
         return MapToResponse(user);
     }
 
     public async Task LogoutAsync(Guid userId, string refreshToken)
     {
-        var tokens = await unitOfWork.Repository<UserToken>()
+        var tokens = await _unitOfWork.Repository<UserToken>()
             .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
         var token = tokens.FirstOrDefault();
         if (token != null)
         {
-            unitOfWork.Repository<UserToken>().Delete(token);
-            await unitOfWork.CompleteAsync();
+            _unitOfWork.Repository<UserToken>().Delete(token);
+            await _unitOfWork.CompleteAsync();
         }
     }
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        var token = (await unitOfWork.Repository<UserToken>()
+        var token = (await _unitOfWork.Repository<UserToken>()
                 .FindAsync(t => t.UserId == request.UserId && t.RefreshToken == request.RefreshToken))
             .FirstOrDefault();
 
@@ -99,15 +102,11 @@ public class AuthService(
             });
         }
 
-        var user = await unitOfWork.Repository<User>().GetByIdAsync(request.UserId);
-        if (user == null)
-        {
-            throw new ValidationException(new Dictionary<string, string[]>
+        var user = await _unitOfWork.Repository<User>().GetByIdAsync(request.UserId)
+                   ?? throw new ValidationException(new Dictionary<string, string[]>
             {
                 ["User"] = ["User not found."]
             });
-        }
-
         var newAccessToken = jwtService.GenerateAccessToken(user);
         var newRefreshToken = Guid.NewGuid().ToString();
 
@@ -115,8 +114,8 @@ public class AuthService(
         token.ExpiredTime = DateTimeOffset.UtcNow.AddDays(7);
         token.ClientIp = authenticatedUserService.ClientIp;
 
-        unitOfWork.Repository<UserToken>().Update(token);
-        await unitOfWork.CompleteAsync();
+        _unitOfWork.Repository<UserToken>().Update(token);
+        await _unitOfWork.CompleteAsync();
 
         return new LoginResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
     }

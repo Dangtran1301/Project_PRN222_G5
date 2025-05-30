@@ -6,15 +6,8 @@ using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    public class CreateModel : BasePageModel
+    public class CreateModel(ICinemaService cinemaService) : BasePageModel
     {
-        private readonly ICinemaService _cinemaService;
-
-        public CreateModel(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
-
         [BindProperty]
         public CreateCinemaDto CinemaDto { get; set; } = new();
 
@@ -30,10 +23,15 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
                 HandleModelStateErrors();
                 return Page();
             }
-            await _cinemaService.CreateAsync(CinemaDto);
-            return RedirectToPage(PageRoutes.Cinema.Index);
+            try
+            {
+                await cinemaService.CreateAsync(CinemaDto);
+                return RedirectToPage(PageRoutes.Cinema.Index);
+            }
+            catch (Exception e)
+            {
+                return HandleValidationExceptionOrThrow(e);
+            }
         }
-
     }
 }
-
