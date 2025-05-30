@@ -13,8 +13,4 @@
     <ProjectReference Include="..\Project_PRN222_G5.DataAccess\Project_PRN222_G5.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="User\" />
-  </ItemGroup>
-
 </Project>
