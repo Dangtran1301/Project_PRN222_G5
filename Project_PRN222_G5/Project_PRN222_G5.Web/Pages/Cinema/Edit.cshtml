@@ -1,0 +1,25 @@
+﻿@page "{id:guid}"
+@model EditModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Cinema</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CinemaId" />
+    <div class="form-group">
+        <label asp-for="CinemaDto.Name" class="control-label"></label>
+        <input asp-for="CinemaDto.Name" class="form-control" />
+        <span asp-validation-for="CinemaDto.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CinemaDto.Address" class="control-label"></label>
+        <input asp-for="CinemaDto.Address" class="form-control" />
+        <span asp-validation-for="CinemaDto.Address" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+</form>

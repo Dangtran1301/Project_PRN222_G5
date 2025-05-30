@@ -1,0 +1,77 @@
+﻿@model _GenericFormModel
+
+@{
+    var props = Model.Data.GetType().GetProperties();
+    var isEdit = props.Any(p => p.Name == "Id");
+    var enumSelectLists = new Dictionary<string, List<SelectListItem>>();
+
+    foreach (var prop in props)
+    {
+        if (prop.PropertyType.IsEnum)
+        {
+            var currentValue = prop.GetValue(Model.Data)?.ToString();
+            var options = Enum.GetValues(prop.PropertyType)
+                .Cast<object>()
+                .Select(val => new SelectListItem
+                        {
+                            Text = val.ToString(),
+                            Value = val.ToString(),
+                            Selected = val.ToString() == currentValue
+                        }).ToList();
+
+            enumSelectLists[prop.Name] = options;
+        }
+    }
+
+    if (Model.ExtraSelectLists is not null)
+    {
+        foreach (var kv in Model.ExtraSelectLists)
+        {
+            enumSelectLists[kv.Key] = kv.Value;
+        }
+    }
+}
+
+<form method="post" enctype="multipart/form-data">
+    @if (isEdit)
+    {
+        var idProp = props.FirstOrDefault(p => p.Name == "Id");
+        if (idProp != null)
+        {
+            <input type="hidden" name="Id" value="@idProp.GetValue(Model.Data)" />
+        }
+    }
+
+    @foreach (var prop in props)
+    {
+        if (prop.Name == "Id") continue;
+
+        <div class="mb-3">
+            <label class="form-label">@prop.Name</label>
+
+            @if (enumSelectLists.TryGetValue(prop.Name, out var enumSelectList))
+            {
+                <select name="@prop.Name" class="form-control" asp-items="@enumSelectList"></select>
+            }
+            else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+            {
+                <input name="@prop.Name" class="form-control" type="date" value="@(prop.GetValue(Model.Data)?.ToString()?.Split(' ')[0])" />
+            }
+            else if (prop.Name.ToLower().Contains("password"))
+            {
+                <input name="@prop.Name" class="form-control" type="password" value="" />
+            }
+            else if (prop.PropertyType == typeof(IFormFile))
+            {
+                <input name="@prop.Name" class="form-control" type="file" />
+            }
+            else
+            {
+                <input name="@prop.Name" class="form-control" value="@prop.GetValue(Model.Data)" />
+            }
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

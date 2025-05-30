@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_PRN222_G5.Application.DTOs.Requests;
-using Project_PRN222_G5.Application.Interfaces;
-using Project_PRN222_G5.Domain.Entities.Users.Enum;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
+using Project_PRN222_G5.Web.Pages.Shared.Models;
+using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Pages.Users
 {
     [Authorize(Roles = nameof(Role.Admin))]
-    public class CreateModel(IUserService userService) : PageModel
+    public class CreateModel(IAuthService authService) : BasePageModel
     {
         [BindProperty]
         public RegisterUserRequest Input { get; set; } = new();
 
+        [ViewData]
+        public List<SelectListItem> Roles { get; set; } = [.. Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(r => r != Role.Admin)
+            .Select(r => new SelectListItem { Value = r.ToString(), Text = r.ToString() })];
+
         public IActionResult OnGet()
         {
-            ViewData["Roles"] = new List<SelectListItem>
-            {
-                new() { Value = nameof(Role.Customer), Text = nameof(Role.Customer) },
-                new() { Value = nameof(Role.Staff), Text = nameof(Role.Staff) }
-            };
             return Page();
         }
 
@@ -28,19 +30,12 @@ namespace Project_PRN222_G5.Web.Pages.Users
         {
             if (!ModelState.IsValid)
             {
+                HandleModelStateErrors();
                 return Page();
             }
 
-            try
-            {
-                await userService.CreateAsync(Input);
-                return RedirectToPage(PageRoutes.UsersIndex);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return Page();
-            }
+            await authService.CreateAsync(Input);
+            return RedirectToPage(PageRoutes.Users.Index);
         }
     }
 }

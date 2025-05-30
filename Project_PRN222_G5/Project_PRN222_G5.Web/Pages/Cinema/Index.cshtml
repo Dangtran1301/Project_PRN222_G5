@@ -1,0 +1,20 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Cinema List";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Cinema List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
+</p>
+
+@await Html.PartialAsync("Shared/PartialViews/_GenericTable", new ViewDataDictionary(ViewData)
+{
+    { "Items", Model.PaginationResponse.Data! },
+    { "Paging", Model.PaginationResponse.Paging },
+    { "Request", Model.PagedRequest },
+    { "DisplayProps", Model.DisplayProps }
+})
