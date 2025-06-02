@@ -12,7 +12,7 @@ public static class UserMapper
         FullName = entity.FullName,
         Username = entity.Username,
         Email = entity.Email,
-        DayOfBirth = entity.DayOfBirth?.ToString("dd-MM-yyyy") ?? "N/A",
+        DayOfBirth = entity.DayOfBirth,
         PhoneNumber = entity.PhoneNumber,
         Gender = entity.Gender.ToString(),
         Role = entity.Role.ToString()
@@ -32,7 +32,7 @@ public static class UserMapper
     {
         request.Fullname = userResponse.FullName;
         request.Gender = userResponse.Gender;
-        request.DayOfBirth = DateTime.Parse(userResponse.DayOfBirth.ToString());
+        request.DayOfBirth = userResponse.DayOfBirth;
         request.PhoneNumber = userResponse.PhoneNumber;
         request.Avatar = userResponse.Avatar;
     }
