@@ -1,5 +1,3 @@
-using Project_PRN222_G5.DataAccess.Data.Seeder;
-
 namespace Project_PRN222_G5.Web;
 
 public class Program
@@ -19,9 +17,6 @@ public class Program
 
         try
         {
-            // Seed data
-            await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
-
             logger.LogInformation("Running application...");
             await host.RunAsync();
         }

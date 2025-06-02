@@ -1,4 +1,5 @@
 ﻿namespace Project_PRN222_G5.Web.Utilities;
+
 public static class PageRoutes
 {
     private static string Route(string controller, string action) => $"/{controller}/{action}";
@@ -34,6 +35,7 @@ public static class PageRoutes
         public static readonly string Edit = Route("Cinema", "Edit");
         public static readonly string Delete = Route("Cinema", "Delete");
     }
+
     public static class Movie
     {
         public static readonly string Index = Route("Movie", "Index");

@@ -2,7 +2,7 @@
 using Project_PRN222_G5.DataAccess.Entities.Movies;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 
-namespace Project_PRN222_G5.DataAccess.Entities.Booking;
+namespace Project_PRN222_G5.DataAccess.Entities.Bookings;
 
 public class Booking : BaseEntity
 {

@@ -1,4 +1,5 @@
-﻿using Project_PRN222_G5.DataAccess.Entities.Common;
+﻿using Project_PRN222_G5.DataAccess.Entities.Bookings;
+using Project_PRN222_G5.DataAccess.Entities.Common;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.DataAccess.Entities.Users;
@@ -25,7 +26,7 @@ public class User : BaseEntity
 
     public Role Role { get; set; } = Role.Customer;
 
-    public ICollection<Booking.Booking> Bookings { get; set; } = [];
+    public ICollection<Booking> Bookings { get; set; } = [];
 
     public ICollection<UserToken> UserTokens { get; set; } = [];
 

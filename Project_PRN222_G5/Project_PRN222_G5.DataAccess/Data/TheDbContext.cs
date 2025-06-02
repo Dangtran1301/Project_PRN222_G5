@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Project_PRN222_G5.DataAccess.Entities.Booking;
+using Project_PRN222_G5.DataAccess.Entities.Bookings;
 using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Entities.Common;
 using Project_PRN222_G5.DataAccess.Entities.Movies;
@@ -10,13 +10,23 @@ using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
 namespace Project_PRN222_G5.DataAccess.Data;
 
-public class TheDbContext(
-    DbContextOptions<TheDbContext> options,
-    IDateTimeService datetimeService,
-    IAuthenticatedUserService authenticatedUserService
-) : DbContext(options), IDbContext
+public class TheDbContext : DbContext, IDbContext
 {
+    private readonly IDateTimeService _dateTimeService;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
+
+    public TheDbContext(
+        DbContextOptions<TheDbContext> options,
+        IDateTimeService dateTimeService,
+        IAuthenticatedUserService authenticatedUserService
+        ) : base(options)
+    {
+        _dateTimeService = dateTimeService;
+        _authenticatedUserService = authenticatedUserService;
+    }
+
     public DatabaseFacade DatabaseFacade => Database;
+
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
     public DbSet<UserResetPassword> UserResetPasswords { get; set; }
@@ -30,21 +40,15 @@ public class TheDbContext(
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-
-        foreach (var property in modelBuilder.Model.GetEntityTypes()
-                     .SelectMany(t => t.GetProperties())
-                     .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
-        {
-            property.SetColumnType("decimal(18,6)");
-        }
-
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.SeedData();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<IBaseAuditable>())
+        var auditableEntries = ChangeTracker.Entries<IBaseAuditable>();
+        foreach (var entry in auditableEntries)
         {
             ApplyAudit(entry.Entity, entry.State);
         }
@@ -57,18 +61,18 @@ public class TheDbContext(
         switch (state)
         {
             case EntityState.Added:
-                entity.CreatedAt = datetimeService.NowUtc;
+                entity.CreatedAt = _dateTimeService.NowUtc;
                 if (entity.CreatedBy == Guid.Empty)
                 {
-                    entity.CreatedBy = Guid.TryParse(authenticatedUserService.UserId, out var userId)
+                    entity.CreatedBy = Guid.TryParse(_authenticatedUserService.UserId, out var userId)
                         ? userId
                         : Guid.Empty;
                 }
                 break;
 
             case EntityState.Modified:
-                entity.UpdatedAt = datetimeService.NowUtc;
-                entity.UpdatedBy = Guid.TryParse(authenticatedUserService.UserId, out var updatedBy)
+                entity.UpdatedAt = _dateTimeService.NowUtc;
+                entity.UpdatedBy = Guid.TryParse(_authenticatedUserService.UserId, out var updatedBy)
                     ? updatedBy
                     : null;
                 break;
