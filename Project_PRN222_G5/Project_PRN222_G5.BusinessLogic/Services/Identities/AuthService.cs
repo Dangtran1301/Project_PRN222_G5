@@ -104,9 +104,9 @@ public class AuthService(
 
         var user = await _unitOfWork.Repository<User>().GetByIdAsync(request.UserId)
                    ?? throw new ValidationException(new Dictionary<string, string[]>
-            {
-                ["User"] = ["User not found."]
-            });
+                   {
+                       ["User"] = ["User not found."]
+                   });
         var newAccessToken = jwtService.GenerateAccessToken(user);
         var newRefreshToken = Guid.NewGuid().ToString();
 

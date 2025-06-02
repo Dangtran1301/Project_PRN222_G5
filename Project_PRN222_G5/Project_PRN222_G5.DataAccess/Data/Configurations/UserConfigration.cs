@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Project_PRN222_G5.DataAccess.Entities.Users;
-using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.DataAccess.Data.Configurations;
 
@@ -35,8 +34,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Gender)
             .HasConversion<string>()
-            .HasMaxLength(10)
-            .HasDefaultValue(Gender.Unknown);
+            .HasMaxLength(10);
 
         builder.Property(x => x.UserStatus)
             .HasConversion<string>()

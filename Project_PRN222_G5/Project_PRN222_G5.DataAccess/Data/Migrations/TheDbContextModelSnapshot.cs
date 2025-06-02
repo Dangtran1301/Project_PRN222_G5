@@ -8,7 +8,7 @@ using Project_PRN222_G5.DataAccess.Data;
 
 #nullable disable
 
-namespace Project_PRN222_G5.Infrastructure.Migrations
+namespace Project_PRN222_G5.DataAccess.Migrations
 {
     [DbContext(typeof(TheDbContext))]
     partial class TheDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Booking.Booking", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Bookings.Booking", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
                     b.Property<decimal>("TotalPrice")
                         .HasPrecision(10, 2)
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -62,9 +62,21 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
+                            BookingTime = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            ShowtimeId = 1,
+                            TotalPrice = 20.00m,
+                            UserId = new Guid("22222222-2222-2222-2222-222222222222")
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Booking.BookingDetail", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Bookings.BookingDetail", b =>
                 {
                     b.Property<Guid>("BookingId")
                         .HasColumnType("uniqueidentifier");
@@ -72,14 +84,31 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Property<Guid>("SeatId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,6)");
+
                     b.HasKey("BookingId", "SeatId");
 
                     b.HasIndex("SeatId");
 
                     b.ToTable("BookingDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            BookingId = new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
+                            SeatId = new Guid("99999999-9999-9999-9999-999999999999"),
+                            Price = 10.00m
+                        },
+                        new
+                        {
+                            BookingId = new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
+                            SeatId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            Price = 10.00m
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Cinema", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,9 +139,27 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cinemas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                            Address = "123 Main Street, Haboi",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Name = "Galaxy Cinema"
+                        },
+                        new
+                        {
+                            Id = new Guid("66666666-6666-6666-6666-666666666666"),
+                            Address = "456 Oak Avenue, Ho Tri Linh City",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Name = "CGV Cinema"
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Room", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,9 +190,27 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasIndex("CinemaId");
 
                     b.ToTable("Rooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("77777777-7777-7777-7777-777777777777"),
+                            CinemaId = new Guid("55555555-5555-5555-5555-555555555555"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Name = "Room 1"
+                        },
+                        new
+                        {
+                            Id = new Guid("88888888-8888-8888-8888-888888888888"),
+                            CinemaId = new Guid("55555555-5555-5555-5555-555555555555"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Name = "Room 2"
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Seat", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Seat", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,9 +241,43 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Seats");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("99999999-9999-9999-9999-999999999999"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoomId = new Guid("77777777-7777-7777-7777-777777777777"),
+                            SeatNumber = "A1"
+                        },
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoomId = new Guid("77777777-7777-7777-7777-777777777777"),
+                            SeatNumber = "A2"
+                        },
+                        new
+                        {
+                            Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoomId = new Guid("77777777-7777-7777-7777-777777777777"),
+                            SeatNumber = "B1"
+                        },
+                        new
+                        {
+                            Id = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoomId = new Guid("77777777-7777-7777-7777-777777777777"),
+                            SeatNumber = "B2"
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Movie", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Movies.Movie", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -223,9 +322,35 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Description = "A thief who steals corporate secrets through dream infiltration technology.",
+                            Duration = 148,
+                            Genre = "Sci-Fi",
+                            PosterPath = "/images/inception.jpg",
+                            Status = "Active",
+                            Title = "Inception"
+                        },
+                        new
+                        {
+                            Id = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Description = "Batman faces the Joker, a criminal mastermind.",
+                            Duration = 152,
+                            Genre = "Action",
+                            PosterPath = "/images/darkknight.jpg",
+                            Status = "Active",
+                            Title = "The Dark Knight"
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Showtime", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Movies.Showtime", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -244,13 +369,13 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -265,9 +390,31 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Showtimes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            MovieId = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                            Price = 10.00m,
+                            RoomId = new Guid("77777777-7777-7777-7777-777777777777"),
+                            StartTime = new DateTimeOffset(new DateTime(2025, 6, 1, 2, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            MovieId = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                            Price = 12.00m,
+                            RoomId = new Guid("88888888-8888-8888-8888-888888888888"),
+                            StartTime = new DateTimeOffset(new DateTime(2025, 6, 1, 4, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0))
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -298,10 +445,8 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("Unknown");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -341,18 +486,46 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Avatar = "/avatars/admin.jpg",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            DayOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@example.com",
+                            FullName = "Admin User",
+                            Gender = "Male",
+                            PasswordHash = "$2b$10$2ZgkaUmY6vSIXTFKg7fpkewjufMZkj2brKEmxNyRFhPv3Ih7bOEte",
+                            PhoneNumber = "0123456789",
+                            Role = "Admin",
+                            UserStatus = "Active",
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Avatar = "/avatars/johndoe.jpg",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
+                            DayOfBirth = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "john.doe@example.com",
+                            FullName = "John Doe",
+                            Gender = "Male",
+                            PasswordHash = "$2b$10$32EfCFLMW5moXFM8dJSP0Ojo37cEfI6rKO7KK5FxFI2jJr2HgakKm",
+                            PhoneNumber = "0987654321",
+                            Role = "Customer",
+                            UserStatus = "Active",
+                            Username = "johndoe"
+                        });
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.UserResetPassword", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.UserResetPassword", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Expiry")
@@ -361,12 +534,6 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -378,7 +545,7 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.ToTable("UserResetPasswords");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.UserToken", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.UserToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -418,15 +585,15 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Booking.Booking", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Bookings.Booking", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Movie.Showtime", "Showtime")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Movies.Showtime", "Showtime")
                         .WithMany("Bookings")
                         .HasForeignKey("ShowtimeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Users.User", "User")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Users.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -437,15 +604,15 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Booking.BookingDetail", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Bookings.BookingDetail", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Booking.Booking", "Booking")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Bookings.Booking", "Booking")
                         .WithMany("BookingDetails")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Cinema.Seat", "Seat")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Cinemas.Seat", "Seat")
                         .WithMany("BookingDetails")
                         .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -456,9 +623,9 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("Seat");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Room", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Room", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Cinema.Cinema", "Cinema")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema", "Cinema")
                         .WithMany("Rooms")
                         .HasForeignKey("CinemaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -467,9 +634,9 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("Cinema");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Seat", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Seat", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Cinema.Room", "Room")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Cinemas.Room", "Room")
                         .WithMany("Seats")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -478,15 +645,15 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Showtime", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Movies.Showtime", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Movie.Movie", "Movie")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Movies.Movie", "Movie")
                         .WithMany("Showtimes")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Cinema.Room", "Room")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Cinemas.Room", "Room")
                         .WithMany("Showtimes")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -497,9 +664,9 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.UserResetPassword", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.UserResetPassword", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Users.User", "User")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Users.User", "User")
                         .WithMany("UserResetPasswords")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -508,9 +675,9 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.UserToken", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.UserToken", b =>
                 {
-                    b.HasOne("Project_PRN222_G5.Domain.Entities.Users.User", "User")
+                    b.HasOne("Project_PRN222_G5.DataAccess.Entities.Users.User", "User")
                         .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -519,39 +686,39 @@ namespace Project_PRN222_G5.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Booking.Booking", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Bookings.Booking", b =>
                 {
                     b.Navigation("BookingDetails");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Cinema", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Cinema", b =>
                 {
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Room", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Room", b =>
                 {
                     b.Navigation("Seats");
 
                     b.Navigation("Showtimes");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Cinema.Seat", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Cinemas.Seat", b =>
                 {
                     b.Navigation("BookingDetails");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Movie", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Movies.Movie", b =>
                 {
                     b.Navigation("Showtimes");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Movie.Showtime", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Movies.Showtime", b =>
                 {
                     b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("Project_PRN222_G5.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("Project_PRN222_G5.DataAccess.Entities.Users.User", b =>
                 {
                     b.Navigation("Bookings");
 

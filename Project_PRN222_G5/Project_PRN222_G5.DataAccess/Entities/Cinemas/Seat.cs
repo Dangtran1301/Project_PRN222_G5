@@ -1,4 +1,4 @@
-﻿using Project_PRN222_G5.DataAccess.Entities.Booking;
+﻿using Project_PRN222_G5.DataAccess.Entities.Bookings;
 using Project_PRN222_G5.DataAccess.Entities.Common;
 
 namespace Project_PRN222_G5.DataAccess.Entities.Cinemas;
