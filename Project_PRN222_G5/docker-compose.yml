@@ -1,22 +1,12 @@
-version: '3.8'
-
 services:
-  webapp:
+    
+  app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5000:8080'
+      - "8080:80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Database=PRN222_G5;User=sa;Password=sa;
-    depends_on:
-      - db
-
-  db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: 'dangngu'
-      ACCEPT_EULA: 'Y'
-    ports:
-      - '1433:1433'
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=host.docker.internal,1433;Database=PRN222_G5;User Id=sa;Password=P@ssword;TrustServerCertificate=True"
+    restart: unless-stopped

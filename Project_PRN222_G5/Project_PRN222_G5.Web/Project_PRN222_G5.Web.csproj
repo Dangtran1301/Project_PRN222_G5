@@ -6,7 +6,13 @@
 	  <Nullable>enable</Nullable>
 	  <PreserveCompilationContext>true</PreserveCompilationContext>
 	  <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+	  <UserSecretsId>75815d58-483f-4d32-8170-fd33b291c035</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Project_PRN222_G5.BusinessLogic\Project_PRN222_G5.BusinessLogic.csproj" />

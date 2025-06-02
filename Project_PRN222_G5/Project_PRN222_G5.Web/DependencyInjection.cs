@@ -21,12 +21,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        #region HttpContextAccessor
-
-        services.AddHttpContextAccessor();
-
-        #endregion HttpContextAccessor
-
         #region Service
 
         services.AddScoped<IAuthService, AuthService>();
@@ -47,10 +41,20 @@ public static class DependencyInjection
         #region DbContext
 
         services.AddDbContext<TheDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions => sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null)));
         services.AddScoped<IDbContext, TheDbContext>();
 
         #endregion DbContext
+
+        #region HttpContextAccessor
+
+        services.AddHttpContextAccessor();
+
+        #endregion HttpContextAccessor
 
         #region UnitOfWork, Service
 
