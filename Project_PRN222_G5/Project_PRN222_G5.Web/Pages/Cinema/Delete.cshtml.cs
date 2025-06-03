@@ -15,7 +15,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                var cinema = await cinemaService.GetByIdAsync(id.Value);
+                var cinema = await cinemaService.GetByIdAsync(id!.Value);
                 Cinema = cinema;
                 return Page();
             }
@@ -30,7 +30,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                await cinemaService.DeleteAsync(id.Value);
+                await cinemaService.DeleteAsync(id!.Value);
                 return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception ex)

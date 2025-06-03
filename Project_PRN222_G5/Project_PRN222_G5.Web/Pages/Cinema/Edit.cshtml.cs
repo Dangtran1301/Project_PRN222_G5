@@ -17,7 +17,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                var cinema = await cinemaService.GetByIdAsync(id.Value);
+                var cinema = await cinemaService.GetByIdAsync(id!.Value);
 
                 CinemaId = id.Value;
                 CinemaDto = new UpdateCinemaDto

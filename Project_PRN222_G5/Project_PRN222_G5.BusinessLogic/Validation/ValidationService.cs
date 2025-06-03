@@ -3,6 +3,7 @@ using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.ComponentModel.DataAnnotations;
+using ValidationException = Project_PRN222_G5.BusinessLogic.Exceptions.ValidationException;
 
 namespace Project_PRN222_G5.BusinessLogic.Validation;
 
@@ -30,11 +31,6 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
                 g => g.Select(v => v.ErrorMessage ?? "Invalid value").ToArray()
             );
 
-        if (errors.Any())
-        {
-            throw new Exceptions.ValidationException(errors);
-        }
-
         return errors;
     }
 
@@ -53,8 +49,8 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
         var repo = unitOfWork.Repository<Cinema>();
 
         var exists = excludingId.HasValue
-            ? await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower() && c.Id != excludingId.Value)
-            : await repo.AnyAsync(c => c.Name.ToLower() == name.ToLower());
+            ? await repo.AnyAsync(c => string.Equals(name, c.Name, StringComparison.OrdinalIgnoreCase) && c.Id != excludingId.Value)
+            : await repo.AnyAsync(c => string.Equals(name, c.Name, StringComparison.OrdinalIgnoreCase));
 
         if (exists)
         {

@@ -1,5 +1,5 @@
 ﻿@page "{id:guid}"
-@using Project_PRN222_G5.Web.Utilities
+@using Project_PRN222_G5.Web.Pages.Shared.PartialViews
 @model EditModel
 @{
     ViewData["Title"] = "Edit User";
@@ -8,41 +8,11 @@
 
 <h1>Edit User</h1>
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.Fullname" class="form-label"></label>
-        <input asp-for="Input.Fullname" class="form-control" />
-        <span asp-validation-for="Input.Fullname" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.PhoneNumber" class="form-label"></label>
-        <input asp-for="Input.PhoneNumber" class="form-control" />
-        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.DayOfBirth" class="form-label">Email</label>
-        <input asp-for="Input.DayOfBirth" class="form-control" />
-        <span asp-validation-for="Input.DayOfBirth" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.Gender" class="form-label"></label>
-        <select asp-for="Input.Gender" asp-items="@Model.Genders" class="form-control">
-            <option value="">-- Select Role --</option>
-        </select>
-        <span asp-validation-for="Input.Gender" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Input.Avatar" class="form-label"></label>
-        <input asp-for="Input.Avatar" class="form-control" type="file"/>
-        <span asp-validation-for="Input.Avatar" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Edit</button>
-        <a asp-page="@PageRoutes.Users.Index" class="btn btn-secondary">Back to list</a>
-    </div>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+@await Html.PartialAsync("Shared/PartialViews/_GenericForm", new _GenericFormModel
+{
+    Data = Model.Input,
+    ExtraSelectLists = new Dictionary<string, List<SelectListItem>>
+    {
+        ["Gender"] = Model.Genders
+    }
+})

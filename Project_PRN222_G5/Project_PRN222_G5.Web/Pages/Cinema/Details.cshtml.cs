@@ -13,7 +13,7 @@ namespace Project_PRN222_G5.Web.Pages.Cinema
         {
             try
             {
-                Cinema = await cinemaService.GetByIdAsync(id.Value);
+                Cinema = await cinemaService.GetByIdAsync(id!.Value);
                 return Page();
             }
             catch (Exception ex)
