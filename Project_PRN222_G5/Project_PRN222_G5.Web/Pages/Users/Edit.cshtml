@@ -8,11 +8,11 @@
 
 <h1>Edit User</h1>
 
-@await Html.PartialAsync("Shared/PartialViews/_GenericForm", new _GenericFormModel
+@await Html.PartialAsync("Shared/PartialViews/_GenericForm", new _GenericFormModel()
 {
     Data = Model.Input,
     ExtraSelectLists = new Dictionary<string, List<SelectListItem>>
     {
-        ["Role"] = Model.Roles
+        ["Gender"] = Model.Genders
     }
-} )
+})
