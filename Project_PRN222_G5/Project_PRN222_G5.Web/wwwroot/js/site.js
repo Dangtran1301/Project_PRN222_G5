@@ -27,3 +27,18 @@ function checkAndRefreshToken() {
 }
 
 setInterval(checkAndRefreshToken, 60000 * 15);
+
+function previewImage(input, previewId) {
+    const file = input.files[0];
+    const img = document.getElementById(previewId);
+
+    if (file && img) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+            img.style.display = 'block';      // Hiện ảnh
+            img.classList.remove('d-none');   // Xóa class ẩn nếu có
+        };
+        reader.readAsDataURL(file);
+    }
+}

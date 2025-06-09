@@ -13,11 +13,11 @@
             var options = Enum.GetValues(prop.PropertyType)
                 .Cast<object>()
                 .Select(val => new SelectListItem
-                        {
-                            Text = val.ToString(),
-                            Value = val.ToString(),
-                            Selected = val.ToString() == currentValue
-                        }).ToList();
+                {
+                    Text = val.ToString(),
+                    Value = val.ToString(),
+                    Selected = val.ToString() == currentValue
+                }).ToList();
 
             enumSelectLists[prop.Name] = options;
         }
@@ -55,7 +55,11 @@
             }
             else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
             {
-                <input name="@prop.Name" class="form-control" type="date" value="@(prop.GetValue(Model.Data)?.ToString()?.Split(' ')[0])" />
+
+                var dateValue = prop.GetValue(Model.Data) as DateTime?;
+                var formattedDate = dateValue?.ToString("yyyy-MM-dd");
+
+                <input name="@prop.Name" class="form-control" type="date" value="@formattedDate" />
             }
             else if (prop.Name.ToLower().Contains("password"))
             {
@@ -63,7 +67,20 @@
             }
             else if (prop.PropertyType == typeof(IFormFile))
             {
-                <input name="@prop.Name" class="form-control" type="file" />
+
+                var fileName = prop.GetValue(Model.Data)?.ToString();
+                var imageId = $"preview_{prop.Name}";
+
+                @if (!string.IsNullOrEmpty(fileName))
+                {
+                    <img id="@imageId" src="@fileName" class="img-thumbnail mb-2" style="max-height: 150px;" alt=""/>
+                }
+                else
+                {
+                    <img id="@imageId" class="img-thumbnail mb-2 d-none" style="max-height: 150px;" alt=""/>
+                }
+
+                <input name="@prop.Name" class="form-control" type="file" accept="image/*" onchange="previewImage(this, '@imageId')" />
             }
             else
             {
@@ -75,3 +92,23 @@
     <button type="submit" class="btn btn-primary">Save</button>
     <a asp-page="Index" class="btn btn-secondary">Cancel</a>
 </form>
+@section Scripts {
+    <script>
+        function previewImage(input, imageId) {
+            const file = input.files[0];
+            const img = document.getElementById(imageId);
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                    img.classList.remove("d-none");
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "";
+                img.classList.add("d-none");
+            }
+        }
+    </script>
+}

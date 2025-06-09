@@ -8,6 +8,7 @@ using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -15,7 +16,8 @@ public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
     IJwtService jwtService,
-    IAuthenticatedUserService authenticatedUserService
+    IAuthenticatedUserService authenticatedUserService,
+    IMediaService mediaService
     ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -120,11 +122,33 @@ public class AuthService(
         return new LoginResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
     }
 
+    public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request)
+    {
+        var errors = _validationService.Validate(request);
+        if (errors.Any())
+        {
+            throw new ValidationException(errors);
+        }
+
+        var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new ValidationException("User not found.");
+        }
+
+        await entity.UpdateEntityAsync(request, mediaService);
+
+        _unitOfWork.Repository<User>().Update(entity);
+        await _unitOfWork.CompleteAsync();
+
+        return MapToResponse(entity);
+    }
+
     public override UserResponse MapToResponse(User entity) => entity.ToResponse();
 
     public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 
-    public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request);
+    public override void UpdateEntity(User entity, UpdateInfoUser request) => _ = entity.UpdateEntityAsync(request, mediaService);
 
     protected override Expression<Func<User, string>>[] GetSearchFields() =>
     [

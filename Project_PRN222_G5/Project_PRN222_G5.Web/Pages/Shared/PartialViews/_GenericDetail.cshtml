@@ -10,7 +10,24 @@
     {
         <tr>
             <th>@prop.Name</th>
-            <td>@prop.GetValue(Model)</td>
+            <td>
+                @if (prop.Name.Equals("Avatar", StringComparison.OrdinalIgnoreCase))
+                {
+                    var avatarPath = prop.GetValue(Model)?.ToString();
+                    if (!string.IsNullOrWhiteSpace(avatarPath))
+                    {
+                        <img src="~/@avatarPath" alt="Avatar" width="100" height="100" class="rounded-circle border" />
+                    }
+                    else
+                    {
+                        <span>(No avatar)</span>
+                    }
+                }
+                else
+                {
+                    @prop.GetValue(Model)
+                }
+            </td>
         </tr>
     }
     </tbody>

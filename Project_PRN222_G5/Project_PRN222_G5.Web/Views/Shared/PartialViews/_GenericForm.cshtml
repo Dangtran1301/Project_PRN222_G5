@@ -1,0 +1,66 @@
+﻿@using Project_PRN222_G5.Web.Utilities
+@model Project_PRN222_G5.Web.Views.Shared.PartialViews._GenericFormModel
+
+@{
+    const string MarginBottomClass = "mb-3";
+    const string ButtonPrimaryClass = "btn btn-primary";
+    const string ButtonSecondaryClass = "btn btn-secondary";
+
+    var props = Model.Data.GetType().GetProperties();
+    var isEdit = props.Any(p => p.Name == "Id");
+    var selectLists = new Dictionary<string, List<SelectListItem>>();
+
+    // Generate select lists for enum properties
+    foreach (var prop in props.Where(p => p.PropertyType.IsEnum))
+    {
+        var currentValue = prop.GetValue(Model.Data)?.ToString();
+        var options = Enum.GetValues(prop.PropertyType)
+            .Cast<Enum>()
+            .Select(val => new SelectListItem
+            {
+                Text = HtmlUtil.GetEnumDisplayName(val),
+                Value = val.ToString(),
+                Selected = val.ToString() == currentValue
+            }).ToList();
+        selectLists[prop.Name] = options;
+    }
+
+    // Merge extra select lists, allowing overrides
+    if (Model.ExtraSelectLists != null)
+    {
+        foreach (var kv in Model.ExtraSelectLists)
+        {
+            selectLists[kv.Key] = kv.Value;
+        }
+    }
+}
+
+<form method="post" enctype="multipart/form-data" asp-page="@(isEdit ? "Edit" : "Create")">
+    @* Hidden ID field for edit mode *@
+    @if (isEdit)
+    {
+        var idProp = props.FirstOrDefault(p => p.Name == "Id");
+        if (idProp != null)
+        {
+            <input type="hidden" name="Id" value="@idProp.GetValue(Model.Data)" />
+        }
+    }
+
+    @* Dynamic form fields *@
+    @foreach (var prop in props.Where(p => p.Name != "Id"))
+    {
+        var displayName = HtmlUtil.GetDisplayName(prop);
+        var inputName = prop.Name;
+
+        <div class="@MarginBottomClass">
+            <label class="form-label" for="@inputName">@displayName</label>
+            @Html.Raw(HtmlUtil.GenerateInput(prop, Model.Data, selectLists))
+        </div>
+    }
+
+    @* Form buttons *@
+    <div class="@MarginBottomClass">
+        <button type="submit" class="@ButtonPrimaryClass">Save</button>
+        <a asp-page="Index" class="@ButtonSecondaryClass">Cancel</a>
+    </div>
+</form>

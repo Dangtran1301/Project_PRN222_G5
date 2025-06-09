@@ -1,11 +1,11 @@
-﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
-using Project_PRN222_G5.DataAccess.Entities.Users;
+﻿using Microsoft.AspNetCore.Http;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using System.ComponentModel.DataAnnotations;
+using Project_PRN222_G5.BusinessLogic.Extensions;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 
-public class UpdateInfoUser : IMapTo<User>
+public class UpdateInfoUser
 {
     [Required(ErrorMessage = "Full name is required")]
     public string Fullname { get; set; } = string.Empty;
@@ -19,15 +19,7 @@ public class UpdateInfoUser : IMapTo<User>
     [EnumDataType(typeof(Gender))]
     public string Gender { get; set; } = string.Empty;
 
-    [FileExtensions(Extensions = "jpg,jpeg,png")]
-    public string Avatar { get; set; } = string.Empty;
-
-    public User ToEntity() => new()
-    {
-        FullName = Fullname,
-        PhoneNumber = PhoneNumber,
-        DayOfBirth = DayOfBirth,
-        Gender = Enum.Parse<Gender>(Gender, true),
-        Avatar = Avatar,
-    };
+    [Extensions([".jpg", ".jpeg", ".png"])]
+    [ImageDisplay(MaxHeight = 100, Shape = ImageShape.Circle, CssClass = "img-circle", Alt = "User Avatar")]
+    public IFormFile? Avatar { get; set; }
 }
