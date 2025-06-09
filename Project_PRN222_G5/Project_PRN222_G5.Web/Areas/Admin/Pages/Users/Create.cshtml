@@ -1,0 +1,18 @@
+﻿@page
+@using _GenericFormModel = Project_PRN222_G5.Web.Pages.Shared.PartialViews._GenericFormModel
+@model Project_PRN222_G5.Web.Areas.Admin.Pages.Users.CreateModel
+@{
+    ViewData["Title"] = "Create User";
+    Layout = "_Layout";
+}
+
+<h1>Create User</h1>
+
+@await Html.PartialAsync("PartialViews/_GenericForm", new _GenericFormModel()
+{
+    Data = Model.Input,
+    ExtraSelectLists = new Dictionary<string, List<SelectListItem>>
+    {
+        ["Role"] = Model.Roles
+    }
+})

@@ -14,6 +14,8 @@ using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using Project_PRN222_G5.DataAccess.Service;
 using Project_PRN222_G5.DataAccess.UnitOfWork;
 using System.Text;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+using Project_PRN222_G5.BusinessLogic.Services;
 
 namespace Project_PRN222_G5.Web;
 
@@ -36,6 +38,9 @@ public static class DependencyInjection
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<ITokenValidator, TokenValidator>();
         services.AddScoped<ICookieService, CookieService>();
+
+        services.AddScoped<IStorageService,DiskStorageService>();
+        services.AddScoped<IMediaService, MediaService>();
 
         #endregion Service
 

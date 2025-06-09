@@ -11,7 +11,6 @@ namespace Project_PRN222_G5.DataAccess.Data
     public static class DataSeeder
     {
         private static readonly DateTimeOffset SeedDate = new(2025, 6, 1, 0, 0, 0, TimeSpan.FromHours(7));
-        private static readonly string PasswordHash = "$2b$10$2ZgkaUmY6vSIXTFKg7fpkewjufMZkj2brKEmxNyRFhPv3Ih7bOEte"; // Admin123!
 
         public static void SeedData(this ModelBuilder modelBuilder)
         {

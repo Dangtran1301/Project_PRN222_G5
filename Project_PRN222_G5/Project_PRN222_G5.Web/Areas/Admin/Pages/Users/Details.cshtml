@@ -1,0 +1,10 @@
+﻿@page
+@model Project_PRN222_G5.Web.Areas.Admin.Pages.Users.DetailsModel
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "_Layout";
+}
+
+<h1>User Details</h1>
+
+<partial name="PartialViews/_GenericDetail" model="@Model.User"/>
