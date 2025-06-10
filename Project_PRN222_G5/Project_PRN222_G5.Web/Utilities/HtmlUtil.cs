@@ -47,9 +47,14 @@ public static class HtmlUtil
         // Enum select list
         if (selectLists?.TryGetValue(inputName, out var options) == true)
         {
-            return new HtmlString($@"
-                <select name=""{inputName}"" class=""{formControlClass}"" id=""{inputId}"" asp-items=""@options""></select>
-            ");
+            var html = $"<select name=\"{inputName}\" class=\"form-control\">";
+            foreach (var opt in options)
+            {
+                var selected = opt.Selected ? "selected" : "";
+                html += $"<option value=\"{opt.Value}\" {selected}>{opt.Text}</option>";
+            }
+            html += "</select>";
+            return new HtmlString(html);
         }
         // DateTime or Nullable<DateTime>
         else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
@@ -130,9 +135,11 @@ public static class HtmlUtil
                 case ImageShape.Circle:
                     style += " border-radius:50%; object-fit:cover;";
                     break;
+
                 case ImageShape.Square:
                     style += $" width:{imageAttr.MaxHeight}px; height:{imageAttr.MaxHeight}px; object-fit:cover;";
                     break;
+
                 case ImageShape.Rectangle:
                 default:
                     break;

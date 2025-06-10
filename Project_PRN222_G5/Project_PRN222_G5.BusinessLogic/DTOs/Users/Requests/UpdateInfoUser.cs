@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Project_PRN222_G5.BusinessLogic.Extensions;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using System.ComponentModel.DataAnnotations;
-using Project_PRN222_G5.BusinessLogic.Extensions;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 

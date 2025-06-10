@@ -18,6 +18,7 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .HasColumnType("nvarchar(max)");
 
         builder.Property(x => x.Genre)
+            .HasConversion<string>()
             .HasMaxLength(50);
 
         builder.Property(x => x.PosterPath)

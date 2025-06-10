@@ -9,11 +9,12 @@ public class Startup(IConfiguration configuration)
 
     public void ConfigureServices(IServiceCollection services)
     {
-        #region Razor Pages
+        #region Razor Pages & MVC
 
         services.AddRazorPages();
+        services.AddControllersWithViews();
 
-        #endregion Razor Pages
+        #endregion Razor Pages & MVC
 
         #region Services
 
@@ -45,7 +46,7 @@ public class Startup(IConfiguration configuration)
     {
         if (env.IsDevelopment())
         {
-            app.UseExceptionHandler(PageRoutes.Public.Error);
+            app.UseDeveloperExceptionPage();
         }
         else
         {
@@ -61,10 +62,16 @@ public class Startup(IConfiguration configuration)
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseLoggerMiddleware();
         app.UseAuthorizationMiddleware();
+        app.UseLoggerMiddleware();
 
-        app.UseEndpoints(endpoints => endpoints.MapRazorPages()
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapRazorPages();
+        }
         );
     }
 }

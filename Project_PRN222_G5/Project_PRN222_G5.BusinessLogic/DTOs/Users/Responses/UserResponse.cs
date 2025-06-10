@@ -1,4 +1,5 @@
 ﻿using Project_PRN222_G5.BusinessLogic.Extensions;
+using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 
 namespace Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 
@@ -11,7 +12,9 @@ public class UserResponse
     public DateTime? DayOfBirth { get; set; }
     public string Gender { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
-    [ImageDisplay("User avatar", "img-thumbnail shadow", 120,Shape = ImageShape.Circle)]
+
+    [ImageDisplay("User avatar", "img-thumbnail shadow", 120, Shape = ImageShape.Circle)]
     public string Avatar { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty;
+
+    public Role Role { get; set; }
 }

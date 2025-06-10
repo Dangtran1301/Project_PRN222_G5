@@ -7,6 +7,7 @@ namespace Project_PRN222_G5.BusinessLogic.Services;
 public class MediaService(IStorageService storageService) : IMediaService
 {
     private const string RootFolder = "uploads";
+
     public async Task<string> UploadImageAsync(IFormFile file, string folder = RootFolder)
     {
         if (file == null || file.Length == 0)

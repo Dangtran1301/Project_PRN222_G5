@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.BusinessLogic.Services;
 using Project_PRN222_G5.BusinessLogic.Services.Cinema;
 using Project_PRN222_G5.BusinessLogic.Services.Identities;
 using Project_PRN222_G5.BusinessLogic.Validation;
@@ -14,8 +16,6 @@ using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using Project_PRN222_G5.DataAccess.Service;
 using Project_PRN222_G5.DataAccess.UnitOfWork;
 using System.Text;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
-using Project_PRN222_G5.BusinessLogic.Services;
 
 namespace Project_PRN222_G5.Web;
 
@@ -39,7 +39,7 @@ public static class DependencyInjection
         services.AddScoped<ITokenValidator, TokenValidator>();
         services.AddScoped<ICookieService, CookieService>();
 
-        services.AddScoped<IStorageService,DiskStorageService>();
+        services.AddScoped<IStorageService, DiskStorageService>();
         services.AddScoped<IMediaService, MediaService>();
 
         #endregion Service

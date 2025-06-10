@@ -9,7 +9,7 @@ public class AuthorizationMiddleware(RequestDelegate next, ILogger<Authorization
     {
         var path = context.Request.Path;
 
-        if (path.StartsWithSegments("/Users"))
+        if (path.StartsWithSegments("/Admin/**"))
         {
             if (!context.User.Identity?.IsAuthenticated ?? true)
             {
@@ -29,6 +29,30 @@ public class AuthorizationMiddleware(RequestDelegate next, ILogger<Authorization
                 logger.LogWarning("Unauthorized access attempt to {Path} by user without Admin role", path);
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 await context.Response.WriteAsync("Forbidden: Admin access required.");
+                return;
+            }
+        }
+
+        if (path.StartsWithSegments("/Staff/**"))
+        {
+            if (!context.User.Identity?.IsAuthenticated ?? true)
+            {
+                logger.LogWarning("Unauthenticated access attempt to {Path}", path);
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsync("Unauthorized: Please log in.");
+                return;
+            }
+
+            var roles = context.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains(nameof(Role.Staff)))
+            {
+                logger.LogWarning("Unauthorized access attempt to {Path} by user without Staff role", path);
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await context.Response.WriteAsync("Forbidden: Staff access required.");
                 return;
             }
         }

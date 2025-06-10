@@ -1,0 +1,247 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+}
+<style>
+        .movie-poster {
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .movie-card {
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: scale(1.03);
+        }
+        .showtime-item {
+            border-left: 3px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 10px;
+        }
+    </style>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Đặt Vé Xem Phim</h1>
+    <p class="text-center text-muted">Khám phá các bộ phim đang chiếu và đặt vé ngay hôm nay!</p>
+@* @foreach (var movie in Model)
+{
+    <div class="col-md-4 mb-4">
+        <div class="card movie-card shadow-sm">
+            <img src="@movie.PosterUrl" class="card-img-top movie-poster" alt="Movie Poster" />
+            <div class="card-body">
+                <h5 class="card-title">@movie.Title</h5>
+                <p class="card-text"><strong>Thể loại:</strong> @movie.Genre</p>
+                <p class="card-text"><strong>Thời lượng:</strong> @movie.Duration phút</p>
+                <p class="card-text">@movie.Description</p>
+                <h6>Suất chiếu</h6>
+                @foreach (var showtime in movie.Showtimes)
+                {
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> @showtime.Time.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p class="mb-1"><strong>Phòng:</strong> @showtime.Room</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> @showtime.Price.ToString("N0") VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+ *@
+    <!-- Movie List -->
+    <div class="row">
+        <!-- Movie 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">Avengers: Endgame</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Hành động, Khoa học viễn tưởng</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 181 phút</p>
+                    <p class="card-text">Siêu anh hùng đoàn kết để cứu vũ trụ.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 19:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 1</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 120,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 21:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 2</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 130,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 14:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 3</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 110,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Movie 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">The Matrix</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Khoa học viễn tưởng, Hành động</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 136 phút</p>
+                    <p class="card-text">Cuộc chiến giữa con người và máy móc.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 18:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 4</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 100,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 20:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 5</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 110,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 15:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 6</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 115,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Movie 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">Titanic</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Lãng mạn, Bi kịch</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 195 phút</p>
+                    <p class="card-text">Câu chuyện tình yêu trên con tàu định mệnh.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 17:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 7</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 130,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 20:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 8</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 140,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 13:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 9</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 125,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Movie 4 -->
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">Inception</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Khoa học viễn tưởng, Hành động</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 148 phút</p>
+                    <p class="card-text">Cuộc xâm nhập vào giấc mơ đầy bí ẩn.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 19:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 10</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 115,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 22:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 11</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 120,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 16:00</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 12</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 110,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Movie 5 -->
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">La La Land</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Lãng mạn, Nhạc kịch</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 128 phút</p>
+                    <p class="card-text">Câu chuyện tình yêu đầy cảm xúc tại Hollywood.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 18:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 13</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 105,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 21:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 14</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 115,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 14:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 15</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 100,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card movie-card shadow-sm">
+                <img src="https://via.placeholder.com/300x300?text=Poster+5" class="card-img-top movie-poster" alt="Movie Poster">
+                <div class="card-body">
+                    <h5 class="card-title">La La Land</h5>
+                    <p class="card-text"><strong>Thể loại:</strong> Lãng mạn, Nhạc kịch</p>
+                    <p class="card-text"><strong>Thời lượng:</strong> 128 phút</p>
+                    <p class="card-text">Câu chuyện tình yêu đầy cảm xúc tại Hollywood.</p>
+                    <h6>Suất chiếu</h6>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 18:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 13</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 105,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 10/06/2025 21:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 14</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 115,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                    <div class="showtime-item">
+                        <p class="mb-1"><strong>Thời gian:</strong> 11/06/2025 14:30</p>
+                        <p class="mb-1"><strong>Phòng:</strong> Phòng 15</p>
+                        <p class="mb-1"><strong>Giá vé:</strong> 100,000 VNĐ</p>
+                        <button class="btn btn-primary btn-sm">Đặt vé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        // Placeholder for booking button functionality
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Chức năng đặt vé đang được phát triển!');
+            });
+        });
+    </script>
