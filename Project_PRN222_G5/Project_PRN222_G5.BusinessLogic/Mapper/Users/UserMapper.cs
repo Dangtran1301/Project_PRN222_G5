@@ -20,7 +20,7 @@ public static class UserMapper
             ? "images/default-avatar.jpg"
             : entity.Avatar,
         Gender = entity.Gender.ToString(),
-        Role = entity.Role.ToString()
+        Role = entity.Role
     };
 
     public static async Task UpdateEntityAsync(this User entity, UpdateInfoUser request, IMediaService mediaService)

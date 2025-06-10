@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Project_PRN222_G5.BusinessLogic.Extensions;
@@ -14,6 +14,7 @@ public static class MediaExtensions
         var hash = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
         return $"{hash}{fileExt}";
     }
+
     public static string ToEncryptedFileName(this IFormFile file)
     {
         var extension = Path.GetExtension(file.FileName);

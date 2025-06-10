@@ -1,6 +1,7 @@
 ﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Users;
@@ -8,7 +9,6 @@ using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -120,6 +120,11 @@ public class AuthService(
         await _unitOfWork.CompleteAsync();
 
         return new LoginResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+    }
+
+    public async Task<UserResponse> GetUserByUsernameAsync(string username)
+    {
+        return MapToResponse((await _unitOfWork.Repository<User>().FindAsync(x => x.Username == username)).FirstOrDefault(new User()));
     }
 
     public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request)

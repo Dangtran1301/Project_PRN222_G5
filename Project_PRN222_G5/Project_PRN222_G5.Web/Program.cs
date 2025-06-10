@@ -4,7 +4,6 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        // Read Configuration from appsettings
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
             .Build();

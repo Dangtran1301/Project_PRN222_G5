@@ -28,7 +28,8 @@ public class ImageDisplayAttribute : Attribute
     public int MaxHeight { get; set; } = 150;
     public ImageShape Shape { get; set; } = ImageShape.Rectangle;
 
-    public ImageDisplayAttribute() { }
+    public ImageDisplayAttribute()
+    { }
 
     public ImageDisplayAttribute(string alt, string cssClass = "img-thumbnail", int maxHeight = 150, ImageShape shape = ImageShape.Rectangle)
     {
