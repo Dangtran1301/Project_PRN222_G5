@@ -8,7 +8,7 @@ using Project_PRN222_G5.Web.Pages.Shared.Models;
 
 namespace Project_PRN222_G5.Web.Pages.Cinema
 {
-    [Authorize(Roles = nameof(Role.Admin))]
+    [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.Staff)}")]
     public class IndexModel(ICinemaService cinemaService) : BasePageModel
     {
         [BindProperty(SupportsGet = true)]
