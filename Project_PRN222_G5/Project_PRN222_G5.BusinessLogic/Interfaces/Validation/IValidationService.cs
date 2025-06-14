@@ -7,4 +7,6 @@ public interface IValidationService
     Task ValidateUniqueUserAsync(string username, string email);
 
     Task ValidateUniqueCinemaAsync(string name, Guid? excludingId = null);
+
+    Task ValidateCinemaCanBeDeletedAsync(Guid cinemaId);
 }

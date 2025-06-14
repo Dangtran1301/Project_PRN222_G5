@@ -48,6 +48,16 @@ public class CinemaService(
         return entity.ToCinemaResponse();
     }
 
+    public override async Task DeleteAsync(Guid id)
+    {
+        await _validationService.ValidateCinemaCanBeDeletedAsync(id);
+
+        var cinema = await _unitOfWork.Repository<DataAccess.Entities.Cinemas.Cinema>().GetByIdAsync(id);
+        _unitOfWork.Repository<DataAccess.Entities.Cinemas.Cinema>().Delete(cinema);
+        await _unitOfWork.CompleteAsync();
+    }
+
+
     protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
         [
             x=>x.Address,
