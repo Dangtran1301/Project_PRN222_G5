@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response.CinemaResponse>
+@{
+    ViewData["Title"] = "Cinema List";
+}
+
+<h1>All Cinemas</h1>
+
+<form method="get" asp-action="Index" class="mb-3 d-flex gap-2">
+    <input type="text" name="search" value="@ViewBag.Search" placeholder="Search by name or address" class="form-control" />
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+</form>
+
+@if (!Model.Any())
+{
+    <p>No cinema found matching your search.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Address</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
