@@ -14,8 +14,8 @@ namespace Project_PRN222_G5.Web.Controllers;
 public class AuthController(
     IAuthService authService,
     ICookieService cookieService,
-    IAuthenticatedUserService authenticatedUserService
-    , ILogger<AuthController> logger) : Controller
+    IAuthenticatedUserService authenticatedUserService,
+    ILogger<AuthController> logger) : Controller
 {
     [HttpGet]
     public IActionResult Login() => View();

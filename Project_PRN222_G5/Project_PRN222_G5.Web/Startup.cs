@@ -7,6 +7,7 @@ namespace Project_PRN222_G5.Web;
 public class Startup(IConfiguration configuration)
 {
     private IConfiguration Configuration { get; } = configuration;
+    private const string Unknown = "unknown";
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -19,10 +20,10 @@ public class Startup(IConfiguration configuration)
         {
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 RateLimitPartition.GetFixedWindowLimiter(
-                    partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? Unknown,
                     factory: _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 10,
+                        PermitLimit = 60,
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0,
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst
