@@ -9,6 +9,7 @@ using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Logging;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -17,8 +18,8 @@ public class AuthService(
     IValidationService validationService,
     IJwtService jwtService,
     IAuthenticatedUserService authenticatedUserService,
-    IMediaService mediaService
-    ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
+    IMediaService mediaService,
+    ILogger<AuthService> logger) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IValidationService _validationService = validationService;
@@ -80,13 +81,23 @@ public class AuthService(
 
     public async Task LogoutAsync(Guid userId, string refreshToken)
     {
-        var tokens = await _unitOfWork.Repository<UserToken>()
+        if (string.IsNullOrWhiteSpace(refreshToken)) return;
+
+        var token = await _unitOfWork.Repository<UserToken>()
             .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
-        var token = tokens.FirstOrDefault();
-        if (token != null)
+
+        var existingToken = token.FirstOrDefault();
+        if (existingToken != null)
         {
-            _unitOfWork.Repository<UserToken>().Delete(token);
+            _unitOfWork.Repository<UserToken>().Delete(existingToken);
             await _unitOfWork.CompleteAsync();
+        }
+        else
+        {
+            var logoutFailedEvent = new EventId(1001, "LogoutFailed");
+            logger.LogWarning(logoutFailedEvent,
+                "Logout failed: No refresh token found for user {UserId} with token {RefreshToken}",
+                userId, refreshToken);
         }
     }
 

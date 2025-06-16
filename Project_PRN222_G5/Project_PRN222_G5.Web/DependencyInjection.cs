@@ -15,6 +15,7 @@ using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using Project_PRN222_G5.DataAccess.Service;
 using Project_PRN222_G5.DataAccess.UnitOfWork;
+using Project_PRN222_G5.Web.Utilities;
 using System.Text;
 
 namespace Project_PRN222_G5.Web;
@@ -50,14 +51,13 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region DbContext
-
+        services.AddScoped<IDbContext, TheDbContext>();
         services.AddDbContext<TheDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 sqlOptions => sqlOptions.EnableRetryOnFailure(
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorNumbersToAdd: null)));
-        services.AddScoped<IDbContext, TheDbContext>();
 
         #endregion DbContext
 
@@ -72,37 +72,23 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCookieAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration
-                    ["Jwt:Key"]!))
-            };
+        #region Cookie
 
-            options.Events = new JwtBearerEvents
+        services.AddAuthentication("Cookies")
+            .AddCookie("Cookies", options =>
             {
-                OnMessageReceived = context =>
-                {
-                    context.Token = context.Request.Cookies["AccessToken"];
-                    return Task.CompletedTask;
-                }
-            };
-            options.MapInboundClaims = false;
-        });
+                options.LoginPath = PageRoutes.Auth.Login;
+                options.AccessDeniedPath = "/Auth/AccessDenied";
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
+
+        #endregion Cookie
 
         return services;
     }

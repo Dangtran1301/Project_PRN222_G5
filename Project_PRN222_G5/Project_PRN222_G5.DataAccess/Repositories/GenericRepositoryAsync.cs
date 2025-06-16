@@ -22,7 +22,7 @@ namespace Project_PRN222_G5.DataAccess.Repositories
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)
-                   ?? throw new ValidationException($"{nameof(TEntity)} with id {id} not found.");
+                   ?? throw new ValidationException($"{typeof(TEntity).Name} with id {id} not found.");
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

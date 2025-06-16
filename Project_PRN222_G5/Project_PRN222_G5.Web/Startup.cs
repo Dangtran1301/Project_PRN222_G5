@@ -1,5 +1,6 @@
 ﻿using Project_PRN222_G5.Web.Middleware;
 using Project_PRN222_G5.Web.Utilities;
+using System.Threading.RateLimiting;
 
 namespace Project_PRN222_G5.Web;
 
@@ -14,6 +15,22 @@ public class Startup(IConfiguration configuration)
         services.AddRazorPages();
         services.AddControllersWithViews();
 
+        services.AddRateLimiter(options =>
+        {
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 10,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0,
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+                    }));
+
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        });
+
         #endregion Razor Pages & MVC
 
         #region Services
@@ -21,25 +38,10 @@ public class Startup(IConfiguration configuration)
         services
             .AddApplicationServices(Configuration)
             .AddInfrastructureServices(Configuration)
-            .AddJwtAuthentication(Configuration)
+            .AddCookieAuthentication(Configuration)
             .AddCustomLogging();
 
         #endregion Services
-
-        #region Cookie
-
-        services.AddAuthentication("Cookies")
-            .AddCookie("Cookies", options =>
-            {
-                options.LoginPath = PageRoutes.Auth.Login;
-                options.AccessDeniedPath = "/Auth/AccessDenied";
-                options.ExpireTimeSpan = TimeSpan.FromDays(7);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-            });
-
-        #endregion Cookie
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -53,15 +55,13 @@ public class Startup(IConfiguration configuration)
             app.UseHsts();
             app.UseExceptionHandler(PageRoutes.Public.Error);
         }
-
+        app.UseRateLimiter();
         app.UseHttpsRedirection();
-
+        app.UseMiddleware<RequestTimeoutMiddleware>(TimeSpan.FromSeconds(10));
         app.UseRouting();
         app.UseStaticFiles();
-
         app.UseAuthentication();
         app.UseAuthorization();
-
         app.UseAuthorizationMiddleware();
         app.UseLoggerMiddleware();
 
