@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
@@ -16,7 +14,6 @@ using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using Project_PRN222_G5.DataAccess.Service;
 using Project_PRN222_G5.DataAccess.UnitOfWork;
 using Project_PRN222_G5.Web.Utilities;
-using System.Text;
 
 namespace Project_PRN222_G5.Web;
 
@@ -51,6 +48,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region DbContext
+
         services.AddScoped<IDbContext, TheDbContext>();
         services.AddDbContext<TheDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),

@@ -1,4 +1,5 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
+﻿using Microsoft.Extensions.Logging;
+using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
@@ -9,7 +10,6 @@ using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
-using Microsoft.Extensions.Logging;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 

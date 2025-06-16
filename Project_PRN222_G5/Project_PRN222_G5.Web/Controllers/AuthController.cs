@@ -29,7 +29,6 @@ public class AuthController(
         {
             var response = await authService.LoginAsync(loginRequest);
 
-            // Gắn AccessToken + RefreshToken vào cookie
             await cookieService.SetAuthCookiesAsync(
                 loginRequest.Username,
                 response.AccessToken,
