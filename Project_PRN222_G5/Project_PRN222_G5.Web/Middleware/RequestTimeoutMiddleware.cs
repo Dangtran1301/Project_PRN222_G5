@@ -1,4 +1,6 @@
-﻿namespace Project_PRN222_G5.Web.Middleware;
+﻿using System;
+
+namespace Project_PRN222_G5.Web.Middleware;
 
 public class RequestTimeoutMiddleware
 {
@@ -29,4 +31,10 @@ public class RequestTimeoutMiddleware
             await processingTask;
         }
     }
+}
+
+public static class RequestTimeoutMiddlewareExtensions
+{
+    public static IApplicationBuilder UseRequestTimeoutMiddleware(this IApplicationBuilder builder, TimeSpan timeout) =>
+        builder.UseMiddleware<RequestTimeoutMiddleware>(timeout);
 }

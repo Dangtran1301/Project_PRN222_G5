@@ -1,8 +1,9 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs;
-using Project_PRN222_G5.BusinessLogic.Extensions;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
+using Project_PRN222_G5.DataAccess.DTOs;
 using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Exceptions;
+using Project_PRN222_G5.DataAccess.Extensions;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
 
@@ -76,7 +77,8 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public virtual async Task<TR> CreateAsync(TC request)
     {
-        validationService.Validate(request);
+        if (!validationService.TryValidate(request, out var errors))
+            throw new ValidationException(errors);
         var entity = MapToEntity(request);
         await unitOfWork.Repository<TE>().AddAsync(entity);
         await unitOfWork.CompleteAsync();
@@ -85,7 +87,8 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public virtual async Task<TR> UpdateAsync(Guid id, TU request)
     {
-        validationService.Validate(request);
+        if (!validationService.TryValidate(request, out var errors))
+            throw new ValidationException(errors);
         var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
         UpdateEntity(entity, request);
         unitOfWork.Repository<TE>().Update(entity);

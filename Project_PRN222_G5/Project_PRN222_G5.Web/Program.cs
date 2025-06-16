@@ -10,7 +10,6 @@ public class Program
 
         var host = CreateHostBuilder(args).Build();
 
-        // Get logger
         using var scope = host.Services.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 

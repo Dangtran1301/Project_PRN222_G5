@@ -1,7 +1,8 @@
-﻿@{
+﻿@using Project_PRN222_G5.DataAccess.DTOs
+@{
     var items = ViewData["Items"] as IEnumerable<object>;
-    var paging = ViewData["Paging"] as BusinessLogic.DTOs.Paging;
-    var request = ViewData["Request"] as BusinessLogic.DTOs.PagedRequest;
+    var paging = ViewData["Paging"] as Paging;
+    var request = ViewData["Request"] as PagedRequest;
     var displayProps = ViewData["DisplayProps"] as string[] ?? [];
 
     var sortField = request?.Sort;

@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace Project_PRN222_G5.Web.Utilities;
 
@@ -9,7 +8,7 @@ internal static class ClaimsUtil
     {
         if (principal == null!) return "Anonymous";
 
-        return principal.FindFirstValue(JwtRegisteredClaimNames.Sub)
+        return principal.FindFirstValue(ClaimTypes.Name)
                ?? "Anonymous";
     }
 }

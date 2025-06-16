@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Project_PRN222_G5.BusinessLogic.Extensions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+using Project_PRN222_G5.DataAccess.Extensions;
 
 namespace Project_PRN222_G5.BusinessLogic.Services;
 

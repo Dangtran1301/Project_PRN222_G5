@@ -3,35 +3,38 @@ using Project_PRN222_G5.DataAccess.Entities.Cinemas;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.ComponentModel.DataAnnotations;
-using ValidationException = Project_PRN222_G5.BusinessLogic.Exceptions.ValidationException;
+using ValidationException = Project_PRN222_G5.DataAccess.Exceptions.ValidationException;
 
 namespace Project_PRN222_G5.BusinessLogic.Validation;
 
 public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
 {
-    public Dictionary<string, string[]> Validate<T>(T model)
+    public bool TryValidate<T>(T model, out Dictionary<string, string[]> errors)
     {
+        errors = new Dictionary<string, string[]>();
+
         if (model == null)
         {
-            return new Dictionary<string, string[]>
-            {
-                ["Model"] = ["Model cannot be null."]
-            };
+            errors["Model"] = new[] { "Model cannot be null." };
+            return false;
         }
 
         var validationResults = new List<ValidationResult>();
         var validationContext = new ValidationContext(model);
 
-        Validator.TryValidateObject(model, validationContext, validationResults, true);
+        bool isValid = Validator.TryValidateObject(model, validationContext, validationResults, true);
 
-        var errors = validationResults
-            .GroupBy(v => v.MemberNames.FirstOrDefault() ?? "General")
-            .ToDictionary(
-                g => g.Key,
-                g => g.Select(v => v.ErrorMessage ?? "Invalid value").ToArray()
-            );
+        if (!isValid)
+        {
+            errors = validationResults
+                .GroupBy(v => v.MemberNames.FirstOrDefault() ?? "General")
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(v => v.ErrorMessage ?? "Invalid value").ToArray()
+                );
+        }
 
-        return errors;
+        return isValid;
     }
 
     public async Task ValidateUniqueUserAsync(string username, string email)

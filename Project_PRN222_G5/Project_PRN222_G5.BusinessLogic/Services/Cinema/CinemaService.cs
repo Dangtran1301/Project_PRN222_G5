@@ -1,9 +1,9 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
-using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
+using Project_PRN222_G5.DataAccess.DTOs.Cinema.Request;
+using Project_PRN222_G5.DataAccess.DTOs.Cinema.Response;
+using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
 

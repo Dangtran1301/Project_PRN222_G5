@@ -19,7 +19,7 @@ namespace Project_PRN222_G5.Web;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region HttpContextAccessor
 
@@ -30,6 +30,7 @@ public static class DependencyInjection
         #region Service
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService,UserService>();
         services.AddScoped<ICinemaService, CinemaService>();
         services.AddScoped<IJwtService, JwtService>();
 
@@ -45,7 +46,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region DbContext
 
@@ -74,10 +75,11 @@ public static class DependencyInjection
     {
         #region Cookie
 
-        services.AddAuthentication("Cookies")
-            .AddCookie("Cookies", options =>
+        services.AddAuthentication("Project_PRN222_G5.Web.Cookies")
+            .AddCookie("Project_PRN222_G5.Web.Cookies", options =>
             {
                 options.LoginPath = PageRoutes.Auth.Login;
+                options.LogoutPath = PageRoutes.Auth.Logout;
                 options.AccessDeniedPath = "/Auth/AccessDenied";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(7);

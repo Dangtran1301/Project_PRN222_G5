@@ -16,7 +16,10 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\" />
     <Folder Include="Areas\Staff\" />
-    <Folder Include="Views\Customer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\Info.css" />
   </ItemGroup>
 
   <ItemGroup>

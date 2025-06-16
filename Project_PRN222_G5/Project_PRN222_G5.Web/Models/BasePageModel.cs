@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
+using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.Web.Utilities;
 using System.Text;
 using static System.String;
