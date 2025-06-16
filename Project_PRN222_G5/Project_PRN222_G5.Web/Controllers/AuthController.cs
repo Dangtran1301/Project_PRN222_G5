@@ -5,12 +5,17 @@ using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
 using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Controllers;
 
 [AllowAnonymous]
-public class AuthController(IAuthService authService, ICookieService cookieService, ILogger<AuthController> logger) : Controller
+public class AuthController(
+    IAuthService authService,
+    ICookieService cookieService,
+    IAuthenticatedUserService authenticatedUserService,
+    ILogger<AuthController> logger) : Controller
 {
     [HttpGet]
     public IActionResult Login() => View();
@@ -24,7 +29,6 @@ public class AuthController(IAuthService authService, ICookieService cookieServi
         {
             var response = await authService.LoginAsync(loginRequest);
 
-            // Gắn AccessToken + RefreshToken vào cookie
             await cookieService.SetAuthCookiesAsync(
                 loginRequest.Username,
                 response.AccessToken,
@@ -60,8 +64,9 @@ public class AuthController(IAuthService authService, ICookieService cookieServi
     }
 
     [HttpPost]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
+        await authService.LogoutAsync(Guid.Parse(authenticatedUserService.UserId), cookieService!.GetRefreshToken()!);
         cookieService.RemoveAuthCookies();
         TempData["SuccessMessage"] = "Logged out successfully!";
         return RedirectToAction("Login");

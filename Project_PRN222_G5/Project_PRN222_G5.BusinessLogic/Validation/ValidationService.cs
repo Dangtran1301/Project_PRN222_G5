@@ -57,6 +57,7 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
             throw new ValidationException($"Cinema with the name '{name}' already exists.");
         }
     }
+
     public async Task ValidateCinemaCanBeDeletedAsync(Guid cinemaId)
     {
         var cinema = await unitOfWork.Repository<Cinema>().GetByIdAsync(cinemaId);
@@ -67,5 +68,4 @@ public class ValidationService(IUnitOfWork unitOfWork) : IValidationService
         if (hasRooms)
             throw new ValidationException("Cannot delete cinema because it has associated rooms.");
     }
-
 }

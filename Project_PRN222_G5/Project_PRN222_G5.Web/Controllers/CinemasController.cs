@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_PRN222_G5.BusinessLogic.DTOs;
-using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Cinema;
 
 namespace Project_PRN222_G5.Web.Controllers
