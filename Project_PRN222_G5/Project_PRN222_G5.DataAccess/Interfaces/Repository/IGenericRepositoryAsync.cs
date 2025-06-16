@@ -27,6 +27,8 @@ public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 
     void Delete(TEntity entity);
 
+    void RemoveRange(IEnumerable<TEntity> entities);
+
     #endregion CRUD
 
     #region bool

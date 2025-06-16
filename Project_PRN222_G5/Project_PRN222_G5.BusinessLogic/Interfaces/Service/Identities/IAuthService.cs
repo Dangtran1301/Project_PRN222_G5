@@ -1,5 +1,5 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
-using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
+﻿using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
+using Project_PRN222_G5.DataAccess.DTOs.Users.Responses;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 
 namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;

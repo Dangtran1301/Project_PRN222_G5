@@ -7,7 +7,7 @@ namespace Project_PRN222_G5.Web;
 public class Startup(IConfiguration configuration)
 {
     private IConfiguration Configuration { get; } = configuration;
-    private const string Unknown = "unknown";
+    private const string Unknown = "Unknown";
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -37,8 +37,8 @@ public class Startup(IConfiguration configuration)
         #region Services
 
         services
-            .AddApplicationServices(Configuration)
-            .AddInfrastructureServices(Configuration)
+            .AddBusinessLogicServices(Configuration)
+            .AddDataAccessServices(Configuration)
             .AddCookieAuthentication(Configuration)
             .AddCustomLogging();
 
@@ -55,14 +55,18 @@ public class Startup(IConfiguration configuration)
         {
             app.UseHsts();
             app.UseExceptionHandler(PageRoutes.Public.Error);
+            app.UseRequestTimeoutMiddleware(TimeSpan.FromSeconds(15));
         }
         app.UseRateLimiter();
         app.UseHttpsRedirection();
-        app.UseMiddleware<RequestTimeoutMiddleware>(TimeSpan.FromSeconds(10));
+
         app.UseRouting();
         app.UseStaticFiles();
+
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseAuthenticatedUserMiddleware();
         app.UseAuthorizationMiddleware();
         app.UseLoggerMiddleware();
 

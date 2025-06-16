@@ -2,7 +2,7 @@
 using Project_PRN222_G5.DataAccess.Interfaces.Data;
 using Project_PRN222_G5.DataAccess.Interfaces.Repository;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
-using Project_PRN222_G5.DataAccess.Repositories;
+using Project_PRN222_G5.DataAccess.UnitOfWork.Repositories;
 
 namespace Project_PRN222_G5.DataAccess.UnitOfWork
 {

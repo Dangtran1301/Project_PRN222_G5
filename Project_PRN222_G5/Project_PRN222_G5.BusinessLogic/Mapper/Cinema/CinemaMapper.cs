@@ -1,5 +1,5 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Request;
-using Project_PRN222_G5.BusinessLogic.DTOs.Cinema.Response;
+﻿using Project_PRN222_G5.DataAccess.DTOs.Cinema.Request;
+using Project_PRN222_G5.DataAccess.DTOs.Cinema.Response;
 
 namespace Project_PRN222_G5.BusinessLogic.Mapper.Cinema;
 

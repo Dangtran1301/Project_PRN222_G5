@@ -1,6 +1,6 @@
-﻿using Project_PRN222_G5.BusinessLogic.DTOs;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Mapping;
+﻿using Project_PRN222_G5.DataAccess.DTOs;
 using Project_PRN222_G5.DataAccess.Entities.Common;
+using Project_PRN222_G5.DataAccess.Interfaces.Mapping;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service;

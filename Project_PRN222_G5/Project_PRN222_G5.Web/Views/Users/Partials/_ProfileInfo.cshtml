@@ -1,0 +1,70 @@
+﻿@model Project_PRN222_G5.DataAccess.DTOs.Users.Responses.UserResponse
+
+<div class="row" id="profile-container">
+    <!-- Image Card -->
+    <div class="col-md-6 mb-1-9 animate-fade">
+        <div class="card h-100 card-style1 rounded overflow-hidden">
+            <img src="@Model.Avatar" alt="@Model.FullName" class="w-100 h-100 object-fit-cover img-avatar" />
+        </div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="col-md-6 mb-1-9 animate-fade">
+        <div class="card h-100 card-style1 rounded">
+            <div class="card-header bg-secondary text-white text-center p-1-9">
+                <h3 class="mb-0 section-title">@Model.FullName</h3>
+            </div>
+            <div class="card-body p-1-9">
+                <dl class="profile-info-grid mb-1-9">
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-person me-1"></i>Role:</dt>
+                        <dd class="display-26">@Model.Role</dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-person-badge me-1"></i>Username:</dt>
+                        <dd class="display-26">@Model.Username</dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-envelope me-1"></i>Email:</dt>
+                        <dd class="display-26">@Model.Email</dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-cake2 me-1"></i>Birthday:</dt>
+                        <dd class="display-26">@(Model.DayOfBirth.HasValue? Model.DayOfBirth.Value.ToString("D") : "Not set")</dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-gender-ambiguous me-1"></i>Gender:</dt>
+                        <dd class="display-26">
+                            @if (string.Equals(Model.Gender, "Male", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <i class="bi bi-gender-male me-1"></i>
+                            }
+                            else if (string.Equals(Model.Gender, "Female", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <i class="bi bi-gender-female me-1"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-gender-ambiguous me-1"></i>
+                            }
+                            @Model.Gender
+                        </dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-telephone me-1"></i>Phone:</dt>
+                        <dd class="display-26">@Model.PhoneNumber</dd>
+                    </div>
+                    <div class="grid-item">
+                        <dt class="text-secondary font-weight-600"><i class="bi bi-calendar-check me-1"></i>Register on:</dt>
+                        <dd class="display-26">@Model.CreatedAt.ToString("D")</dd>
+                    </div>
+                </dl>
+
+                <div class="d-flex justify-content-between pt-1-9">
+                    <button class="btn btn-outline-primary" id="btn-edit">Edit Profile</button>
+                    <button class="btn btn-outline-danger" id="btn-reset">Reset Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

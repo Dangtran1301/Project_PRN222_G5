@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Project_PRN222_G5.DataAccess.Interfaces.Service;
-using System.Security.Claims;
+﻿using Project_PRN222_G5.DataAccess.Interfaces.Service;
 
 namespace Project_PRN222_G5.DataAccess.Service;
 
-public sealed class AuthenticatedUserService(IHttpContextAccessor contextAccessor) : IAuthenticatedUserService
+public class AuthenticatedUserService : IAuthenticatedUserService
 {
-    public string UserId { get; } = contextAccessor.HttpContext?.User.FindFirstValue("uid") ?? string.Empty;
-    public string ClientIp { get; } = contextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+    public string UserId { get; private set; } = string.Empty;
+    public string ClientIp { get; private set; } = string.Empty;
+
+    public void SetUser(string userId, string clientIp)
+    {
+        UserId = userId;
+        ClientIp = clientIp;
+    }
 }

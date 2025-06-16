@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_PRN222_G5.BusinessLogic.Extensions;
+using Project_PRN222_G5.DataAccess.Extensions;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;

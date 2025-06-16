@@ -1,149 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Project_PRN222_G5.DataAccess.Data;
-using Project_PRN222_G5.DataAccess.Entities.Users;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Services.Identities;
+using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
+using Project_PRN222_G5.DataAccess.Exceptions;
+using Project_PRN222_G5.DataAccess.Interfaces.Service;
+using Project_PRN222_G5.Web.Views.Users;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Project_PRN222_G5.Web.Controllers
+namespace Project_PRN222_G5.Web.Controllers;
+
+[Authorize]
+public class UsersController : Controller
 {
-    public class UsersController : Controller
+    private readonly IUserService _userService;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
+    private readonly ICookieService _cookieService;
+    private readonly IAuthService _authService;
+
+    public UsersController(IUserService userService, IAuthenticatedUserService authenticatedUserService, ICookieService cookieService, IAuthService authService)
     {
-        private readonly TheDbContext _context;
+        _userService = userService;
+        _authenticatedUserService = authenticatedUserService;
+        _cookieService = cookieService;
+        _authService = authService;
+    }
+    [HttpGet]
+    public async Task<IActionResult> Info()
+    {
+        var userId = Guid.Parse(_authenticatedUserService.UserId);
+        var userInfo = await _userService.GetUserInfoById(userId);
 
-        public UsersController(TheDbContext context)
+        var viewModel = new InfoPageViewModel
         {
-            _context = context;
+            User = userInfo,
+            UpdateInfo = new UpdateInfoUser
+            {
+                Id = userInfo.Id,
+                FullName = userInfo.FullName,
+                PhoneNumber = userInfo.PhoneNumber,
+                DayOfBirth = userInfo.DayOfBirth,
+                Gender = userInfo.Gender,
+            },
+            ResetPassword = new ResetPasswordRequest()
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateProfile([Bind] UpdateInfoUser infoUser)
+    {
+        var userId = Guid.Parse(_authenticatedUserService.UserId);
+
+        if (userId != infoUser.Id)
+        {
+            return Unauthorized();
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+        await _userService.UpdateAsync(userId, infoUser);
+        TempData["SuccessMessage"] = "Your profile was updated successfully!";
+        return RedirectToAction(nameof(Info));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword([Bind] ResetPasswordRequest request)
+    {
+        var userId = Guid.Parse(_authenticatedUserService.UserId);
+
+        try
         {
-            return View(await _context.Users.ToListAsync());
+            if (await _userService.ResetPassword(userId, request))
+            {
+                TempData["SuccessMessage"] = "Password changed successfully. Please login again.";
+                await _authService.LogoutAsync(userId, _cookieService.GetRefreshToken() ?? string.Empty);
+                await _cookieService.RemoveAuthCookiesAsync();
+
+                return RedirectToAction("Login", "Auth");
+            }
+
+            ModelState.AddModelError(string.Empty, "Password reset failed.");
         }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        catch (ValidationException ex)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FullName,Username,PasswordHash,Email,PhoneNumber,Gender,DayOfBirth,Avatar,UserStatus,Role,CreatedAt,CreatedBy,UpdatedBy,UpdatedAt,Id")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("FullName,Username,PasswordHash,Email,PhoneNumber,Gender,DayOfBirth,Avatar,UserStatus,Role,CreatedAt,CreatedBy,UpdatedBy,UpdatedAt,Id")] User user)
-        {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            ViewData["ActiveForm"] = "reset";
+            if (ex.Errors is { Count: > 0 })
+                foreach (var error in ex.Errors)
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
+                    foreach (var message in error.Value.Distinct())
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        ModelState.AddModelError(error.Key, message);
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
+            else
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
         }
 
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        var userInfo = await _userService.GetUserInfoById(userId);
+        var viewModel = new InfoPageViewModel
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
+            User = userInfo,
+            UpdateInfo = new UpdateInfoUser
             {
-                _context.Users.Remove(user);
-            }
+                Id = userInfo.Id,
+                FullName = userInfo.FullName,
+                PhoneNumber = userInfo.PhoneNumber,
+                DayOfBirth = userInfo.DayOfBirth,
+                Gender = userInfo.Gender,
+            },
+            ResetPassword = request
+        };
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        return View(nameof(Info), viewModel);
     }
 }

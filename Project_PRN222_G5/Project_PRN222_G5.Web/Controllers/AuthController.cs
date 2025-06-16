@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
+using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.Web.Utilities;
 
@@ -28,19 +28,19 @@ public class AuthController(
         try
         {
             var response = await authService.LoginAsync(loginRequest);
+            var user = await authService.GetUserByUsernameAsync(loginRequest.Username);
 
             await cookieService.SetAuthCookiesAsync(
-                loginRequest.Username,
+                user,
                 response.AccessToken,
                 response.RefreshToken
             );
 
             TempData["SuccessMessage"] = "Login successfully!";
 
-            var user = await authService.GetUserByUsernameAsync(loginRequest.Username);
             if (user.Role == Role.Admin)
             {
-                return RedirectToPage(PageRoutes.Users.Index);
+                return RedirectToPage(PageRoutes.Public.Home);
             }
 
             return RedirectToAction("Home", "Home");
@@ -54,11 +54,12 @@ public class AuthController(
                     ModelState.AddModelError(error.Key, msg);
                 }
             }
+
             return View(loginRequest);
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("", "Unexpected error: " + ex.Message);
+            ModelState.AddModelError("ErrorMessage", "Unexpected error: " + ex.Message);
             return View(loginRequest);
         }
     }
@@ -66,10 +67,12 @@ public class AuthController(
     [HttpPost]
     public async Task<IActionResult> Logout()
     {
-        await authService.LogoutAsync(Guid.Parse(authenticatedUserService.UserId), cookieService!.GetRefreshToken()!);
-        cookieService.RemoveAuthCookies();
+        await authService.LogoutAsync(
+            Guid.Parse(authenticatedUserService.UserId), cookieService!.GetRefreshToken()!
+        );
+        await cookieService.RemoveAuthCookiesAsync();
         TempData["SuccessMessage"] = "Logged out successfully!";
-        return RedirectToAction("Login");
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpGet]
@@ -101,7 +104,7 @@ public class AuthController(
         {
             await authService.CreateAsync(input);
             TempData["SuccessMessage"] = "Registered successfully. Please log in.";
-            return RedirectToAction("Login");
+            return RedirectToAction(nameof(Login));
         }
         catch (Exception ex)
         {
@@ -114,7 +117,7 @@ public class AuthController(
     [IgnoreAntiforgeryToken]
     public async Task<IActionResult> RefreshToken()
     {
-        var accessToken = Request.Cookies["AccessToken"];
+        var accessToken = Request.Cookies["Project_PRN222_G5.Web.AccessToken"];
         var refreshToken = User.FindFirst("RefreshToken")?.Value;
         var userIdClaim = User.FindFirst("uid")?.Value;
 
@@ -139,9 +142,19 @@ public class AuthController(
             };
 
             var response = await authService.RefreshTokenAsync(request);
-            await cookieService.SetAuthCookiesAsync(User.Identity!.Name!, response.AccessToken, response.RefreshToken);
+            var currentUser = await authService.GetByIdAsync(userId);
+            await cookieService.SetAuthCookiesAsync(currentUser, response.AccessToken, response.RefreshToken);
 
-            return Json(new { response.AccessToken });
+            return Json(new { AccessToken = response.AccessToken });
+        }
+        catch (ValidationException ex)
+        {
+            foreach (var error in ex.Errors)
+            {
+                ModelState.AddModelError(error.Key, string.Join(", ", error.Value));
+            }
+
+            return Unauthorized();
         }
         catch (Exception ex)
         {

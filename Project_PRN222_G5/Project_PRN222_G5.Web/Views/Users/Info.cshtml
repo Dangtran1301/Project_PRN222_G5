@@ -1,0 +1,76 @@
+﻿@model Project_PRN222_G5.Web.Views.Users.InfoPageViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+<link rel="stylesheet" href="~/css/Info.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<section class="container py-5">
+
+    @await Html.PartialAsync("Partials/_ProfileInfo", Model.User)
+
+    @await Html.PartialAsync("Partials/_EditProfileForm", Model.UpdateInfo)
+
+    @await Html.PartialAsync("Partials/_ResetPasswordForm", Model.ResetPassword)
+
+</section>
+
+@section Scripts {
+    <script>
+        document.getElementById("btn-edit")?.addEventListener("click", function () {
+            toggleView("edit-container");
+        });
+
+        document.getElementById("btn-reset")?.addEventListener("click", function () {
+            toggleView("reset-container");
+        });
+
+        document.getElementById("btn-cancel-edit")?.addEventListener("click", function () {
+            toggleView("profile-container");
+        });
+
+        document.getElementById("btn-cancel-reset")?.addEventListener("click", function () {
+            toggleView("profile-container");
+        });
+
+        function toggleView(showId) {
+            const sections = ["profile-container", "edit-container", "reset-container"];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const isShowing = id === showId;
+                    el.classList.toggle("d-none", !isShowing);
+
+                    if (isShowing) {
+                        el.classList.add("animate-fade");
+                        void el.offsetWidth;
+                    } else {
+                        el.classList.remove("animate-fade");
+                    }
+                }
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+        const activeForm = "@ViewData["ActiveForm"]" || "";
+        if (activeForm === "reset") {
+            toggleView("reset-container");
+        } else if (activeForm === "edit") {
+            toggleView("edit-container");
+        } else {
+            toggleView("profile-container");
+        }
+            });
+
+        function previewAvatar(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const preview = document.getElementById("avatar-preview");
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            }
+        }
+    </script>
+}

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using Project_PRN222_G5.BusinessLogic.DTOs.Users.Requests;
-using Project_PRN222_G5.BusinessLogic.DTOs.Users.Responses;
-using Project_PRN222_G5.BusinessLogic.Exceptions;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Users;
+using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
+using Project_PRN222_G5.DataAccess.DTOs.Users.Responses;
 using Project_PRN222_G5.DataAccess.Entities.Users;
+using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using System.Linq.Expressions;
@@ -26,21 +26,18 @@ public class AuthService(
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
-        var errors = _validationService.Validate(request);
-        if (errors.Count != 0)
-        {
+        if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
-        }
 
         var user = (await _unitOfWork.Repository<User>()
-                .FindAsync(u => u.Username == request.Username))
+                .FindAsync(u => (u.Username == request.Username) || u.Email == request.Username))
             .FirstOrDefault();
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             throw new ValidationException(new Dictionary<string, string[]>
             {
-                ["Credentials"] = ["Username or Password is not correct."]
+                ["Credentials"] = ["Username/Email or Password is not correct."]
             });
         }
 
@@ -64,11 +61,8 @@ public class AuthService(
 
     public override async Task<UserResponse> CreateAsync(RegisterUserRequest request)
     {
-        var errors = _validationService.Validate(request);
-        if (errors.Count != 0)
-        {
+        if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
-        }
 
         await _validationService.ValidateUniqueUserAsync(request.Username, request.Email);
 
@@ -83,22 +77,12 @@ public class AuthService(
     {
         if (string.IsNullOrWhiteSpace(refreshToken)) return;
 
-        var token = await _unitOfWork.Repository<UserToken>()
+        var tokens = await _unitOfWork.Repository<UserToken>()
             .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
 
-        var existingToken = token.FirstOrDefault();
-        if (existingToken != null)
-        {
-            _unitOfWork.Repository<UserToken>().Delete(existingToken);
-            await _unitOfWork.CompleteAsync();
-        }
-        else
-        {
-            var logoutFailedEvent = new EventId(1001, "LogoutFailed");
-            logger.LogWarning(logoutFailedEvent,
-                "Logout failed: No refresh token found for user {UserId} with token {RefreshToken}",
-                userId, refreshToken);
-        }
+        _unitOfWork.Repository<UserToken>().RemoveRange(tokens);
+
+        await _unitOfWork.CompleteAsync();
     }
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
@@ -135,16 +119,16 @@ public class AuthService(
 
     public async Task<UserResponse> GetUserByUsernameAsync(string username)
     {
-        return MapToResponse((await _unitOfWork.Repository<User>().FindAsync(x => x.Username == username)).FirstOrDefault(new User()));
+        return MapToResponse(
+            (await _unitOfWork.Repository<User>()
+                .FindAsync(x => x.Username == username))
+                .FirstOrDefault(new User()));
     }
 
     public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request)
     {
-        var errors = _validationService.Validate(request);
-        if (errors.Any())
-        {
+        if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
-        }
 
         var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id);
         if (entity == null)
@@ -152,9 +136,19 @@ public class AuthService(
             throw new ValidationException("User not found.");
         }
 
-        await entity.UpdateEntityAsync(request, mediaService);
+        entity.UpdateEntity(request, mediaService);
 
+        if (request.Avatar is not null)
+        {
+            if (!string.IsNullOrEmpty(entity.Avatar))
+            {
+                await mediaService.DeleteImageAsync(entity.Avatar);
+            }
+
+            entity.Avatar = await mediaService.UploadImageAsync(request.Avatar, nameof(request.Avatar));
+        }
         _unitOfWork.Repository<User>().Update(entity);
+
         await _unitOfWork.CompleteAsync();
 
         return MapToResponse(entity);
@@ -164,7 +158,7 @@ public class AuthService(
 
     public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 
-    public override void UpdateEntity(User entity, UpdateInfoUser request) => _ = entity.UpdateEntityAsync(request, mediaService);
+    public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request, mediaService);
 
     protected override Expression<Func<User, string>>[] GetSearchFields() =>
     [

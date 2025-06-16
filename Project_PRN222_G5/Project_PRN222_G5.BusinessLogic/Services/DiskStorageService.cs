@@ -15,7 +15,7 @@ public class DiskStorageService(IWebHostEnvironment env) : IStorageService
         await using var stream = new FileStream(filePath, FileMode.Create);
         await fileStream.CopyToAsync(stream);
 
-        return Path.Combine(folder, fileName).Replace("\\", "/");
+        return $"/{Path.Combine(folder, fileName).Replace("\\", "/")}";
     }
 
     public Task DeleteFileAsync(string relativePath)
