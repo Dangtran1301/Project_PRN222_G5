@@ -17,7 +17,7 @@ public static class UserMapper
         DayOfBirth = entity.DayOfBirth,
         PhoneNumber = entity.PhoneNumber,
         Avatar = string.IsNullOrEmpty(entity.Avatar)
-            ? "images/default-avatar.jpg"
+            ? "/images/default-avatar.jpg"
             : entity.Avatar,
         Gender = entity.Gender.ToString(),
         Role = entity.Role

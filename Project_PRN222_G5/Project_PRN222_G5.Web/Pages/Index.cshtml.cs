@@ -1,4 +1,4 @@
-using Project_PRN222_G5.Web.Pages.Shared.Models;
+using Project_PRN222_G5.Web.Models;
 
 namespace Project_PRN222_G5.Web.Pages
 {

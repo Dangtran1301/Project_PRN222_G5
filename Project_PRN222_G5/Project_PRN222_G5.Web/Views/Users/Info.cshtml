@@ -63,14 +63,5 @@
             toggleView("profile-container");
         }
             });
-
-        function previewAvatar(event) {
-            const [file] = event.target.files;
-            if (file) {
-                const preview = document.getElementById("avatar-preview");
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove("d-none");
-            }
-        }
     </script>
 }

@@ -9,26 +9,18 @@ using Project_PRN222_G5.Web.Views.Users;
 namespace Project_PRN222_G5.Web.Controllers;
 
 [Authorize]
-public class UsersController : Controller
+public class UsersController(
+    IUserService userService,
+    IAuthenticatedUserService authenticatedUserService,
+    ICookieService cookieService,
+    IAuthService authService)
+    : Controller
 {
-    private readonly IUserService _userService;
-    private readonly IAuthenticatedUserService _authenticatedUserService;
-    private readonly ICookieService _cookieService;
-    private readonly IAuthService _authService;
-
-    public UsersController(IUserService userService, IAuthenticatedUserService authenticatedUserService, ICookieService cookieService, IAuthService authService)
-    {
-        _userService = userService;
-        _authenticatedUserService = authenticatedUserService;
-        _cookieService = cookieService;
-        _authService = authService;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Info()
     {
-        var userId = Guid.Parse(_authenticatedUserService.UserId);
-        var userInfo = await _userService.GetUserInfoById(userId);
+        var userId = Guid.Parse(authenticatedUserService.UserId);
+        var userInfo = await userService.GetUserInfoById(userId);
 
         var viewModel = new InfoPageViewModel
         {
@@ -50,14 +42,14 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateProfile([Bind] UpdateInfoUser infoUser)
     {
-        var userId = Guid.Parse(_authenticatedUserService.UserId);
+        var userId = Guid.Parse(authenticatedUserService.UserId);
 
         if (userId != infoUser.Id)
         {
             return Unauthorized();
         }
 
-        await _userService.UpdateAsync(userId, infoUser);
+        await userService.UpdateAsync(userId, infoUser);
         TempData["SuccessMessage"] = "Your profile was updated successfully!";
         return RedirectToAction(nameof(Info));
     }
@@ -65,15 +57,15 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> ResetPassword([Bind] ResetPasswordRequest request)
     {
-        var userId = Guid.Parse(_authenticatedUserService.UserId);
+        var userId = Guid.Parse(authenticatedUserService.UserId);
 
         try
         {
-            if (await _userService.ResetPassword(userId, request))
+            if (await userService.ResetPassword(userId, request))
             {
                 TempData["SuccessMessage"] = "Password changed successfully. Please login again.";
-                await _authService.LogoutAsync(userId, _cookieService.GetRefreshToken() ?? string.Empty);
-                await _cookieService.RemoveAuthCookiesAsync();
+                await authService.LogoutAsync(userId, cookieService.GetRefreshToken() ?? string.Empty);
+                await cookieService.RemoveAuthCookiesAsync();
 
                 return RedirectToAction("Login", "Auth");
             }
@@ -97,7 +89,7 @@ public class UsersController : Controller
             }
         }
 
-        var userInfo = await _userService.GetUserInfoById(userId);
+        var userInfo = await userService.GetUserInfoById(userId);
         var viewModel = new InfoPageViewModel
         {
             User = userInfo,
