@@ -43,12 +43,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Avatar" class="form-label">Avatar</label>
-                        <input asp-for="Avatar" type="file" accept=".jpg,.jpeg,.png" class="form-control" onchange="previewAvatar(event)" />
-                        <span asp-validation-for="Avatar" class="text-danger"></span>
-                        <div class="mt-2">
-                            <img id="avatar-preview" src="#" alt="Avatar preview" class="img-thumbnail d-none" style="max-height: 100px;" />
+                        <div class="mt-2 text-center">
+                            <img id="avatar" class="img-thumbnail img-avatar"/>
                         </div>
+                        <label asp-for="Avatar" class="form-label">Avatar</label>
+                        <input asp-for="Avatar" type="file" accept=".jpg,.jpeg,.png" class="form-control"
+                               onchange="avatar.src = window.URL.createObjectURL(this.files[0])" />
+                        <span asp-validation-for="Avatar" class="text-danger"></span>
                     </div>
                     <div class="d-flex justify-content-between pt-3">
                         <button type="submit" class="btn btn-warning text-white">Save Changes</button>

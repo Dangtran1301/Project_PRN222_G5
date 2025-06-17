@@ -15,6 +15,7 @@ public class CookieService(IHttpContextAccessor httpContextAccessor) : ICookieSe
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim("RefreshToken", refreshToken),
             new Claim("uid", user.Id.ToString())
         };

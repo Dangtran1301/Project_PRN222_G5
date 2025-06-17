@@ -1,0 +1,19 @@
+﻿@page
+@model Cinema.IndexModel
+@{
+    ViewData["Title"] = "Cinema List";
+}
+
+<h1>Cinema List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Cinema</a>
+</p>
+
+@await Html.PartialAsync("PartialViews/_GenericTable", new ViewDataDictionary(ViewData)
+{
+    { "Items", Model.PaginationResponse.Data! },
+    { "Paging", Model.PaginationResponse.Paging },
+    { "Request", Model.PagedRequest },
+    { "DisplayProps", Model.DisplayProps }
+})

@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.BusinessLogic.Services.Identities;
 using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
-using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web.Controllers;
 
@@ -40,12 +38,18 @@ public class AuthController(
 
             TempData["SuccessMessage"] = "Login successfully!";
 
-            if (user.Role == Role.Admin)
+            switch (user.Role)
             {
-                return RedirectToPage(PageRoutes.Public.Home);
-            }
+                case Role.Admin:
+                    return RedirectToPage("/Index", new { area = "Admin" });
 
-            return RedirectToAction("Home", "Home");
+                case Role.Staff:
+                    return RedirectToPage("/Index", new { area = "Staff" });
+
+                case Role.Customer:
+                    return RedirectToAction("Home", "Pages");
+            }
+            return View(loginRequest);
         }
         catch (ValidationException ex)
         {
