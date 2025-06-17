@@ -10,6 +10,8 @@ public interface IDbContext : IDisposable
 
     EntityEntry Entry(object entity);
 
+    ChangeTracker ChangeTracker { get; }
+
     public DatabaseFacade DatabaseFacade { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

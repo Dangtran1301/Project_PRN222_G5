@@ -8,6 +8,7 @@ namespace Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 public class UpdateInfoUser
 {
     [Required] public Guid Id { get; set; } = Guid.Empty;
+
     [Required(ErrorMessage = "Full name is required")]
     public string FullName { get; set; } = string.Empty;
 

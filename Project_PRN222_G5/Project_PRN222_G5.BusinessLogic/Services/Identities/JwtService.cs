@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
+
 public class JwtService(IConfiguration config, IDateTimeService timeService) : IJwtService
 {
     public string GenerateAccessToken(User user)
