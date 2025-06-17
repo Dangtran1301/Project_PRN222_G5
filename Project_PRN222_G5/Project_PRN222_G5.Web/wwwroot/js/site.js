@@ -1,44 +1,34 @@
-﻿function refreshToken() {
-    fetch('/Auth/Refresh', {
-        method: 'POST',
+﻿async function fetchWithAutoRefresh(url, options = {}, retry = true) {
+    const response = await fetch(url, {
+        ...options,
         credentials: 'include'
-    })
-        .then(response => {
-            if (!response.ok) throw new Error('Refresh failed');
-            return response.json();
-        })
-        .then(data => {
-            document.cookie = `AccessToken=${data.AccessToken}; path=/; HttpOnly; Secure; SameSite=Strict; Expires=${new Date(Date.now() + 3600000)}`;
-        })
-        .catch(error => {
-            console.error('Refresh failed:', error);
-            window.location.href = '/Auth/Login';
-        });
-}
+    });
 
-function checkAndRefreshToken() {
-    const token = document.cookie.split('; ').find(row => row.startsWith('AccessToken='))?.split('=')[1];
-    if (token) {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.exp < Date.now() / 1000) {
-            refreshToken();
+    if (response.status === 401 && retry) {
+        const refreshResult = await tryRefreshToken();
+
+        if (refreshResult) {
+            return fetchWithAutoRefresh(url, options, false);
+        } else {
+            window.location.href = '/Auth/Login';
+            return null;
         }
     }
+
+    return response;
 }
 
-setInterval(checkAndRefreshToken, 60000 * 15);
+async function tryRefreshToken() {
+    try {
+        const response = await fetch('/Auth/RefreshToken', {
+            method: 'POST',
+            credentials: 'include'
+        });
 
-function previewImage(input, previewId) {
-    const file = input.files[0];
-    const img = document.getElementById(previewId);
-
-    if (file && img) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            img.src = e.target.result;
-            img.style.display = 'block';      // Hiện ảnh
-            img.classList.remove('d-none');   // Xóa class ẩn nếu có
-        };
-        reader.readAsDataURL(file);
+        if (!response.ok) throw new Error("Refresh failed");
+        return true;
+    } catch (e) {
+        console.error("Refresh token failed", e);
+        return false;
     }
 }
