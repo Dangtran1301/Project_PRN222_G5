@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
-using Project_PRN222_G5.BusinessLogic.Services.Identities;
 using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.Web.Views.Users;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Project_PRN222_G5.Web.Controllers;
 
@@ -26,6 +23,7 @@ public class UsersController : Controller
         _cookieService = cookieService;
         _authService = authService;
     }
+
     [HttpGet]
     public async Task<IActionResult> Info()
     {

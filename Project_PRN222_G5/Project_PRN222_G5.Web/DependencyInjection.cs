@@ -12,7 +12,7 @@ using Project_PRN222_G5.DataAccess.Interfaces.Data;
 using Project_PRN222_G5.DataAccess.Interfaces.Service;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
 using Project_PRN222_G5.DataAccess.Service;
-using Project_PRN222_G5.DataAccess.UnitOfWork;
+using Project_PRN222_G5.DataAccess.UnitOfWorks;
 using Project_PRN222_G5.Web.Utilities;
 
 namespace Project_PRN222_G5.Web;
@@ -30,7 +30,7 @@ public static class DependencyInjection
         #region Service
 
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IUserService,UserService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICinemaService, CinemaService>();
         services.AddScoped<IJwtService, JwtService>();
 

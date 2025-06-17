@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Project_PRN222_G5.Web.Middleware;
+﻿namespace Project_PRN222_G5.Web.Middleware;
 
 public class RequestTimeoutMiddleware
 {

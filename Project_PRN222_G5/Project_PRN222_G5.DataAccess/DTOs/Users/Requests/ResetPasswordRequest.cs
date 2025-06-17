@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Project_PRN222_G5.DataAccess.Extensions;
+﻿using Project_PRN222_G5.DataAccess.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 
