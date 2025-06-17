@@ -11,10 +11,11 @@ namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
 public class JwtService(IConfiguration config, IDateTimeService timeService) : IJwtService
 {
+    private const string Algorithms = SecurityAlgorithms.HmacSha256;
     public string GenerateAccessToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var creds = new SigningCredentials(key, Algorithms);
 
         var claims = new[]
         {
@@ -29,7 +30,7 @@ public class JwtService(IConfiguration config, IDateTimeService timeService) : I
             issuer: config["Jwt:Issuer"],
             audience: config["Jwt:Audience"],
             claims: claims,
-            expires: timeService.NowUtc.AddHours(1),
+            expires: timeService.Now.AddHours(6),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -52,6 +53,12 @@ public class JwtService(IConfiguration config, IDateTimeService timeService) : I
                 ValidAudience = config["Jwt:Audience"],
                 ValidateLifetime = false
             }, out var securityToken);
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(Algorithms, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
 
             return principal;
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
+using Project_PRN222_G5.BusinessLogic.Services.Identities;
 using Project_PRN222_G5.DataAccess.DTOs.Users.Requests;
 using Project_PRN222_G5.DataAccess.Entities.Users.Enum;
 using Project_PRN222_G5.DataAccess.Exceptions;
@@ -13,6 +14,7 @@ namespace Project_PRN222_G5.Web.Controllers;
 [AllowAnonymous]
 public class AuthController(
     IAuthService authService,
+    IJwtService jwtService,
     ICookieService cookieService,
     IAuthenticatedUserService authenticatedUserService,
     ILogger<AuthController> logger) : Controller
@@ -118,23 +120,24 @@ public class AuthController(
     public async Task<IActionResult> RefreshToken()
     {
         var accessToken = Request.Cookies["Project_PRN222_G5.Web.AccessToken"];
-        var refreshToken = User.FindFirst("RefreshToken")?.Value;
-        var userIdClaim = User.FindFirst("uid")?.Value;
-
+        var refreshToken = Request.Cookies["Project_PRN222_G5.Web.RefreshToken"];
         if (string.IsNullOrWhiteSpace(accessToken) || string.IsNullOrWhiteSpace(refreshToken))
         {
             logger.LogWarning("Missing tokens");
             return Unauthorized();
         }
 
-        if (!Guid.TryParse(userIdClaim, out var userId))
-        {
-            logger.LogWarning("Invalid user ID");
-            return Unauthorized();
-        }
-
         try
         {
+            var principal = jwtService.GetClaimsPrincipalFromExpiredToken(accessToken);
+            var userIdClaim = principal?.FindFirst("uid")?.Value;
+
+            if (!Guid.TryParse(userIdClaim, out var userId))
+            {
+                logger.LogWarning("Invalid user ID");
+                return Unauthorized();
+            }
+
             var request = new RefreshTokenRequest
             {
                 UserId = userId,

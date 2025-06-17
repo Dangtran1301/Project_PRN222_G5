@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.BusinessLogic.Mapper.Users;
@@ -17,9 +16,11 @@ public class AuthService(
     IUnitOfWork unitOfWork,
     IValidationService validationService,
     IJwtService jwtService,
+    IDateTimeService dateTimeService,
     IAuthenticatedUserService authenticatedUserService,
     IMediaService mediaService,
-    ILogger<AuthService> logger) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
+    ITokenValidator tokenValidator
+    ) : GenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>(unitOfWork, validationService), IAuthService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IValidationService _validationService = validationService;
@@ -49,7 +50,7 @@ public class AuthService(
         {
             UserId = userId,
             RefreshToken = refreshToken,
-            ExpiredTime = DateTimeOffset.UtcNow.AddDays(7),
+            ExpiredTime = dateTimeService.NowUtc.AddDays(7),
             CreatedBy = userId,
             ClientIp = authenticatedUserService.ClientIp
         });
@@ -87,11 +88,7 @@ public class AuthService(
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        var token = (await _unitOfWork.Repository<UserToken>()
-                .FindAsync(t => t.UserId == request.UserId && t.RefreshToken == request.RefreshToken))
-            .FirstOrDefault();
-
-        if (token == null || token.ExpiredTime < DateTimeOffset.UtcNow)
+        if (!await tokenValidator.IsRefreshTokenValidAsync(request.UserId, request.RefreshToken))
         {
             throw new ValidationException(new Dictionary<string, string[]>
             {
@@ -107,8 +104,12 @@ public class AuthService(
         var newAccessToken = jwtService.GenerateAccessToken(user);
         var newRefreshToken = Guid.NewGuid().ToString();
 
+        var token = (await _unitOfWork.Repository<UserToken>()
+                .FindAsync(t => t.UserId == request.UserId && t.RefreshToken == request.RefreshToken))
+            .First();
+
         token.RefreshToken = newRefreshToken;
-        token.ExpiredTime = DateTimeOffset.UtcNow.AddDays(7);
+        token.ExpiredTime = dateTimeService.NowUtc.AddDays(7);
         token.ClientIp = authenticatedUserService.ClientIp;
 
         _unitOfWork.Repository<UserToken>().Update(token);
