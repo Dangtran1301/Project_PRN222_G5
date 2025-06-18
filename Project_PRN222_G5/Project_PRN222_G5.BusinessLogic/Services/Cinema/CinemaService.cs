@@ -57,9 +57,9 @@ public class CinemaService(
         await _unitOfWork.CompleteAsync();
     }
 
-    protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] GetSearchFields() =>
-        [
-            x=>x.Address,
-            x=>x.Name
-        ];
+    protected override Expression<Func<DataAccess.Entities.Cinemas.Cinema, string>>[] DefineSearchFields() =>
+    [
+        x=>x.Address,
+        x=>x.Name
+    ];
 }

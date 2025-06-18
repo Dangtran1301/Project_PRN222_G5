@@ -7,7 +7,6 @@ using Project_PRN222_G5.DataAccess.DTOs.Users.Responses;
 using Project_PRN222_G5.DataAccess.Entities.Users;
 using Project_PRN222_G5.DataAccess.Exceptions;
 using Project_PRN222_G5.DataAccess.Interfaces.UnitOfWork;
-using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 
@@ -23,11 +22,6 @@ public class UserService(
     public override UserResponse MapToResponse(User entity) => entity.ToResponse();
 
     public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request, mediaService);
-
-    protected override Expression<Func<User, string>>[] GetSearchFields()
-    {
-        throw new NotImplementedException();
-    }
 
     public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 

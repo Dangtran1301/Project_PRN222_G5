@@ -44,9 +44,8 @@ public abstract class GenericService<TE, TC, TU, TR>(
         Expression<Func<TE, bool>>? predicate = null,
         Func<IQueryable<TE>, IQueryable<TE>>? include = null)
     {
-        var searchPredicate = request.BuildSearchPredicate(GetSearchFields());
-
-        var finalPredicate = CombinePredicates(predicate, searchPredicate);
+        var finalPredicate =
+              CombinePredicates(predicate, request.BuildSearchPredicate(DefineSearchFields()));
 
         Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null;
         if (!string.IsNullOrWhiteSpace(request.Sort))
@@ -106,22 +105,8 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     #endregion Mapping
 
-    private static readonly Dictionary<Type, Expression<Func<object, string>>[]> SearchFieldsCache = [];
+    protected virtual Expression<Func<TE, string>>[] DefineSearchFields() => [];
 
-    protected virtual Expression<Func<TE, string>>[] GetSearchFields()
-    {
-        if (SearchFieldsCache.TryGetValue(typeof(TE), out var fields))
-            return [.. fields.Cast<Expression<Func<TE, string>>>()];
-
-        var searchFields = DefineSearchFields();
-        SearchFieldsCache[typeof(TE)] = [.. searchFields.Cast<Expression<Func<object, string>>>()];
-        return searchFields;
-    }
-
-    protected virtual Expression<Func<TE, string>>[] DefineSearchFields()
-    {
-        throw new NotImplementedException("Define search fields in derived classes.");
-    }
     private static Expression<Func<TE, bool>>? CombinePredicates(Expression<Func<TE, bool>>? predicate, Expression<Func<TE, bool>>? searchPredicate)
     {
         if (predicate == null) return searchPredicate;
