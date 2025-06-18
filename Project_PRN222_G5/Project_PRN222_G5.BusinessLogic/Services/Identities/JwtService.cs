@@ -12,6 +12,7 @@ namespace Project_PRN222_G5.BusinessLogic.Services.Identities;
 public class JwtService(IConfiguration config, IDateTimeService timeService) : IJwtService
 {
     private const string Algorithms = SecurityAlgorithms.HmacSha256;
+
     public string GenerateAccessToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
