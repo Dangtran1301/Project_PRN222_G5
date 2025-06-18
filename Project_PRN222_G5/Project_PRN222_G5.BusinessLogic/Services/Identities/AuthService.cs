@@ -161,11 +161,11 @@ public class AuthService(
 
     public override void UpdateEntity(User entity, UpdateInfoUser request) => entity.UpdateEntity(request, mediaService);
 
-    protected override Expression<Func<User, string>>[] GetSearchFields() =>
+    protected override Expression<Func<User, string>>[] DefineSearchFields() =>
     [
         u => u.Username,
-        u=>u.FullName,
-        u=>u.Email,
-        u=>u.PhoneNumber
+        u => u.FullName,
+        u => u.Email,
+        u => u.PhoneNumber
     ];
 }

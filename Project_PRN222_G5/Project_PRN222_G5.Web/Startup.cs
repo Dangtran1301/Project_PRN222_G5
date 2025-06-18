@@ -59,7 +59,6 @@ public class Startup(IConfiguration configuration)
         }
         app.UseRateLimiter();
         app.UseHttpsRedirection();
-
         app.UseRouting();
         app.UseStaticFiles();
 
@@ -69,7 +68,6 @@ public class Startup(IConfiguration configuration)
         app.UseAuthenticatedUserMiddleware();
         app.UseAuthorizationMiddleware();
         app.UseLoggerMiddleware();
-
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
