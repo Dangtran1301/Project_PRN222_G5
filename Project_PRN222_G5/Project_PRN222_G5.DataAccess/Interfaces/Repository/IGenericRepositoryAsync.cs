@@ -8,7 +8,7 @@ public interface IGenericRepositoryAsync<TEntity> where TEntity : class
 
     #region CRUD
 
-    Task<TEntity> GetByIdAsync(Guid id);
+    Task<TEntity> GetByIdAsync(Guid id, bool track = false);
 
     Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedAsync(
         int page,

@@ -19,9 +19,10 @@ public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepos
 
     #region CRUD
 
-    public async Task<TEntity> GetByIdAsync(Guid id)
+    public async Task<TEntity> GetByIdAsync(Guid id, bool track = false)
     {
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)
+        var query = track ? _dbSet : _dbSet.AsNoTracking();
+        return await query.FirstOrDefaultAsync(x => x.Id == id)
                ?? throw new ValidationException($"{typeof(TEntity).Name} with id {id} not found.");
     }
 
@@ -63,29 +64,20 @@ public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepos
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
     {
         var query = _dbSet.AsQueryable();
-
-        if (include is not null)
-        {
+        if (include != null)
             query = include(query);
-        }
-
-        if (predicate is not null)
-        {
+        if (predicate != null)
             query = query.Where(predicate);
-        }
 
-        var countQuery = query;
-        var totalCount = await countQuery.CountAsync();
-
+        var count = await query.CountAsync();
         query = orderBy != null ? orderBy(query) : query.OrderBy(e => e.Id);
-
         var items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
             .ToListAsync();
 
-        return (items, totalCount);
+        return (items, count);
     }
 
     #endregion CRUD

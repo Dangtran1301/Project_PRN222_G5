@@ -13,9 +13,9 @@ public interface IGenericService<TE, in TC, in TU, TR> : IMapper<TE, TC, TU, TR>
 {
     #region CRUD
 
-    Task<TR> GetByIdAsync(Guid id);
+    Task<TR> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<TR>> GetAllAsync();
+    Task<IEnumerable<TR>> GetAllAsync(string? sort = null, bool ascending = true);
 
     Task<PaginationResponse<TR>> GetPagedAsync(
         PagedRequest request,

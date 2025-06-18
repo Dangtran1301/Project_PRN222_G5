@@ -1,4 +1,5 @@
-﻿using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
+﻿using Microsoft.EntityFrameworkCore;
+using Project_PRN222_G5.BusinessLogic.Interfaces.Service;
 using Project_PRN222_G5.BusinessLogic.Interfaces.Validation;
 using Project_PRN222_G5.DataAccess.DTOs;
 using Project_PRN222_G5.DataAccess.Entities.Common;
@@ -20,17 +21,21 @@ public abstract class GenericService<TE, TC, TU, TR>(
 {
     #region CRUD
 
-    public async Task<TR> GetByIdAsync(Guid id)
+    public async Task<TR> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
-        return MapToResponse(entity);
+        var entity = await unitOfWork.Repository<TE>().AsQueryable()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return entity == null ? throw new ValidationException($"{typeof(TE).Name} with id {id} not found.") : MapToResponse(entity);
     }
 
-    public async Task<IEnumerable<TR>> GetAllAsync()
+    public async Task<IEnumerable<TR>> GetAllAsync(string? sort = null, bool ascending = true)
     {
-        var entities =
-            (await unitOfWork.Repository<TE>().GetAllAsync())
-            .OrderByDescending(x => x.CreatedAt);
+        var query = unitOfWork.Repository<TE>().AsQueryable();
+        if (!string.IsNullOrWhiteSpace(sort))
+        {
+            query = query.ApplyOrdering(sort, ascending);
+        }
+        var entities = await query.ToListAsync();
         return entities.Select(MapToResponse);
     }
 
@@ -41,21 +46,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
     {
         var searchPredicate = request.BuildSearchPredicate(GetSearchFields());
 
-        Expression<Func<TE, bool>>? finalPredicate = null;
-
-        if (predicate != null && searchPredicate != null)
-        {
-            var param = Expression.Parameter(typeof(TE));
-            var body = Expression.AndAlso(
-                Expression.Invoke(predicate, param),
-                Expression.Invoke(searchPredicate, param)
-            );
-            finalPredicate = Expression.Lambda<Func<TE, bool>>(body, param);
-        }
-        else
-        {
-            finalPredicate = predicate ?? searchPredicate;
-        }
+        var finalPredicate = CombinePredicates(predicate, searchPredicate);
 
         Func<IQueryable<TE>, IOrderedQueryable<TE>>? orderBy = null;
         if (!string.IsNullOrWhiteSpace(request.Sort))
@@ -89,7 +80,7 @@ public abstract class GenericService<TE, TC, TU, TR>(
     {
         if (!validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
-        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
+        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id, true);
         UpdateEntity(entity, request);
         unitOfWork.Repository<TE>().Update(entity);
         await unitOfWork.CompleteAsync();
@@ -115,5 +106,26 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     #endregion Mapping
 
-    protected abstract Expression<Func<TE, string>>[] GetSearchFields();
+    private static readonly Dictionary<Type, Expression<Func<object, string>>[]> SearchFieldsCache = [];
+
+    protected virtual Expression<Func<TE, string>>[] GetSearchFields()
+    {
+        if (SearchFieldsCache.TryGetValue(typeof(TE), out var fields))
+            return [.. fields.Cast<Expression<Func<TE, string>>>()];
+
+        var searchFields = DefineSearchFields();
+        SearchFieldsCache[typeof(TE)] = [.. searchFields.Cast<Expression<Func<object, string>>>()];
+        return searchFields;
+    }
+
+    protected virtual Expression<Func<TE, string>>[] DefineSearchFields()
+    {
+        throw new NotImplementedException("Define search fields in derived classes.");
+    }
+    private static Expression<Func<TE, bool>>? CombinePredicates(Expression<Func<TE, bool>>? predicate, Expression<Func<TE, bool>>? searchPredicate)
+    {
+        if (predicate == null) return searchPredicate;
+        if (searchPredicate == null) return predicate;
+        return predicate.AndAlso(searchPredicate);
+    }
 }
