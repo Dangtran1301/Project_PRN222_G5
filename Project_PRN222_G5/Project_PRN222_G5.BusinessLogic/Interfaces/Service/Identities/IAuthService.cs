@@ -6,9 +6,9 @@ namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 
 public interface IAuthService : IGenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>
 {
-    Task<LoginResponse> LoginAsync(LoginRequest loginRequest);
+    Task<LoginResponse> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken = default);
 
-    Task LogoutAsync(Guid userId, string refreshToken);
+    Task LogoutAsync(Guid userId, string refreshToken, CancellationToken cancellationToken = default);
 
     Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request);
 

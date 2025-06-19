@@ -25,17 +25,17 @@ public class UserService(
 
     public override User MapToEntity(RegisterUserRequest request) => request.ToEntity();
 
-    public async Task<UserResponse> GetUserInfoById(Guid id)
+    public async Task<UserResponse> GetUserInfoById(Guid id, CancellationToken cancellationToken = default)
     {
-        return MapToResponse(await _unitOfWork.Repository<User>().GetByIdAsync(id));
+        return MapToResponse(await _unitOfWork.Repository<User>().GetByIdAsync(id, cancellationToken));
     }
 
-    public async Task<bool> ResetPassword(Guid id, ResetPasswordRequest request)
+    public async Task<bool> ResetPassword(Guid id, ResetPasswordRequest request, CancellationToken cancellationToken = default)
     {
         if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
 
-        var user = await _unitOfWork.Repository<User>().GetByIdAsync(id);
+        var user = await _unitOfWork.Repository<User>().GetByIdAsync(id, cancellationToken, true);
 
         if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash))
         {
@@ -46,23 +46,19 @@ public class UserService(
         _unitOfWork.Repository<User>().Update(user);
 
         _unitOfWork.Repository<UserToken>().RemoveRange(
-            await _unitOfWork.Repository<UserToken>().FindAsync(x => x.UserId == user.Id)
+            await _unitOfWork.Repository<UserToken>().FindAsync(x => x.UserId == user.Id, cancellationToken)
             );
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync(cancellationToken);
         return true;
     }
 
-    public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request)
+    public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request, CancellationToken cancellationToken = default)
     {
         if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
 
-        var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new ValidationException("User not found.");
-        }
-
+        var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id, cancellationToken, true)
+                     ?? throw new ValidationException("User not found.");
         entity.UpdateEntity(request, mediaService);
 
         if (request.Avatar is not null)
@@ -76,7 +72,7 @@ public class UserService(
         }
         _unitOfWork.Repository<User>().Update(entity);
 
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync(cancellationToken);
 
         return MapToResponse(entity);
     }

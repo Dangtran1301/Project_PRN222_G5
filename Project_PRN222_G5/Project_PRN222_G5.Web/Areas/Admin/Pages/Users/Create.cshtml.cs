@@ -26,7 +26,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Users
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Users
                 return Page();
             }
 
-            await authService.CreateAsync(Input);
+            await authService.CreateAsync(Input, cancellationToken);
             return RedirectToPage(PageRoutes.Users.Index);
         }
     }

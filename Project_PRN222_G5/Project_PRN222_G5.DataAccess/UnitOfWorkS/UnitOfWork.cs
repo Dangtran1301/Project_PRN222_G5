@@ -10,7 +10,8 @@ namespace Project_PRN222_G5.DataAccess.UnitOfWorks
 {
     public class UnitOfWork(IDbContext context, IDateTimeService dateTimeService, IAuthenticatedUserService authenticatedUserService) : IUnitOfWork
     {
-        private readonly Dictionary<Type, object> _repositories = new();
+        private readonly Dictionary<Type, object> _repositories = [];
+        private bool _disposed = false;
 
         public IGenericRepositoryAsync<TEntity> Repository<TEntity>()
             where TEntity : BaseEntity
@@ -25,17 +26,33 @@ namespace Project_PRN222_G5.DataAccess.UnitOfWorks
             return newRepository;
         }
 
-        public async Task<int> CompleteAsync()
+        public async Task<int> CompleteAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in context.ChangeTracker.Entries<IBaseAuditable>())
             {
                 ApplyAudit(entry.Entity, entry.State);
             }
 
-            return await context.SaveChangesAsync();
+            return await context.SaveChangesAsync(cancellationToken);
         }
 
-        public void Dispose() => context.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+                _disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         private void ApplyAudit(IBaseAuditable entity, EntityState state)
         {

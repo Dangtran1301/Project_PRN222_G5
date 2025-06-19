@@ -19,6 +19,13 @@ public class LoggerMiddleware(
         {
             await next(context);
         }
+        catch (OperationCanceledException)
+        {
+            stopwatch.Stop();
+            logger.LogWarning(
+                "Request was cancelled: {Method} {Path}{QueryString} by User: {Username} after {ElapsedMs}ms",
+                method, path, queryString, currentUser, stopwatch.ElapsedMilliseconds);
+        }
         catch (Exception ex)
         {
             stopwatch.Stop();
@@ -29,18 +36,21 @@ public class LoggerMiddleware(
         }
         finally
         {
-            stopwatch.Stop();
-            var statusCode = context.Response.StatusCode;
-            var elapsedMs = stopwatch.ElapsedMilliseconds;
-            var logMessage = "Request: {Method} {Path}{QueryString} with status code {StatusCode} by User: {Username} in {ElapsedMs}ms";
+            if (!context.RequestAborted.IsCancellationRequested)
+            {
+                stopwatch.Stop();
+                var statusCode = context.Response.StatusCode;
+                var elapsedMs = stopwatch.ElapsedMilliseconds;
+                const string logMessage = "Request: {Method} {Path}{QueryString} with status code {StatusCode} by User: {Username} in {ElapsedMs}ms";
 
-            if (elapsedMs > 500)
-            {
-                logger.LogWarning(logMessage, method, path, queryString, statusCode, currentUser, elapsedMs);
-            }
-            else
-            {
-                logger.LogInformation(logMessage, method, path, queryString, statusCode, currentUser, elapsedMs);
+                if (elapsedMs > 500)
+                {
+                    logger.LogWarning(logMessage, method, path, queryString, statusCode, currentUser, elapsedMs);
+                }
+                else
+                {
+                    logger.LogInformation(logMessage, method, path, queryString, statusCode, currentUser, elapsedMs);
+                }
             }
         }
     }

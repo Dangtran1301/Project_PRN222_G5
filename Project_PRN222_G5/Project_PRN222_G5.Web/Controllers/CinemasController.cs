@@ -6,17 +6,12 @@ using Project_PRN222_G5.DataAccess.DTOs;
 namespace Project_PRN222_G5.Web.Controllers
 {
     [AllowAnonymous]
-    public class CinemasController : Controller
+    public class CinemasController(ICinemaService cinemaService) : Controller
     {
-        private readonly ICinemaService _cinemaService;
-
-        public CinemasController(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
+        private readonly ICinemaService _cinemaService = cinemaService;
 
         // GET: Cinemas
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, CancellationToken cancellationToken)
         {
             var request = new PagedRequest
             {
@@ -25,18 +20,17 @@ namespace Project_PRN222_G5.Web.Controllers
                 Search = search
             };
 
-            var result = await _cinemaService.GetPagedAsync(request);
+            var result = await _cinemaService.GetPagedAsync(request, cancellationToken: cancellationToken);
             ViewBag.Search = search;
             return View(result.Data);
         }
 
         // GET: Cinemas/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
         {
             if (id == null) return NotFound();
 
-            var cinema = await _cinemaService.GetByIdAsync(id.Value);
-            if (cinema == null) return NotFound();
+            var cinema = await _cinemaService.GetByIdAsync(id.Value, cancellationToken);
 
             return View(cinema);
         }

@@ -40,7 +40,7 @@ public class UsersController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateProfile([Bind] UpdateInfoUser infoUser)
+    public async Task<IActionResult> UpdateProfile([Bind] UpdateInfoUser infoUser, CancellationToken cancellationToken)
     {
         var userId = Guid.Parse(authenticatedUserService.UserId);
 
@@ -49,22 +49,22 @@ public class UsersController(
             return Unauthorized();
         }
 
-        await userService.UpdateAsync(userId, infoUser);
+        await userService.UpdateAsync(userId, infoUser, cancellationToken);
         TempData["SuccessMessage"] = "Your profile was updated successfully!";
         return RedirectToAction(nameof(Info));
     }
 
     [HttpPost]
-    public async Task<IActionResult> ResetPassword([Bind] ResetPasswordRequest request)
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken)
     {
         var userId = Guid.Parse(authenticatedUserService.UserId);
 
         try
         {
-            if (await userService.ResetPassword(userId, request))
+            if (await userService.ResetPassword(userId, request, cancellationToken))
             {
                 TempData["SuccessMessage"] = "Password changed successfully. Please login again.";
-                await authService.LogoutAsync(userId, cookieService.GetRefreshToken() ?? string.Empty);
+                await authService.LogoutAsync(userId, cookieService.GetRefreshToken() ?? string.Empty, cancellationToken);
                 await cookieService.RemoveAuthCookiesAsync();
 
                 return RedirectToAction("Login", "Auth");
@@ -89,7 +89,7 @@ public class UsersController(
             }
         }
 
-        var userInfo = await userService.GetUserInfoById(userId);
+        var userInfo = await userService.GetUserInfoById(userId, cancellationToken);
         var viewModel = new InfoPageViewModel
         {
             User = userInfo,

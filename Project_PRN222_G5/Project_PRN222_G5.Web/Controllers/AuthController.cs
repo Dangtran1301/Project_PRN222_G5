@@ -21,13 +21,13 @@ public class AuthController(
     public IActionResult Login() => View();
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginRequest loginRequest)
+    public async Task<IActionResult> Login(LoginRequest loginRequest, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return View(loginRequest);
 
         try
         {
-            var response = await authService.LoginAsync(loginRequest);
+            var response = await authService.LoginAsync(loginRequest, cancellationToken);
             var user = await authService.GetUserByUsernameAsync(loginRequest.Username);
 
             await cookieService.SetAuthCookiesAsync(
@@ -38,18 +38,13 @@ public class AuthController(
 
             TempData["SuccessMessage"] = "Login successfully!";
 
-            switch (user.Role)
+            return user.Role switch
             {
-                case Role.Admin:
-                    return RedirectToPage("/Index", new { area = "Admin" });
-
-                case Role.Staff:
-                    return RedirectToPage("/Index", new { area = "Staff" });
-
-                case Role.Customer:
-                    return RedirectToAction("Home", "Pages");
-            }
-            return View(loginRequest);
+                Role.Admin => RedirectToPage("/Index", new { area = "Admin" }),
+                Role.Staff => RedirectToPage("/Index", new { area = "Staff" }),
+                Role.Customer => RedirectToAction("Home", "Pages"),
+                _ => View(loginRequest)
+            };
         }
         catch (ValidationException ex)
         {
@@ -94,7 +89,7 @@ public class AuthController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterUserRequest input)
+    public async Task<IActionResult> Register(RegisterUserRequest input, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
@@ -108,7 +103,7 @@ public class AuthController(
 
         try
         {
-            await authService.CreateAsync(input);
+            await authService.CreateAsync(input, cancellationToken);
             TempData["SuccessMessage"] = "Registered successfully. Please log in.";
             return RedirectToAction(nameof(Login));
         }
@@ -152,7 +147,7 @@ public class AuthController(
             var currentUser = await authService.GetByIdAsync(userId);
             await cookieService.SetAuthCookiesAsync(currentUser, response.AccessToken, response.RefreshToken);
 
-            return Json(new { AccessToken = response.AccessToken });
+            return Json(new { response.AccessToken });
         }
         catch (ValidationException ex)
         {
