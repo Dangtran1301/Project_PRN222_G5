@@ -2,7 +2,6 @@
 using Project_PRN222_G5.DataAccess.Entities.Common;
 using Project_PRN222_G5.DataAccess.Interfaces.Data;
 using Project_PRN222_G5.DataAccess.Interfaces.Repository;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace Project_PRN222_G5.DataAccess.UnitOfWorks.Repositories;
@@ -19,26 +18,25 @@ public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepos
 
     #region CRUD
 
-    public async Task<TEntity> GetByIdAsync(Guid id, bool track = false)
+    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default, bool track = false)
     {
         var query = track ? _dbSet : _dbSet.AsNoTracking();
-        return await query.FirstOrDefaultAsync(x => x.Id == id)
-               ?? throw new ValidationException($"{typeof(TEntity).Name} with id {id} not found.");
+        return await query.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? default!;
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbSet.AsNoTracking().ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.Where(predicate).ToListAsync();
+        return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task AddAsync(TEntity entity)
+    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(entity, cancellationToken);
     }
 
     public void Update(TEntity entity)
@@ -61,7 +59,8 @@ public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepos
         int pageSize,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
+        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
+        CancellationToken cancellationToken = default)
     {
         var query = _dbSet.AsQueryable();
         if (include != null)
@@ -69,13 +68,13 @@ public class GenericRepositoryAsync<TEntity>(IDbContext context) : IGenericRepos
         if (predicate != null)
             query = query.Where(predicate);
 
-        var count = await query.CountAsync();
+        var count = await query.CountAsync(cancellationToken);
         query = orderBy != null ? orderBy(query) : query.OrderBy(e => e.Id);
         var items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return (items, count);
     }

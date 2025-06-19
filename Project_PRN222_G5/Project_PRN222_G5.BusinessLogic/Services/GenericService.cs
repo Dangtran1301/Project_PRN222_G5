@@ -23,26 +23,25 @@ public abstract class GenericService<TE, TC, TU, TR>(
 
     public async Task<TR> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await unitOfWork.Repository<TE>().AsQueryable()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        return entity == null ? throw new ValidationException($"{typeof(TE).Name} with id {id} not found.") : MapToResponse(entity);
+        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id, cancellationToken);
+        return MapToResponse(entity) ?? throw new ValidationException($"{typeof(TE).Name} can't found with ID: {id}");
     }
 
-    public async Task<IEnumerable<TR>> GetAllAsync(string? sort = null, bool ascending = true)
+    public async Task<IEnumerable<TR>> GetAllAsync(CancellationToken cancellationToken = default, string? sort = null, bool ascending = true)
     {
         var query = unitOfWork.Repository<TE>().AsQueryable();
         if (!string.IsNullOrWhiteSpace(sort))
         {
             query = query.ApplyOrdering(sort, ascending);
         }
-        var entities = await query.ToListAsync();
+        var entities = await query.ToListAsync(cancellationToken);
         return entities.Select(MapToResponse);
     }
 
     public async Task<PaginationResponse<TR>> GetPagedAsync(
         PagedRequest request,
         Expression<Func<TE, bool>>? predicate = null,
-        Func<IQueryable<TE>, IQueryable<TE>>? include = null)
+        Func<IQueryable<TE>, IQueryable<TE>>? include = null, CancellationToken cancellationToken = default)
     {
         var finalPredicate =
               CombinePredicates(predicate, request.BuildSearchPredicate(DefineSearchFields()));
@@ -58,39 +57,40 @@ public abstract class GenericService<TE, TC, TU, TR>(
             request.PageSize,
             finalPredicate,
             orderBy,
-            include
+            include,
+            cancellationToken
         );
 
         var data = items.Select(MapToResponse);
         return new PaginationResponse<TR>(data, request.PageNumber, totalCount, request.PageSize);
     }
 
-    public virtual async Task<TR> CreateAsync(TC request)
+    public virtual async Task<TR> CreateAsync(TC request, CancellationToken cancellationToken = default)
     {
         if (!validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
         var entity = MapToEntity(request);
-        await unitOfWork.Repository<TE>().AddAsync(entity);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.Repository<TE>().AddAsync(entity, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
         return MapToResponse(entity);
     }
 
-    public virtual async Task<TR> UpdateAsync(Guid id, TU request)
+    public virtual async Task<TR> UpdateAsync(Guid id, TU request, CancellationToken cancellationToken = default)
     {
         if (!validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
-        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id, true);
+        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id, cancellationToken, true);
         UpdateEntity(entity, request);
         unitOfWork.Repository<TE>().Update(entity);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.CompleteAsync(cancellationToken);
         return MapToResponse(entity);
     }
 
-    public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id);
+        var entity = await unitOfWork.Repository<TE>().GetByIdAsync(id, cancellationToken, true);
         unitOfWork.Repository<TE>().Delete(entity);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.CompleteAsync(cancellationToken);
     }
 
     #endregion CRUD

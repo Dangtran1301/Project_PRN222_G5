@@ -25,13 +25,13 @@ public class AuthService(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IValidationService _validationService = validationService;
 
-    public async Task<LoginResponse> LoginAsync(LoginRequest request)
+    public async Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
         if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
 
         var user = (await _unitOfWork.Repository<User>()
-                .FindAsync(u => (u.Username == request.Username) || u.Email == request.Username))
+                .FindAsync(u => (u.Username == request.Username) || u.Email == request.Username, cancellationToken))
             .FirstOrDefault();
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
@@ -53,14 +53,15 @@ public class AuthService(
             ExpiredTime = dateTimeService.NowUtc.AddDays(7),
             CreatedBy = userId,
             ClientIp = authenticatedUserService.ClientIp
-        });
+        },
+            cancellationToken);
 
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync(cancellationToken);
 
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    public override async Task<UserResponse> CreateAsync(RegisterUserRequest request)
+    public override async Task<UserResponse> CreateAsync(RegisterUserRequest request, CancellationToken cancellationToken = default)
     {
         if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
@@ -68,22 +69,22 @@ public class AuthService(
         await _validationService.ValidateUniqueUserAsync(request.Username, request.Email);
 
         var user = MapToEntity(request);
-        await _unitOfWork.Repository<User>().AddAsync(user);
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.Repository<User>().AddAsync(user, cancellationToken);
+        await _unitOfWork.CompleteAsync(cancellationToken);
 
         return MapToResponse(user);
     }
 
-    public async Task LogoutAsync(Guid userId, string refreshToken)
+    public async Task LogoutAsync(Guid userId, string refreshToken, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(refreshToken)) return;
 
         var tokens = await _unitOfWork.Repository<UserToken>()
-            .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken);
+            .FindAsync(t => t.UserId == userId && t.RefreshToken == refreshToken, cancellationToken);
 
         _unitOfWork.Repository<UserToken>().RemoveRange(tokens);
 
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync(cancellationToken);
     }
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
@@ -126,17 +127,13 @@ public class AuthService(
                 .FirstOrDefault(new User()));
     }
 
-    public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request)
+    public override async Task<UserResponse> UpdateAsync(Guid id, UpdateInfoUser request, CancellationToken cancellationToken = default)
     {
         if (!_validationService.TryValidate(request, out var errors))
             throw new ValidationException(errors);
 
-        var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new ValidationException("User not found.");
-        }
-
+        var entity = await _unitOfWork.Repository<User>().GetByIdAsync(id, cancellationToken, true)
+                     ?? throw new ValidationException("User not found.");
         entity.UpdateEntity(request, mediaService);
 
         if (request.Avatar is not null)
@@ -150,7 +147,7 @@ public class AuthService(
         }
         _unitOfWork.Repository<User>().Update(entity);
 
-        await _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync(cancellationToken);
 
         return MapToResponse(entity);
     }

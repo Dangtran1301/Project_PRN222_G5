@@ -16,11 +16,11 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
 
         public Guid CinemaId { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id, CancellationToken cancellationToken)
         {
             try
             {
-                var cinema = await cinemaService.GetByIdAsync(id.Value);
+                var cinema = await cinemaService.GetByIdAsync(id.Value, cancellationToken);
 
                 CinemaId = id.Value;
                 CinemaDto = new UpdateCinemaDto
@@ -38,7 +38,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid id)
+        public async Task<IActionResult> OnPostAsync(Guid id, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
             }
             try
             {
-                await cinemaService.UpdateAsync(id, CinemaDto);
+                await cinemaService.UpdateAsync(id, CinemaDto, cancellationToken);
                 return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception e)

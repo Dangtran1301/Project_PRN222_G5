@@ -19,9 +19,9 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Users
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid id)
+        public async Task<IActionResult> OnPostAsync(Guid id, CancellationToken cancellationToken)
         {
-            await authService.DeleteAsync(id);
+            await authService.DeleteAsync(id, cancellationToken);
             return RedirectToPage(PageRoutes.Users.Index);
         }
     }

@@ -19,7 +19,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -28,7 +28,7 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
             }
             try
             {
-                await cinemaService.CreateAsync(CinemaDto);
+                await cinemaService.CreateAsync(CinemaDto, cancellationToken);
                 return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception e)

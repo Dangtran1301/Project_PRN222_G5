@@ -8,5 +8,5 @@ public interface IUnitOfWork : IDisposable
     IGenericRepositoryAsync<TEntity> Repository<TEntity>()
         where TEntity : BaseEntity;
 
-    Task<int> CompleteAsync();
+    Task<int> CompleteAsync(CancellationToken cancellationToken = default);
 }

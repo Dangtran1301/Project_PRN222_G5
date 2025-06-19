@@ -14,11 +14,11 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
         [BindProperty]
         public CinemaResponse Cinema { get; set; } = null!;
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id, CancellationToken cancellationToken)
         {
             try
             {
-                var cinema = await cinemaService.GetByIdAsync(id.Value);
+                var cinema = await cinemaService.GetByIdAsync(id.Value, cancellationToken);
                 Cinema = cinema;
                 return Page();
             }
@@ -29,11 +29,11 @@ namespace Project_PRN222_G5.Web.Areas.Admin.Pages.Cinema
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid? id)
+        public async Task<IActionResult> OnPostAsync(Guid? id, CancellationToken cancellationToken)
         {
             try
             {
-                await cinemaService.DeleteAsync(id.Value);
+                await cinemaService.DeleteAsync(id.Value, cancellationToken);
                 return RedirectToPage(PageRoutes.Cinema.Index);
             }
             catch (Exception ex)

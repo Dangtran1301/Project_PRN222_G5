@@ -6,7 +6,7 @@ namespace Project_PRN222_G5.BusinessLogic.Interfaces.Service.Identities;
 
 public interface IUserService : IGenericService<User, RegisterUserRequest, UpdateInfoUser, UserResponse>
 {
-    Task<UserResponse> GetUserInfoById(Guid id);
+    Task<UserResponse> GetUserInfoById(Guid id, CancellationToken cancellationToken = default);
 
-    Task<bool> ResetPassword(Guid id, ResetPasswordRequest request);
+    Task<bool> ResetPassword(Guid id, ResetPasswordRequest request, CancellationToken cancellationToken = default);
 }
