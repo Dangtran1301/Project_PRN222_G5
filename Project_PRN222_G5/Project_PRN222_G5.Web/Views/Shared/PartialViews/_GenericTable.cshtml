@@ -9,6 +9,7 @@
     var sortOrder = request?.SortDir ?? "asc";
     var currentPage = request?.PageNumber ?? 1;
     var search = request?.Search ?? string.Empty;
+    var allowDelete = ViewData["AllowDelete"] as bool? ?? true;
 }
 
 <form method="get" class="mb-3">
@@ -69,7 +70,10 @@ else
                     <td>
                         <a class="btn btn-sm btn-info" asp-page="Details" asp-route-id="@id">Detail</a>
                         <a class="btn btn-sm btn-warning" asp-page="Edit" asp-route-id="@id">Edit</a>
-                        <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@id">Delete</a>
+                        @if (allowDelete)
+                        {
+                            <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@id">Delete</a>
+                        }
                     </td>
                 </tr>
             }
