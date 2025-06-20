@@ -67,15 +67,6 @@ public class NotEqualToAttribute : ValidationAttribute
     }
 }
 
-public static class AttributeExtensions
-{
-    public static ImageDisplayAttribute? GetImageDisplay(this PropertyInfo prop)
-    {
-        return prop.GetCustomAttributes(typeof(ImageDisplayAttribute), false)
-            .FirstOrDefault() as ImageDisplayAttribute;
-    }
-}
-
 public enum ImageShape
 {
     Rectangle,

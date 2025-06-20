@@ -63,7 +63,7 @@ public class UserService(
 
         if (request.Avatar is not null)
         {
-            if (!string.IsNullOrEmpty(entity.Avatar))
+            if (!string.IsNullOrWhiteSpace(entity.Avatar))
             {
                 await mediaService.DeleteImageAsync(entity.Avatar);
             }

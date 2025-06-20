@@ -11,7 +11,7 @@ namespace Project_PRN222_G5.DataAccess.UnitOfWorks
     public class UnitOfWork(IDbContext context, IDateTimeService dateTimeService, IAuthenticatedUserService authenticatedUserService) : IUnitOfWork
     {
         private readonly Dictionary<Type, object> _repositories = [];
-        private bool _disposed = false;
+        private bool _disposed;
 
         public IGenericRepositoryAsync<TEntity> Repository<TEntity>()
             where TEntity : BaseEntity
@@ -36,7 +36,7 @@ namespace Project_PRN222_G5.DataAccess.UnitOfWorks
             return await context.SaveChangesAsync(cancellationToken);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
